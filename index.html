@@ -90,6 +90,17 @@
     .nav-tab[data-tab="sommeil"].active { border-color: var(--secondary); }
     .nav-tab[data-tab="couches"].active { border-color: var(--green); }
     .nav-tab[data-tab="poids"].active { border-color: var(--purple); }
+    .nav-tab[data-tab="paramètres"].active { border-color: #8a9bb0; }
+    .nav-tab[data-tab="paramètres"].active .tab-label { color: #8a9bb0; }
+    /* Settings tab */
+    .settings-section { margin-bottom: 20px; }
+    .settings-section p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 14px; }
+    .btn-export { background: #4a7fa5; color: #fff; }
+    .btn-export:hover { background: #3a6a8e; }
+    .btn-import { background: #5a9a72; color: #fff; }
+    .btn-import:hover { background: #4a8560; }
+    .import-info { font-size: 0.78rem; color: var(--text-muted); margin-top: 8px; font-style: italic; }
+    #importFileInput { display: none; }
     /* Main */
     .main { padding: 16px; max-width: 520px; margin: 0 auto; }
     .tab-content { display: none; }
@@ -361,6 +372,10 @@
     <span class="tab-icon">&#9878;</span>
     <span class="tab-label">Poids</span>
   </div>
+  <div class="nav-tab" data-tab="paramètres" onclick="switchTab('paramètres')">
+    <span class="tab-icon">&#9881;</span>
+    <span class="tab-label">Réglages</span>
+  </div>
 </nav>
 
 <div class="main">
@@ -519,6 +534,25 @@
     </div>
   </div>
 
+  <!-- ═══════════════ PARAMÈTRES ═══════════════ -->
+  <div class="tab-content" id="tab-paramètres">
+
+    <div class="card settings-section">
+      <div class="card-title">&#128190; Exporter les données</div>
+      <p>Téléchargez une copie de toutes vos données (tétées, sommeil, couches, poids) dans un fichier JSON. Conservez ce fichier en lieu sûr pour pouvoir les restaurer plus tard ou les transférer sur un autre appareil.</p>
+      <button class="btn btn-export" onclick="exportData()">&#8595; Télécharger mes données</button>
+    </div>
+
+    <div class="card settings-section">
+      <div class="card-title">&#128228; Importer des données</div>
+      <p>Restaurez vos données à partir d'un fichier JSON précédemment exporté. <strong>Attention :</strong> cette action remplacera toutes les données actuelles par celles du fichier importé.</p>
+      <button class="btn btn-import" onclick="document.getElementById('importFileInput').click()">&#8593; Charger un fichier de sauvegarde</button>
+      <input type="file" id="importFileInput" accept=".json,application/json" onchange="importData(event)" />
+      <p class="import-info">Formats acceptés : fichier .json exporté depuis cette application.</p>
+    </div>
+
+  </div>
+
 </div>
 
 <div class="toast" id="toast"></div>
@@ -609,6 +643,61 @@ function switchTab(name) {
   if (name === 'sommeil') renderSommeil();
   if (name === 'couches') renderCouches();
   if (name === 'poids') { renderPoids(); drawWeightChart(); }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// PARAMÈTRES — EXPORT / IMPORT
+// ══════════════════════════════════════════════════════════════════════
+function exportData() {
+  const data = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    tetees: load(KEYS.tetees),
+    sommeil: load(KEYS.sommeil),
+    couches: load(KEYS.couches),
+    poids: load(KEYS.poids),
+    activeSleep: loadObj(KEYS.activeSleep)
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const date = new Date().toISOString().slice(0, 10);
+  a.href = url;
+  a.download = `babytrack-sauvegarde-${date}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('✓ Données exportées avec succès !');
+}
+
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.version || !Array.isArray(data.tetees) || !Array.isArray(data.sommeil) || !Array.isArray(data.couches) || !Array.isArray(data.poids)) {
+        showToast('⚠ Fichier invalide ou incompatible.');
+        return;
+      }
+      if (!confirm('Cette action va remplacer toutes vos données actuelles. Continuer ?')) return;
+      save(KEYS.tetees, data.tetees);
+      save(KEYS.sommeil, data.sommeil);
+      save(KEYS.couches, data.couches);
+      save(KEYS.poids, data.poids);
+      if (data.activeSleep) {
+        localStorage.setItem(KEYS.activeSleep, JSON.stringify(data.activeSleep));
+      } else {
+        localStorage.removeItem(KEYS.activeSleep);
+      }
+      showToast('✓ Données restaurées avec succès !');
+      switchTab('tétées');
+    } catch {
+      showToast('⚠ Erreur lors de la lecture du fichier.');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
 }
 
 // ══════════════════════════════════════════════════════════════════════
