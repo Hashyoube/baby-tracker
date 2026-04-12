@@ -335,6 +335,191 @@
     }
     .btn-reset:hover { background: rgba(239,68,68,0.2); }
 
+    /* ── SANTÉ ──────────────────────────────────────────────────────────── */
+    .nav-tab[data-tab="santé"].active { border-color: #2dd4bf; }
+    .nav-tab[data-tab="santé"].active .tab-label { color: #2dd4bf; }
+
+    /* Sub-navigation */
+    .health-subnav {
+      display: flex; gap: 6px; margin-bottom: 14px; overflow-x: auto;
+      scrollbar-width: none; padding-bottom: 2px;
+    }
+    .health-subnav::-webkit-scrollbar { display: none; }
+    .health-subnav-btn {
+      flex-shrink: 0; padding: 8px 14px; border-radius: 20px;
+      font-size: 0.78rem; font-weight: 700; cursor: pointer; user-select: none;
+      background: var(--surface); border: 1.5px solid var(--border);
+      color: var(--text-muted); transition: all 0.18s;
+    }
+    .health-subnav-btn.active {
+      background: rgba(45,212,191,0.12); border-color: #2dd4bf; color: #2dd4bf;
+    }
+    .health-section { display: none; }
+    .health-section.active { display: block; }
+
+    /* Vaccination */
+    .vacc-country-note { font-size:0.75rem; color:var(--text-muted); margin-bottom:12px; line-height:1.5; }
+    .vacc-group { margin-bottom: 14px; }
+    .vacc-age-header {
+      font-size: 0.68rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.7px; color: #2dd4bf; margin-bottom: 8px;
+      padding: 4px 10px; background: rgba(45,212,191,0.08);
+      border-left: 3px solid #2dd4bf; border-radius: 0 6px 6px 0;
+    }
+    .vacc-item {
+      display: flex; align-items: flex-start; gap: 11px;
+      padding: 11px 13px; background: var(--surface2);
+      border-radius: var(--radius-sm); border: 1px solid var(--border);
+      margin-bottom: 7px; transition: border-color 0.2s;
+    }
+    .vacc-item.done { border-color: rgba(45,212,191,0.3); background: rgba(45,212,191,0.05); }
+    .vacc-checkbox {
+      width: 20px; height: 20px; border-radius: 5px; flex-shrink: 0; cursor: pointer;
+      accent-color: #2dd4bf; margin-top: 1px;
+    }
+    .vacc-body { flex: 1; min-width: 0; }
+    .vacc-name-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 2px; }
+    .vacc-name { font-size: 0.87rem; font-weight: 700; color: var(--text); }
+    .vacc-badge {
+      font-size: 0.6rem; font-weight: 800; padding: 2px 6px; border-radius: 10px;
+      text-transform: uppercase; letter-spacing: 0.3px;
+    }
+    .vb-oblig { background: rgba(239,68,68,0.15); color: #f87171; }
+    .vb-opt   { background: rgba(96,165,250,0.12); color: #60a5fa; }
+    .vacc-detail { font-size: 0.73rem; color: var(--text-muted); margin-bottom: 6px; line-height: 1.4; }
+    .vacc-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .vacc-date-input {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 6px; color: var(--text); font-size: 0.8rem;
+      padding: 4px 8px; outline: none; transition: border-color 0.18s;
+    }
+    .vacc-date-input:focus { border-color: #2dd4bf; }
+    .vacc-note-input {
+      flex: 1; min-width: 80px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 6px; color: var(--text); font-size: 0.8rem;
+      padding: 4px 8px; outline: none; transition: border-color 0.18s;
+    }
+    .vacc-note-input:focus { border-color: #2dd4bf; }
+    .vacc-done-tag {
+      font-size: 0.72rem; color: #2dd4bf; font-weight: 700;
+    }
+
+    /* Appointments */
+    .rdv-upcoming-label {
+      font-size: 0.68rem; font-weight: 800; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.6px; margin: 10px 0 8px;
+    }
+    .rdv-past-label {
+      font-size: 0.68rem; font-weight: 800; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.6px; margin: 14px 0 8px;
+      opacity: 0.7;
+    }
+    .rdv-item {
+      display: flex; align-items: flex-start; gap: 11px;
+      padding: 12px 14px; background: var(--surface2);
+      border-radius: var(--radius-sm); border: 1px solid var(--border);
+      margin-bottom: 8px;
+    }
+    .rdv-item.upcoming { border-left: 3px solid var(--accent); }
+    .rdv-item.past { opacity: 0.55; }
+    .rdv-date-block {
+      text-align: center; background: var(--accent-dim); border-radius: 8px;
+      padding: 6px 10px; flex-shrink: 0; min-width: 44px;
+    }
+    .rdv-date-day  { font-size: 1.2rem; font-weight: 900; color: var(--accent); line-height: 1; }
+    .rdv-date-mon  { font-size: 0.6rem; font-weight: 700; color: var(--accent); text-transform: uppercase; }
+    .rdv-info { flex: 1; min-width: 0; }
+    .rdv-time  { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); margin-bottom: 2px; }
+    .rdv-title { font-size: 0.9rem; font-weight: 700; color: var(--text); }
+    .rdv-sub   { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+    .rdv-notes { font-size: 0.73rem; color: var(--text-muted); font-style: italic; margin-top: 3px; }
+    .rdv-type-chip {
+      display: inline-block; font-size: 0.62rem; font-weight: 700;
+      padding: 2px 7px; border-radius: 10px; margin-top: 4px;
+      text-transform: uppercase; letter-spacing: 0.3px;
+      background: var(--accent-dim); color: var(--accent);
+    }
+
+    /* Head circumference */
+    /* (reuses existing .who-chart-wrap, .who-legend, etc.) */
+
+    /* ── INSIGHTS ───────────────────────────────────────────────────────── */
+    .nav-tab[data-tab="insights"].active { border-color: #f59e0b; }
+    .nav-tab[data-tab="insights"].active .tab-label { color: #f59e0b; }
+
+    .insight-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .insight-header-title { font-size: 1rem; font-weight: 800; color: var(--text); }
+    .insight-header-sub   { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
+    .refresh-btn {
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text-muted); border-radius: 8px; padding: 6px 12px;
+      font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.15s;
+    }
+    .refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .insight-row {
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .insight-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 14px; background: var(--surface2);
+      border-radius: var(--radius-sm); border: 1px solid var(--border);
+    }
+    .insight-icon {
+      font-size: 1.3rem; width: 36px; height: 36px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 10px;
+    }
+    .ii-amber { background: rgba(245,158,11,0.15); }
+    .ii-blue  { background: rgba(96,165,250,0.12); }
+    .ii-green { background: rgba(52,211,153,0.12); }
+    .ii-purple{ background: rgba(167,139,250,0.12); }
+    .ii-red   { background: rgba(239,68,68,0.12);  }
+    .ii-pink  { background: rgba(244,114,182,0.12);}
+    .insight-body { flex: 1; min-width: 0; }
+    .insight-label {
+      font-size: 0.72rem; font-weight: 700; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px;
+    }
+    .insight-value { font-size: 0.95rem; font-weight: 700; color: var(--text); line-height: 1.4; }
+    .insight-detail{ font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
+    .insight-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 0.68rem; font-weight: 700; padding: 2px 8px;
+      border-radius: 20px; margin-top: 4px;
+    }
+    .badge-warn  { background: rgba(245,158,11,0.15); color: #f59e0b; }
+    .badge-good  { background: rgba(52,211,153,0.15);  color: #34d399; }
+    .badge-info  { background: rgba(96,165,250,0.15);  color: #60a5fa; }
+
+    .no-data-msg {
+      text-align: center; padding: 20px 12px; color: var(--text-muted);
+      font-size: 0.82rem; line-height: 1.6;
+    }
+    .no-data-msg .no-data-icon { font-size: 1.6rem; margin-bottom: 8px; opacity: 0.5; }
+
+    .section-summary {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 8px;
+      margin-bottom: 0;
+    }
+    .summary-pill {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 10px 8px; text-align: center;
+    }
+    .summary-pill .sp-val  { font-size: 1.1rem; font-weight: 800; color: var(--accent); }
+    .summary-pill .sp-lbl  { font-size: 0.58rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; margin-top: 2px; }
+
+    .anomaly-none {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 14px; background: rgba(52,211,153,0.06);
+      border: 1px solid rgba(52,211,153,0.2); border-radius: var(--radius-sm);
+      font-size: 0.85rem; font-weight: 600; color: #34d399;
+    }
+
     /* ── WHO CHARTS ─────────────────────────────────────────────────────── */
     .who-chart-wrap { position: relative; height: 280px; margin-bottom: 4px; }
     .who-legend {
@@ -414,6 +599,12 @@
   </div>
   <div class="nav-tab" data-tab="poids" onclick="switchTab('poids')">
     <span class="tab-icon">⚖️</span><span class="tab-label">Poids</span>
+  </div>
+  <div class="nav-tab" data-tab="santé" onclick="switchTab('santé')">
+    <span class="tab-icon">🏥</span><span class="tab-label">Santé</span>
+  </div>
+  <div class="nav-tab" data-tab="insights" onclick="switchTab('insights')">
+    <span class="tab-icon">✨</span><span class="tab-label">Insights</span>
   </div>
   <div class="nav-tab" data-tab="paramètres" onclick="switchTab('paramètres')">
     <span class="tab-icon">⚙️</span><span class="tab-label">Réglages</span>
@@ -603,6 +794,143 @@
     </div>
   </div>
 
+  <!-- SANTÉ -->
+  <div class="tab-content" id="tab-santé">
+
+    <!-- Sous-navigation -->
+    <div class="health-subnav">
+      <div class="health-subnav-btn active" data-sect="vaccins"    onclick="switchHealthSection('vaccins')">💉 Vaccins</div>
+      <div class="health-subnav-btn"         data-sect="rdv"       onclick="switchHealthSection('rdv')">📅 Rendez-vous</div>
+      <div class="health-subnav-btn"         data-sect="perimetre" onclick="switchHealthSection('perimetre')">📐 Périmètre crânien</div>
+    </div>
+
+    <!-- ─── VACCINS ─── -->
+    <div class="health-section active" id="hsect-vaccins">
+      <div class="card">
+        <div class="card-title">Programme de vaccination</div>
+        <div class="seg-group" id="vaccCountryGroup" style="margin-bottom:10px;">
+          <div class="seg-btn active-primary" data-val="FR"   onclick="selectVaccCountry('FR')">🇫🇷 France</div>
+          <div class="seg-btn"               data-val="TH"   onclick="selectVaccCountry('TH')">🇹🇭 Thaïlande</div>
+          <div class="seg-btn"               data-val="BOTH" onclick="selectVaccCountry('BOTH')">Les deux</div>
+        </div>
+        <p class="vacc-country-note" id="vaccCountryNote"></p>
+      </div>
+      <div id="vaccinsContainer"></div>
+    </div>
+
+    <!-- ─── RENDEZ-VOUS ─── -->
+    <div class="health-section" id="hsect-rdv">
+      <div class="card">
+        <div class="card-title">+ Nouveau rendez-vous</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="rdvDate" />
+          </div>
+          <div class="form-group">
+            <label>Heure</label>
+            <input type="time" id="rdvHeure" />
+          </div>
+        </div>
+        <div style="margin-bottom:10px;">
+          <label style="font-size:0.72rem;font-weight:700;color:var(--text-muted);display:block;margin-bottom:7px;">Type</label>
+          <div class="seg-group" id="rdvTypeGroup">
+            <div class="seg-btn active-primary" data-val="pédiatre"    onclick="selectSeg('rdvTypeGroup','active-primary',this)">👶 Pédiatre</div>
+            <div class="seg-btn"               data-val="généraliste" onclick="selectSeg('rdvTypeGroup','active-primary',this)">🩺 Généraliste</div>
+            <div class="seg-btn"               data-val="spécialiste" onclick="selectSeg('rdvTypeGroup','active-primary',this)">⚕️ Spécialiste</div>
+            <div class="seg-btn"               data-val="urgences"    onclick="selectSeg('rdvTypeGroup','active-primary',this)">🚨 Urgences</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Médecin / Praticien</label>
+            <input type="text" id="rdvMedecin" placeholder="Dr Martin…" />
+          </div>
+          <div class="form-group">
+            <label>Lieu</label>
+            <input type="text" id="rdvLieu" placeholder="Cabinet, hôpital…" />
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:12px;">
+          <label>Notes (optionnel)</label>
+          <input type="text" id="rdvNotes" placeholder="Questions à poser, documents à apporter…" />
+        </div>
+        <button class="btn btn-primary" onclick="addRDV()">✓ Ajouter le rendez-vous</button>
+      </div>
+      <div id="rdvContainer"></div>
+    </div>
+
+    <!-- ─── PÉRIMÈTRE CRÂNIEN ─── -->
+    <div class="health-section" id="hsect-perimetre">
+      <div class="stats-row" id="perimStats"></div>
+      <div class="card">
+        <div class="card-title">📐 Nouvelle mesure</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="perimDate" />
+          </div>
+          <div class="form-group">
+            <label>Périmètre crânien (cm)</label>
+            <input type="number" id="perimVal" placeholder="Ex : 34.5" min="25" max="60" step="0.1" />
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:12px;">
+          <label>Note (optionnel)</label>
+          <input type="text" id="perimNote" placeholder="Ex : pédiatre, maternité…" />
+        </div>
+        <button class="btn" style="background:#2dd4bf;color:#07201e;font-weight:800;" onclick="savePerimetre()">✓ Enregistrer la mesure</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Courbe de croissance crânienne — OMS</div>
+        <div class="who-legend" id="whoPerimLegend"></div>
+        <div class="who-chart-wrap"><canvas id="whoPerimChart"></canvas></div>
+        <div class="who-section-label" style="margin-top:6px;">Âge en mois (0 – 24)</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Historique des mesures</div>
+        <div class="history-list" id="perimHistory"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- INSIGHTS -->
+  <div class="tab-content" id="tab-insights">
+
+    <div class="card">
+      <div class="insight-header">
+        <div>
+          <div class="insight-header-title" id="insightTitle">Analyse de Bébé</div>
+          <div class="insight-header-sub" id="insightSubtitle">Basée sur les 7 derniers jours</div>
+        </div>
+        <button class="refresh-btn" onclick="renderInsights()">↻ Actualiser</button>
+      </div>
+      <div class="section-summary" id="insightSummaryToday"></div>
+    </div>
+
+    <div class="card" id="insightPredCard">
+      <div class="card-title">🔮 Prédictions</div>
+      <div class="insight-row" id="insightPredictions"></div>
+    </div>
+
+    <div class="card" id="insightRhythmCard">
+      <div class="card-title">📊 Rythmes — 7 derniers jours</div>
+      <div class="insight-row" id="insightRhythms"></div>
+    </div>
+
+    <div class="card" id="insightAnomalyCard">
+      <div class="card-title">⚠️ Points d'attention aujourd'hui</div>
+      <div id="insightAnomalies"></div>
+    </div>
+
+    <div class="card" id="insightDayCard">
+      <div class="card-title">📝 Résumé de la journée</div>
+      <div class="insight-row" id="insightDaySummary"></div>
+    </div>
+
+  </div>
+
   <!-- PARAMÈTRES -->
   <div class="tab-content" id="tab-paramètres">
 
@@ -636,7 +964,8 @@
 // ─── CLÉS ────────────────────────────────────────────────────────────────────
 const KEYS = {
   tetees: 'bt_tetees', sommeil: 'bt_sommeil', couches: 'bt_couches',
-  poids: 'bt_poids', tailles: 'bt_tailles', activeSleep: 'bt_active_sleep', profile: 'bt_profile'
+  poids: 'bt_poids', tailles: 'bt_tailles', activeSleep: 'bt_active_sleep', profile: 'bt_profile',
+  vaccins: 'bt_vaccins', rdv: 'bt_rdv', perimetre: 'bt_perimetre',
 };
 
 // ─── DONNÉES OMS ─────────────────────────────────────────────────────────────
@@ -849,6 +1178,8 @@ function switchTab(name) {
   if (name==='sommeil')   renderSommeil();
   if (name==='couches')   renderCouches();
   if (name==='poids')     { renderPoids(); drawWHOCharts(); }
+  if (name==='santé')     { renderVaccins(); renderRDV(); }
+  if (name==='insights')  renderInsights();
 }
 
 // ─── EXPORT / IMPORT ─────────────────────────────────────────────────────────
@@ -859,7 +1190,10 @@ function exportData() {
     sommeil:  load(KEYS.sommeil),
     couches:  load(KEYS.couches),
     poids:    load(KEYS.poids),
-    tailles:  load(KEYS.tailles),
+    tailles:   load(KEYS.tailles),
+    vaccins:   loadObj(KEYS.vaccins),
+    rdv:       load(KEYS.rdv),
+    perimetre: load(KEYS.perimetre),
     activeSleep: loadObj(KEYS.activeSleep),
     profile:  loadObj(KEYS.profile)
   };
@@ -885,7 +1219,10 @@ function importData(event) {
       if (!confirm('Cette action remplacera toutes vos données actuelles. Continuer ?')) return;
       save(KEYS.tetees, data.tetees); save(KEYS.sommeil, data.sommeil);
       save(KEYS.couches, data.couches); save(KEYS.poids, data.poids);
-      if (data.tailles) save(KEYS.tailles, data.tailles);
+      if (data.tailles)   save(KEYS.tailles, data.tailles);
+      if (data.vaccins)   save(KEYS.vaccins, data.vaccins);
+      if (data.rdv)       save(KEYS.rdv, data.rdv);
+      if (data.perimetre) save(KEYS.perimetre, data.perimetre);
       if (data.activeSleep) localStorage.setItem(KEYS.activeSleep, JSON.stringify(data.activeSleep));
       else localStorage.removeItem(KEYS.activeSleep);
       showToast('✓ Données restaurées !');
@@ -1308,6 +1645,799 @@ function whoChartOptions(unit, maxWeeks) {
   };
 }
 
+// ══════════════════════════════════════════════════════════════════════════════
+// SANTÉ
+// ══════════════════════════════════════════════════════════════════════════════
+
+// ─── Données vaccins ──────────────────────────────────────────────────────────
+const VACCINS_DATA = {
+  FR: [
+    { id:'fr_m2_hex1',  age:'2 mois',    nom:'Hexavalent DTCaP-Hib-HepB',                 detail:'Diphtérie, Tétanos, Coqueluche, Polio, Hib, Hépatite B — Dose 1 (Infanrix Hexa / Vaxelis)', oblig:true },
+    { id:'fr_m2_pcv1',  age:'2 mois',    nom:'Pneumocoque 13-valent (PCV13)',              detail:'Prévention infections invasives à pneumocoque — Dose 1',                                      oblig:true },
+    { id:'fr_m2_menb1', age:'2 mois',    nom:'Méningocoque B (Bexsero)',                   detail:'Prévention méningite à méningocoque B — Dose 1',                                              oblig:false },
+    { id:'fr_m2_rota1', age:'2 mois',    nom:'Rotavirus (Rotarix / RotaTeq)',              detail:'Prévention gastro-entérites sévères — Dose 1 (à donner avant 12 semaines)',                  oblig:false },
+    { id:'fr_m4_hex2',  age:'4 mois',    nom:'Hexavalent DTCaP-Hib-HepB',                 detail:'Dose 2',                                                                                      oblig:true },
+    { id:'fr_m4_pcv2',  age:'4 mois',    nom:'Pneumocoque 13-valent (PCV13)',              detail:'Dose 2',                                                                                      oblig:true },
+    { id:'fr_m4_menb2', age:'4 mois',    nom:'Méningocoque B',                             detail:'Dose 2',                                                                                      oblig:false },
+    { id:'fr_m4_rota2', age:'4 mois',    nom:'Rotavirus',                                  detail:'Dose 2',                                                                                      oblig:false },
+    { id:'fr_m5_menb3', age:'5 mois',    nom:'Méningocoque B',                             detail:'Dose 3 — schéma 2-4-5 mois',                                                                 oblig:false },
+    { id:'fr_m11_hex3', age:'11 mois',   nom:'Hexavalent DTCaP-Hib-HepB',                 detail:'Rappel — Dose 3',                                                                             oblig:true },
+    { id:'fr_m11_pcvr', age:'11 mois',   nom:'Pneumocoque 13-valent (PCV13)',              detail:'Rappel',                                                                                      oblig:true },
+    { id:'fr_m11_menc', age:'11 mois',   nom:'Méningocoque C (Neisvac / Menjugate)',       detail:'1 dose unique',                                                                               oblig:true },
+    { id:'fr_m12_ror1', age:'12 mois',   nom:'ROR — Rougeole, Oreillons, Rubéole',         detail:'Dose 1',                                                                                      oblig:true },
+    { id:'fr_m12_mnbr', age:'12 mois',   nom:'Méningocoque B',                             detail:'Rappel (4ème dose)',                                                                          oblig:false },
+    { id:'fr_m16_ror2', age:'16–18 mois',nom:'ROR — Rougeole, Oreillons, Rubéole',         detail:'Dose 2',                                                                                      oblig:true },
+    { id:'fr_m24_mena', age:'24 mois',   nom:'Méningocoque ACYW (Nimenrix / MenQuadfi)',   detail:'1 dose recommandée',                                                                          oblig:false },
+  ],
+  TH: [
+    { id:'th_b_bcg',    age:'Naissance', nom:'BCG (Bacille de Calmette et Guérin)',        detail:'Tuberculose — 1 dose unique à la naissance',                                                  oblig:true },
+    { id:'th_b_hepb1',  age:'Naissance', nom:'Hépatite B',                                 detail:'1ère dose dans les 24 h',                                                                     oblig:true },
+    { id:'th_m1_hepb2', age:'1 mois',    nom:'Hépatite B',                                 detail:'2ème dose',                                                                                   oblig:true },
+    { id:'th_m2_pen1',  age:'2 mois',    nom:'Pentavalent DTP-HepB-Hib',                   detail:'Diphtérie, Tétanos, Coqueluche, Hépatite B, Hib — Dose 1',                                   oblig:true },
+    { id:'th_m2_pol1',  age:'2 mois',    nom:'Polio (OPV / IPV)',                          detail:'Dose 1',                                                                                      oblig:true },
+    { id:'th_m2_pcv1',  age:'2 mois',    nom:'Pneumocoque (PCV13)',                        detail:'Dose 1 — recommandé (secteur privé)',                                                         oblig:false },
+    { id:'th_m2_rot1',  age:'2 mois',    nom:'Rotavirus',                                  detail:'Dose 1 — recommandé',                                                                         oblig:false },
+    { id:'th_m4_pen2',  age:'4 mois',    nom:'Pentavalent DTP-HepB-Hib',                   detail:'Dose 2',                                                                                      oblig:true },
+    { id:'th_m4_pol2',  age:'4 mois',    nom:'Polio (OPV / IPV)',                          detail:'Dose 2',                                                                                      oblig:true },
+    { id:'th_m4_pcv2',  age:'4 mois',    nom:'Pneumocoque (PCV13)',                        detail:'Dose 2 — recommandé',                                                                         oblig:false },
+    { id:'th_m4_rot2',  age:'4 mois',    nom:'Rotavirus',                                  detail:'Dose 2 — recommandé',                                                                         oblig:false },
+    { id:'th_m6_pen3',  age:'6 mois',    nom:'Pentavalent DTP-HepB-Hib',                   detail:'Dose 3',                                                                                      oblig:true },
+    { id:'th_m6_pol3',  age:'6 mois',    nom:'Polio (OPV / IPV)',                          detail:'Dose 3',                                                                                      oblig:true },
+    { id:'th_m6_flu',   age:'6 mois',    nom:'Grippe saisonnière (Influenza)',              detail:'1ère dose — recommandé (annuel)',                                                             oblig:false },
+    { id:'th_m9_mmr1',  age:'9 mois',    nom:'ROR — Rougeole, Oreillons, Rubéole',         detail:'1ère dose',                                                                                   oblig:true },
+    { id:'th_m12_je1',  age:'12 mois',   nom:'Encéphalite japonaise (JE)',                 detail:'1ère dose (2 doses à 1 mois d\'intervalle)',                                                  oblig:true },
+    { id:'th_m12_var',  age:'12 mois',   nom:'Varicelle',                                  detail:'1 dose — recommandé',                                                                         oblig:false },
+    { id:'th_m18_dtpr', age:'18 mois',   nom:'DTP — Rappel',                               detail:'Rappel Diphtérie-Tétanos-Coqueluche',                                                        oblig:true },
+    { id:'th_m18_polr', age:'18 mois',   nom:'Polio — Rappel',                             detail:'Rappel',                                                                                      oblig:true },
+    { id:'th_m18_mmr2', age:'18 mois',   nom:'ROR — Rougeole, Oreillons, Rubéole',         detail:'2ème dose',                                                                                   oblig:true },
+    { id:'th_m24_je2',  age:'24 mois',   nom:'Encéphalite japonaise (JE)',                 detail:'2ème dose',                                                                                   oblig:true },
+  ],
+};
+
+// ─── Données OMS — Périmètre crânien (cm) mois 0–24 [P3,P15,P50,P85,P97] ────
+const WHO_PERIMETRE = {
+  garçon: [
+    [31.7,32.8,34.5,36.0,37.1],[35.0,36.1,37.9,39.5,40.7],[37.1,38.3,40.0,41.6,42.8],
+    [38.7,40.0,41.7,43.2,44.4],[39.9,41.2,43.0,44.5,45.6],[41.0,42.3,44.1,45.6,46.8],
+    [41.9,43.2,45.0,46.6,47.8],[42.5,43.9,45.7,47.3,48.5],[43.1,44.5,46.4,47.9,49.1],
+    [43.6,45.0,46.9,48.5,49.7],[44.0,45.4,47.3,48.9,50.1],[44.4,45.8,47.7,49.3,50.6],
+    [44.7,46.2,48.1,49.7,50.9],[45.0,46.4,48.3,50.0,51.2],[45.2,46.7,48.6,50.2,51.5],
+    [45.5,46.9,48.9,50.5,51.7],[45.7,47.1,49.1,50.8,52.0],[45.9,47.3,49.3,51.0,52.2],
+    [46.1,47.5,49.5,51.2,52.4],[46.2,47.7,49.7,51.4,52.6],[46.4,47.9,49.9,51.6,52.8],
+    [46.5,48.0,50.0,51.7,53.0],[46.7,48.2,50.2,51.9,53.2],[46.8,48.3,50.3,52.0,53.3],
+    [46.9,48.5,50.5,52.2,53.5],
+  ],
+  fille: [
+    [30.9,32.1,33.9,35.4,36.6],[34.0,35.3,37.1,38.7,39.9],[36.2,37.5,39.3,40.9,42.1],
+    [37.9,39.2,41.0,42.6,43.8],[39.1,40.5,42.3,43.9,45.1],[40.2,41.6,43.4,45.0,46.2],
+    [41.2,42.5,44.3,46.0,47.2],[41.9,43.3,45.2,46.8,48.1],[42.5,43.9,45.8,47.5,48.7],
+    [43.1,44.5,46.4,48.1,49.3],[43.5,44.9,46.9,48.6,49.9],[43.9,45.3,47.3,49.0,50.3],
+    [44.2,45.7,47.7,49.4,50.7],[44.5,46.0,48.0,49.7,51.0],[44.8,46.2,48.2,49.9,51.3],
+    [45.0,46.5,48.5,50.3,51.6],[45.3,46.7,48.8,50.5,51.8],[45.5,47.0,49.0,50.8,52.0],
+    [45.7,47.2,49.2,51.0,52.3],[45.9,47.4,49.5,51.2,52.5],[46.1,47.6,49.7,51.4,52.7],
+    [46.2,47.7,49.8,51.6,52.9],[46.4,47.9,50.0,51.8,53.1],[46.5,48.1,50.2,51.9,53.3],
+    [46.7,48.2,50.4,52.1,53.4],
+  ],
+};
+let chartWHOPerimetre = null;
+
+// ─── Sous-navigation Santé ────────────────────────────────────────────────────
+let currentVaccCountry = 'FR';
+
+function switchHealthSection(name) {
+  document.querySelectorAll('.health-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.health-subnav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('hsect-' + name).classList.add('active');
+  document.querySelector(`.health-subnav-btn[data-sect="${name}"]`).classList.add('active');
+  if (name === 'vaccins')    renderVaccins();
+  if (name === 'rdv')        renderRDV();
+  if (name === 'perimetre')  { renderPerimetre(); drawPerimetreChart(); }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// VACCINS
+// ══════════════════════════════════════════════════════════════════════════════
+function selectVaccCountry(country) {
+  currentVaccCountry = country;
+  document.querySelectorAll('#vaccCountryGroup .seg-btn').forEach(b => b.classList.remove('active-primary'));
+  document.querySelector(`#vaccCountryGroup [data-val="${country}"]`).classList.add('active-primary');
+  renderVaccins();
+}
+
+function renderVaccins() {
+  const notes = {
+    FR:   'Programme national de vaccination (Calendrier vaccinal 2024 — DGS France). Les vaccins obligatoires sont marqués en rouge.',
+    TH:   'Programme du Ministère de la Santé Publique Thaïlandais (MOPH 2024). Les vaccins du programme public sont obligatoires, les autres recommandés.',
+    BOTH: 'Programme France + Thaïlande combinés. Cochez selon le pays de vaccination.',
+  };
+  document.getElementById('vaccCountryNote').textContent = notes[currentVaccCountry] || '';
+
+  const state = loadObj(KEYS.vaccins) || {};
+  let list = [];
+  if (currentVaccCountry === 'BOTH') list = [...VACCINS_DATA.FR, ...VACCINS_DATA.TH];
+  else list = VACCINS_DATA[currentVaccCountry] || [];
+
+  // Regrouper par âge
+  const byAge = {};
+  list.forEach(v => { (byAge[v.age] = byAge[v.age]||[]).push(v); });
+
+  const container = document.getElementById('vaccinsContainer');
+  container.innerHTML = Object.entries(byAge).map(([age, vaccines]) => `
+    <div class="vacc-group">
+      <div class="vacc-age-header">${age}</div>
+      ${vaccines.map(v => {
+        const vs = state[v.id] || {};
+        const done = !!vs.done;
+        return `<div class="vacc-item${done?' done':''}" id="vi-${v.id}">
+          <input type="checkbox" class="vacc-checkbox" id="vc-${v.id}"
+            ${done?'checked':''} onchange="toggleVaccin('${v.id}',this)">
+          <div class="vacc-body">
+            <div class="vacc-name-row">
+              <span class="vacc-name">${v.nom}</span>
+              <span class="vacc-badge ${v.oblig?'vb-oblig':'vb-opt'}">${v.oblig?'Obligatoire':'Recommandé'}</span>
+            </div>
+            <div class="vacc-detail">${v.detail}</div>
+            <div class="vacc-meta">
+              <input type="date" class="vacc-date-input" id="vd-${v.id}"
+                value="${vs.date||''}" placeholder="Date admin."
+                onchange="saveVaccinField('${v.id}','date',this.value)">
+              <input type="text" class="vacc-note-input" id="vn-${v.id}"
+                value="${vs.note||''}" placeholder="Lot, médecin…"
+                onblur="saveVaccinField('${v.id}','note',this.value)">
+              ${done && vs.date ? `<span class="vacc-done-tag">✓ ${new Date(vs.date+'T12:00:00').toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'})}</span>` : ''}
+            </div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`).join('');
+}
+
+function toggleVaccin(id, checkbox) {
+  const state = loadObj(KEYS.vaccins) || {};
+  if (!state[id]) state[id] = {};
+  state[id].done = checkbox.checked;
+  if (checkbox.checked && !state[id].date) {
+    state[id].date = toLocalDateStr(now());
+    const inp = document.getElementById('vd-'+id);
+    if (inp) inp.value = state[id].date;
+  }
+  save(KEYS.vaccins, state);
+  const item = document.getElementById('vi-'+id);
+  if (item) item.classList.toggle('done', checkbox.checked);
+  showToast(checkbox.checked ? '✓ Vaccin enregistré' : 'Vaccin décoche');
+}
+
+function saveVaccinField(id, field, value) {
+  const state = loadObj(KEYS.vaccins) || {};
+  if (!state[id]) state[id] = {};
+  state[id][field] = value;
+  save(KEYS.vaccins, state);
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// RENDEZ-VOUS
+// ══════════════════════════════════════════════════════════════════════════════
+function addRDV() {
+  const date    = document.getElementById('rdvDate').value;
+  const heure   = document.getElementById('rdvHeure').value;
+  const type    = getSegVal('rdvTypeGroup') || 'pédiatre';
+  const medecin = document.getElementById('rdvMedecin').value.trim();
+  const lieu    = document.getElementById('rdvLieu').value.trim();
+  const notes   = document.getElementById('rdvNotes').value.trim();
+  if (!date || !heure) { showToast('Veuillez saisir une date et une heure'); return; }
+  const data = load(KEYS.rdv);
+  data.push({ id: Date.now(), date, heure, type, medecin, lieu, notes });
+  data.sort((a,b) => (a.date+a.heure).localeCompare(b.date+b.heure));
+  save(KEYS.rdv, data);
+  ['rdvDate','rdvHeure','rdvMedecin','rdvLieu','rdvNotes'].forEach(id => document.getElementById(id).value='');
+  renderRDV(); showToast('Rendez-vous ajouté ✓');
+}
+
+function deleteRDV(id) {
+  save(KEYS.rdv, load(KEYS.rdv).filter(r => r.id !== id));
+  renderRDV();
+}
+
+function renderRDV() {
+  const data = load(KEYS.rdv);
+  const container = document.getElementById('rdvContainer');
+  if (!data.length) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">📅</div>Aucun rendez-vous enregistré</div>`;
+    return;
+  }
+  const todayStr = toLocalDateStr(now());
+  const upcoming = data.filter(r => r.date >= todayStr);
+  const past     = data.filter(r => r.date < todayStr).reverse();
+
+  const typeEmoji = { pédiatre:'👶', généraliste:'🩺', spécialiste:'⚕️', urgences:'🚨' };
+
+  const renderItem = (r, isUpcoming) => {
+    const d = new Date(r.date + 'T12:00:00');
+    const day = d.toLocaleDateString('fr-FR',{day:'2-digit'});
+    const mon = d.toLocaleDateString('fr-FR',{month:'short'}).replace('.','');
+    return `<div class="rdv-item${isUpcoming?' upcoming':' past'}">
+      <div class="rdv-date-block">
+        <div class="rdv-date-day">${day}</div>
+        <div class="rdv-date-mon">${mon}</div>
+      </div>
+      <div class="rdv-info">
+        <div class="rdv-time">${r.heure} &nbsp;·&nbsp; ${d.toLocaleDateString('fr-FR',{weekday:'long'})}</div>
+        <div class="rdv-title">${typeEmoji[r.type]||'📋'} ${r.type.charAt(0).toUpperCase()+r.type.slice(1)}</div>
+        ${r.medecin ? `<div class="rdv-sub">👤 ${r.medecin}${r.lieu?' · 📍 '+r.lieu:''}</div>` : r.lieu ? `<div class="rdv-sub">📍 ${r.lieu}</div>` : ''}
+        ${r.notes   ? `<div class="rdv-notes">📝 ${r.notes}</div>` : ''}
+        <span class="rdv-type-chip">${r.type}</span>
+      </div>
+      <button class="delete-btn" onclick="deleteRDV(${r.id})">✕</button>
+    </div>`;
+  };
+
+  let html = '';
+  if (upcoming.length) {
+    html += `<div class="rdv-upcoming-label">📌 Prochains rendez-vous (${upcoming.length})</div>`;
+    html += upcoming.map(r => renderItem(r, true)).join('');
+  }
+  if (past.length) {
+    html += `<div class="rdv-past-label">Rendez-vous passés</div>`;
+    html += past.map(r => renderItem(r, false)).join('');
+  }
+  container.innerHTML = html;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// PÉRIMÈTRE CRÂNIEN
+// ══════════════════════════════════════════════════════════════════════════════
+function ageEnMois(dateStr) {
+  const profile = loadObj(KEYS.profile);
+  if (!profile || !profile.naissance) return null;
+  const birth  = new Date(profile.naissance + 'T12:00:00');
+  const mesure = new Date(dateStr + 'T12:00:00');
+  return (mesure - birth) / (30.4375 * 24 * 3600 * 1000);
+}
+
+function savePerimetre() {
+  const dateVal = document.getElementById('perimDate').value;
+  const val     = parseFloat(document.getElementById('perimVal').value);
+  const note    = document.getElementById('perimNote').value.trim();
+  if (!dateVal || !val) { showToast('Veuillez saisir une date et une mesure'); return; }
+  const data = load(KEYS.perimetre);
+  data.push({ id: Date.now(), date: dateVal, value: val, note });
+  data.sort((a,b) => a.date.localeCompare(b.date));
+  save(KEYS.perimetre, data);
+  document.getElementById('perimVal').value = '';
+  document.getElementById('perimNote').value = '';
+  renderPerimetre(); drawPerimetreChart();
+  showToast('Périmètre crânien enregistré ✓');
+}
+
+function renderPerimetre() {
+  const data = load(KEYS.perimetre);
+  const statsEl = document.getElementById('perimStats');
+  if (data.length) {
+    const last  = data[data.length-1];
+    const first = data[0];
+    const diff  = +(last.value - first.value).toFixed(1);
+    statsEl.innerHTML = `
+      <div class="stat-box"><div class="stat-val" style="color:#2dd4bf;">${last.value} cm</div><div class="stat-lbl">Dernière mesure</div></div>
+      <div class="stat-box"><div class="stat-val" style="color:#2dd4bf;">${data.length}</div><div class="stat-lbl">Mesures</div></div>
+      <div class="stat-box"><div class="stat-val" style="color:#2dd4bf;">${diff>=0?'+':''}${diff} cm</div><div class="stat-lbl">Progression</div></div>`;
+  } else {
+    statsEl.innerHTML = '';
+  }
+  const c = document.getElementById('perimHistory');
+  if (!data.length) {
+    c.innerHTML = '<div class="empty-state"><div class="empty-icon">📐</div>Aucune mesure enregistrée</div>';
+    return;
+  }
+  c.innerHTML = [...data].reverse().map(e => `
+    <div class="history-item">
+      <div class="history-icon" style="background:rgba(45,212,191,0.12);">📐</div>
+      <div class="history-info">
+        <div class="hi-main">${e.value} cm</div>
+        <div class="hi-sub">${e.note||'—'}</div>
+      </div>
+      <div class="history-time">${fmtDate(e.date+'T12:00:00')}</div>
+      <button class="delete-btn" onclick="deletePerimetre(${e.id})">✕</button>
+    </div>`).join('');
+}
+
+function deletePerimetre(id) {
+  save(KEYS.perimetre, load(KEYS.perimetre).filter(e => e.id !== id));
+  renderPerimetre(); drawPerimetreChart();
+}
+
+function drawPerimetreChart() {
+  const profile = loadObj(KEYS.profile);
+  const sexe    = profile ? profile.sexe : 'garçon';
+  const refData = WHO_PERIMETRE[sexe] || WHO_PERIMETRE.garçon;
+  const accent  = '#2dd4bf';
+
+  // Mesures utilisateur → points (x = mois, y = cm)
+  const userPts = load(KEYS.perimetre).map(e => {
+    const m = ageEnMois(e.date);
+    return m !== null && m >= 0 && m <= 26 ? { x: +m.toFixed(2), y: e.value } : null;
+  }).filter(Boolean);
+
+  // Datasets OMS (mois 0-24, x = index)
+  const percLabels = ['P3','P15','P50','P85','P97'];
+  const colors = ['rgba(248,113,113,0.75)','rgba(251,191,36,0.75)','rgba(74,222,128,0.95)','rgba(251,191,36,0.75)','rgba(248,113,113,0.75)'];
+  const dashes  = [[6,3],[4,3],[],[4,3],[6,3]];
+  const widths  = [1.5,1.5,2.5,1.5,1.5];
+
+  const datasets = percLabels.map((lbl,pi) => ({
+    label: lbl,
+    data: refData.map((row, mi) => ({ x: mi, y: row[pi] })),
+    borderColor: colors[pi], borderWidth: widths[pi], borderDash: dashes[pi],
+    pointRadius: 0, fill: false, tension: 0.35, order: 10,
+  }));
+
+  datasets.push({
+    label: 'Mesures',
+    data: userPts,
+    borderColor: accent, backgroundColor: accent,
+    pointRadius: 6, pointHoverRadius: 8,
+    pointBorderColor: '#0d1117', pointBorderWidth: 2,
+    showLine: userPts.length >= 2, borderWidth: 2, tension: 0.3,
+    fill: false, order: 1,
+  });
+
+  // Légende
+  document.getElementById('whoPerimLegend').innerHTML = buildLegendHTML(accent);
+
+  if (chartWHOPerimetre) chartWHOPerimetre.destroy();
+  chartWHOPerimetre = new Chart(document.getElementById('whoPerimChart'), {
+    type: 'line',
+    data: { datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false, animation: { duration: 400 },
+      scales: {
+        x: {
+          type: 'linear', min: 0, max: 24,
+          ticks: { color:'#4a5568', font:{size:10}, stepSize:2, callback: v => `${v}m` },
+          grid: { color:'rgba(255,255,255,0.04)' },
+          border: { color:'rgba(255,255,255,0.08)' },
+        },
+        y: {
+          title: { display:true, text:'cm', color:'#4a5568', font:{size:10} },
+          ticks: { color:'#4a5568', font:{size:10} },
+          grid: { color:'rgba(255,255,255,0.04)' },
+          border: { color:'rgba(255,255,255,0.08)' },
+        },
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor:'#1e2436', borderColor:'rgba(255,255,255,0.1)', borderWidth:1,
+          titleColor:'#e2e8f0', bodyColor:'#7a8899',
+          callbacks: {
+            title: items => `${items[0].parsed.x.toFixed(1)} mois`,
+            label: item => item.dataset.label==='Mesures'
+              ? ` ${item.parsed.y} cm` : ` ${item.dataset.label} : ${item.parsed.y} cm`,
+          },
+        },
+      },
+    },
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// INSIGHTS — Analyse locale des patterns
+// ══════════════════════════════════════════════════════════════════════════════
+
+// ── Helpers analytiques ───────────────────────────────────────────────────────
+function mean(arr) { return arr.length ? arr.reduce((s,v)=>s+v,0)/arr.length : null; }
+
+function fmtMinutesAsTime(totalMin) {
+  if (totalMin === null) return '—';
+  const h = Math.floor(totalMin / 60), m = Math.round(totalMin % 60);
+  if (h === 0) return `${m} min`;
+  return m === 0 ? `${h}h` : `${h}h ${m}min`;
+}
+
+function addMinutesToDate(d, min) {
+  return new Date(d.getTime() + min * 60000);
+}
+
+function fmtHHMM(d) {
+  if (!d || isNaN(d)) return '—';
+  return d.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+}
+
+// Intervalles entre tétées consécutives (minutes)
+function computeIntervals(tetees7) {
+  const sorted = [...tetees7].sort((a,b) => new Date(a.timestamp)-new Date(b.timestamp));
+  const intervals = [];
+  for (let i=1; i<sorted.length; i++) {
+    const diff = (new Date(sorted[i].timestamp)-new Date(sorted[i-1].timestamp))/60000;
+    if (diff > 15 && diff < 720) intervals.push(diff); // filtre bruits (< 15 min ou > 12 h)
+  }
+  return intervals;
+}
+
+// Heure moyenne (en minutes depuis minuit), gestion du cercle
+function circularMeanMinutes(minutesList) {
+  if (!minutesList.length) return null;
+  const TAU = 24*60;
+  let sx=0, sy=0;
+  minutesList.forEach(m => { const a=2*Math.PI*m/TAU; sx+=Math.cos(a); sy+=Math.sin(a); });
+  let avg = Math.atan2(sy/minutesList.length, sx/minutesList.length) * TAU / (2*Math.PI);
+  if (avg < 0) avg += TAU;
+  return avg; // minutes depuis minuit
+}
+
+function minutesSinceMidnight(dateStr) {
+  const d = new Date(dateStr);
+  return d.getHours()*60 + d.getMinutes();
+}
+
+// Regroupement par plage horaire (clustering naïf des tétées par moment de la journée)
+function feedingClusters(tetees7) {
+  // On cherche les "pics" d'heure en découpant la journée en tranches de 3h
+  const slots = Array(8).fill(0); // 8 tranches de 3h
+  tetees7.forEach(e => { const h=new Date(e.timestamp).getHours(); slots[Math.floor(h/3)]++; });
+  // Trouver les 2 créneaux les plus fréquents
+  const ranked = slots.map((cnt,i)=>({slot:i,cnt})).sort((a,b)=>b.cnt-a.cnt);
+  return ranked.filter(r=>r.cnt>0).slice(0,3).map(r=>{
+    const h = r.slot*3;
+    return `${pad(h)}h–${pad(h+3)}h (${r.cnt}×)`;
+  });
+}
+
+// Durée entre deux événements : dernière tétée → premier sommeil qui suit
+function avgDelayFeedingToSleep(tetees7, sleep7) {
+  const delays = [];
+  tetees7.forEach(tet => {
+    const tetEnd = new Date(tet.timestamp).getTime() + (tet.duration||0)*60000;
+    // Trouver le premier sommeil démarré après cette tétée (dans les 3h)
+    const s = sleep7.find(sl => {
+      const sleepStart = new Date(sl.start).getTime();
+      return sleepStart >= tetEnd && sleepStart - tetEnd < 3*3600*1000;
+    });
+    if (s) delays.push((new Date(s.start).getTime() - tetEnd)/60000);
+  });
+  return mean(delays);
+}
+
+// Nombre d'événements par jour calendaire
+function avgPerDay(entries, dateKey='timestamp') {
+  if (!entries.length) return null;
+  const byDay = {};
+  entries.forEach(e => {
+    const d = toLocalDateStr(new Date(e[dateKey]));
+    byDay[d] = (byDay[d]||0) + 1;
+  });
+  const counts = Object.values(byDay);
+  return mean(counts);
+}
+
+// ── Rendu principal ───────────────────────────────────────────────────────────
+function renderInsights() {
+  const profile = loadObj(KEYS.profile);
+  const babyName = profile ? profile.prenom : 'Bébé';
+
+  // Titre
+  document.getElementById('insightTitle').textContent = `Analyse de ${babyName}`;
+
+  // Collecte données
+  const now7 = Date.now() - 7*24*3600*1000;
+  const todayStr = toLocalDateStr(now());
+
+  const allTetees  = load(KEYS.tetees);
+  const allSommeil = load(KEYS.sommeil);
+  const allCouches = load(KEYS.couches);
+
+  const tet7    = allTetees.filter(e=>new Date(e.timestamp).getTime()>now7);
+  const sleep7  = allSommeil.filter(e=>new Date(e.start).getTime()>now7 && e.duration>0);
+  const diap7   = allCouches.filter(e=>new Date(e.timestamp).getTime()>now7);
+
+  const tetToday   = allTetees.filter(e=>toLocalDateStr(new Date(e.timestamp))===todayStr);
+  const sleepToday = allSommeil.filter(e=>toLocalDateStr(new Date(e.start))===todayStr && e.duration>0);
+  const diapToday  = allCouches.filter(e=>toLocalDateStr(new Date(e.timestamp))===todayStr);
+
+  // ── RÉSUMÉ DU JOUR (pills) ──
+  const totalSleepTodayMin = sleepToday.reduce((s,e)=>s+(e.duration||0),0);
+  document.getElementById('insightSummaryToday').innerHTML = `
+    <div class="summary-pill"><div class="sp-val">${tetToday.length}</div><div class="sp-lbl">🍼 Tétées</div></div>
+    <div class="summary-pill"><div class="sp-val">${fmtMinutesAsTime(totalSleepTodayMin)}</div><div class="sp-lbl">😴 Sommeil</div></div>
+    <div class="summary-pill"><div class="sp-val">${diapToday.length}</div><div class="sp-lbl">🧷 Couches</div></div>`;
+
+  // ── RYTHMES ──
+  const intervals   = computeIntervals(tet7);
+  const avgInterval = mean(intervals);
+  const avgTetDur   = mean(tet7.filter(e=>e.duration).map(e=>e.duration));
+  const avgSleepDur = mean(sleep7.map(e=>e.duration));
+  const avgTetPerDay= avgPerDay(tet7, 'timestamp');
+  const avgDiapPerDay=avgPerDay(diap7,'timestamp');
+  const avgSleepPerDay=avgPerDay(sleep7,'start');
+  const delayFeedSleep = avgDelayFeedingToSleep(tet7, sleep7);
+  const clusters = feedingClusters(tet7);
+
+  // Heures moyennes des tétées
+  const tetHours = tet7.map(e=>minutesSinceMidnight(e.timestamp));
+  const avgTetTime = circularMeanMinutes(tetHours);
+
+  const rhythmEl = document.getElementById('insightRhythms');
+  if (tet7.length < 5 && sleep7.length < 3) {
+    rhythmEl.innerHTML = `<div class="no-data-msg"><div class="no-data-icon">📊</div>
+      Pas encore assez de données.<br>Revenez après quelques jours de suivi !</div>`;
+  } else {
+    const rows = [];
+    if (avgInterval !== null) rows.push({
+      icon:'⏱', cls:'ii-amber',
+      label:'Intervalle moyen entre tétées',
+      value: fmtMinutesAsTime(avgInterval),
+      detail: `Basé sur ${intervals.length} intervalle${intervals.length>1?'s':''} mesurés`,
+    });
+    if (avgTetDur !== null) rows.push({
+      icon:'🍼', cls:'ii-blue',
+      label:'Durée moyenne d\'une tétée',
+      value: fmtMinutesAsTime(avgTetDur),
+      detail: `Sur ${tet7.filter(e=>e.duration).length} tétées chronométrées`,
+    });
+    if (avgTetPerDay !== null) rows.push({
+      icon:'📅', cls:'ii-purple',
+      label:'Tétées par jour en moyenne',
+      value: avgTetPerDay.toFixed(1),
+      detail: `Sur les 7 derniers jours`,
+    });
+    if (avgSleepDur !== null) rows.push({
+      icon:'😴', cls:'ii-blue',
+      label:'Durée moyenne d\'une sieste',
+      value: fmtMinutesAsTime(avgSleepDur),
+      detail: avgSleepPerDay ? `Environ ${avgSleepPerDay.toFixed(1)} sieste${avgSleepPerDay>1?'s':''}/jour` : '',
+    });
+    if (delayFeedSleep !== null) rows.push({
+      icon:'💤', cls:'ii-purple',
+      label:`${babyName} s'endort généralement`,
+      value: `${fmtMinutesAsTime(delayFeedSleep)} après une tétée`,
+      detail: `Pattern détecté sur 7 jours`,
+    });
+    if (avgDiapPerDay !== null) rows.push({
+      icon:'🧷', cls:'ii-green',
+      label:'Couches par jour en moyenne',
+      value: avgDiapPerDay.toFixed(1),
+      detail: `Sur les 7 derniers jours`,
+    });
+    if (clusters.length) rows.push({
+      icon:'🕐', cls:'ii-amber',
+      label:'Créneaux habituels des tétées',
+      value: clusters.join(' · '),
+      detail: `Tranches de 3h les plus actives`,
+    });
+    rhythmEl.innerHTML = rows.map(r=>`
+      <div class="insight-item">
+        <div class="insight-icon ${r.cls}">${r.icon}</div>
+        <div class="insight-body">
+          <div class="insight-label">${r.label}</div>
+          <div class="insight-value">${r.value}</div>
+          ${r.detail ? `<div class="insight-detail">${r.detail}</div>` : ''}
+        </div>
+      </div>`).join('');
+  }
+
+  // ── PRÉDICTIONS ──
+  const predEl = document.getElementById('insightPredictions');
+  const preds = [];
+
+  // Prochaine tétée
+  if (avgInterval !== null && allTetees.length > 0) {
+    const lastTet = new Date(allTetees[0].timestamp); // déjà trié newest first
+    const predicted = addMinutesToDate(lastTet, avgInterval);
+    const diffNow = (predicted - now()) / 60000; // minutes depuis maintenant
+    if (diffNow > -60) {
+      let timeStr;
+      if (diffNow < 0) {
+        timeStr = `dans quelques minutes (prévu à ${fmtHHMM(predicted)})`;
+      } else if (diffNow < 60) {
+        timeStr = `dans ~${Math.round(diffNow)} min (vers ${fmtHHMM(predicted)})`;
+      } else {
+        timeStr = `vers ${fmtHHMM(predicted)}`;
+      }
+      preds.push({
+        icon:'🍼', cls:'ii-amber',
+        label:'Prochaine tétée probable',
+        value: timeStr,
+        detail: `Dernière : ${fmtHHMM(lastTet)} · intervalle moyen : ${fmtMinutesAsTime(avgInterval)}`,
+        badge: diffNow < 0 ? {text:'En retard', cls:'badge-warn'} : diffNow < 30 ? {text:'Bientôt', cls:'badge-warn'} : {text:'Prévu', cls:'badge-info'},
+      });
+    } else {
+      preds.push({
+        icon:'🍼', cls:'ii-blue',
+        label:'Prochaine tétée probable',
+        value: `vers ${fmtHHMM(predicted)}`,
+        detail: `Intervalle moyen : ${fmtMinutesAsTime(avgInterval)}`,
+      });
+    }
+  }
+
+  // Durée probable prochaine tétée
+  if (avgTetDur !== null) {
+    preds.push({
+      icon:'⏱', cls:'ii-purple',
+      label:'Durée probable',
+      value: `~${fmtMinutesAsTime(avgTetDur)}`,
+      detail: `Basé sur la moyenne des 7 derniers jours`,
+    });
+  }
+
+  // Sommeil prédit après tétée
+  if (delayFeedSleep !== null && allTetees.length > 0) {
+    const lastTet = new Date(allTetees[0].timestamp);
+    const predictedSleep = addMinutesToDate(lastTet, (allTetees[0].duration||0) + delayFeedSleep);
+    const diffSleep = (predictedSleep - now()) / 60000;
+    preds.push({
+      icon:'💤', cls:'ii-blue',
+      label:`${babyName} devrait s'endormir`,
+      value: diffSleep > 0
+        ? `dans ~${fmtMinutesAsTime(diffSleep)} (vers ${fmtHHMM(predictedSleep)})`
+        : `normalement déjà endormi`,
+      detail: `S'endort en moyenne ${fmtMinutesAsTime(delayFeedSleep)} après la tétée`,
+    });
+  }
+
+  // Durée probable sieste
+  if (avgSleepDur !== null) {
+    preds.push({
+      icon:'😴', cls:'ii-blue',
+      label:'Durée probable de la sieste',
+      value: `~${fmtMinutesAsTime(avgSleepDur)}`,
+      detail: `Moyenne des 7 derniers jours`,
+    });
+  }
+
+  if (!preds.length) {
+    predEl.innerHTML = `<div class="no-data-msg"><div class="no-data-icon">🔮</div>
+      Pas encore assez de données pour faire des prédictions.<br>
+      Continuez le suivi pendant quelques jours !</div>`;
+  } else {
+    predEl.innerHTML = preds.map(p=>`
+      <div class="insight-item">
+        <div class="insight-icon ${p.cls}">${p.icon}</div>
+        <div class="insight-body">
+          <div class="insight-label">${p.label}</div>
+          <div class="insight-value">${p.value}</div>
+          ${p.detail ? `<div class="insight-detail">${p.detail}</div>` : ''}
+          ${p.badge ? `<span class="insight-badge ${p.badge.cls}">${p.badge.text}</span>` : ''}
+        </div>
+      </div>`).join('');
+  }
+
+  // ── ANOMALIES ──
+  const anomalies = [];
+
+  if (avgTetPerDay !== null && tetToday.length < avgTetPerDay * 0.65) {
+    anomalies.push({
+      icon:'⚠️', cls:'ii-red',
+      label:'Moins de tétées qu\'habituellement',
+      value: `${tetToday.length} tétée${tetToday.length>1?'s':''} aujourd'hui (moy. ${avgTetPerDay.toFixed(1)}/j)`,
+      detail: `${babyName} a moins mangé que d'habitude`,
+    });
+  }
+  if (avgTetPerDay !== null && tetToday.length > avgTetPerDay * 1.4) {
+    anomalies.push({
+      icon:'📈', cls:'ii-green',
+      label:'Plus de tétées qu\'habituellement',
+      value: `${tetToday.length} tétées aujourd'hui (moy. ${avgTetPerDay.toFixed(1)}/j)`,
+      detail: `Poussée de croissance possible`,
+    });
+  }
+
+  const todaySleepMin = sleepToday.reduce((s,e)=>s+(e.duration||0),0);
+  const avgDailySleep = avgSleepPerDay !== null && avgSleepDur !== null ? avgSleepPerDay * avgSleepDur : null;
+  if (avgDailySleep !== null && todaySleepMin < avgDailySleep * 0.6 && todaySleepMin > 0) {
+    anomalies.push({
+      icon:'😟', cls:'ii-red',
+      label:'Moins de sommeil qu\'habituellement',
+      value: `${fmtMinutesAsTime(todaySleepMin)} aujourd'hui (moy. ${fmtMinutesAsTime(avgDailySleep)}/j)`,
+      detail: `${babyName} a moins dormi aujourd'hui`,
+    });
+  }
+
+  if (avgDiapPerDay !== null && diapToday.length < avgDiapPerDay * 0.5 && new Date().getHours() >= 12) {
+    anomalies.push({
+      icon:'🧷', cls:'ii-red',
+      label:'Peu de couches aujourd\'hui',
+      value: `${diapToday.length} couche${diapToday.length>1?'s':''} (moy. ${avgDiapPerDay.toFixed(1)}/j)`,
+      detail: `Surveiller l'hydratation`,
+    });
+  }
+
+  // Interval anormalement long depuis la dernière tétée
+  if (avgInterval !== null && allTetees.length > 0) {
+    const sinceLastTet = (now() - new Date(allTetees[0].timestamp)) / 60000;
+    if (sinceLastTet > avgInterval * 1.6 && sinceLastTet > 30) {
+      anomalies.push({
+        icon:'⏰', cls:'ii-red',
+        label:`Longtemps sans tétée`,
+        value: `${fmtMinutesAsTime(sinceLastTet)} depuis la dernière tétée`,
+        detail: `Intervalle habituel : ${fmtMinutesAsTime(avgInterval)}`,
+        badge: {text:'Attention', cls:'badge-warn'},
+      });
+    }
+  }
+
+  const anomalyEl = document.getElementById('insightAnomalies');
+  if (!anomalies.length) {
+    anomalyEl.innerHTML = `<div class="anomaly-none">✓ Tout se passe normalement aujourd'hui !</div>`;
+  } else {
+    anomalyEl.innerHTML = `<div class="insight-row">${anomalies.map(a=>`
+      <div class="insight-item">
+        <div class="insight-icon ${a.cls}">${a.icon}</div>
+        <div class="insight-body">
+          <div class="insight-label">${a.label}</div>
+          <div class="insight-value">${a.value}</div>
+          ${a.detail ? `<div class="insight-detail">${a.detail}</div>` : ''}
+          ${a.badge ? `<span class="insight-badge ${a.badge.cls}">${a.badge.text}</span>` : ''}
+        </div>
+      </div>`).join('')}</div>`;
+  }
+
+  // ── RÉSUMÉ DE LA JOURNÉE ──
+  const dayRows = [];
+
+  // Tétées d'aujourd'hui
+  const tetTodayDurTotal = tetToday.reduce((s,e)=>s+(e.duration||0),0);
+  const biberonToday = tetToday.filter(e=>e.type==='biberon');
+  const mlTotal = biberonToday.reduce((s,e)=>s+(e.ml||0),0);
+  dayRows.push({
+    icon:'🍼', cls:'ii-pink',
+    label:`Tétées aujourd'hui`,
+    value: tetToday.length === 0
+      ? 'Aucune tétée enregistrée'
+      : `${tetToday.length} tétée${tetToday.length>1?'s':''}${tetTodayDurTotal ? ` · ${fmtMinutesAsTime(tetTodayDurTotal)} total` : ''}`,
+    detail: mlTotal > 0 ? `${mlTotal} ml au biberon` :
+      tetToday.length > 0 ? `Dernière à ${fmtHHMM(new Date(tetToday[0].timestamp))}` : '',
+  });
+
+  // Sommeil d'aujourd'hui
+  const activeSleep = loadObj(KEYS.activeSleep);
+  dayRows.push({
+    icon:'😴', cls:'ii-blue',
+    label:'Sommeil aujourd\'hui',
+    value: totalSleepTodayMin > 0 || activeSleep
+      ? `${fmtMinutesAsTime(totalSleepTodayMin)}${activeSleep ? ' (+ en cours)' : ''}`
+      : 'Aucune sieste enregistrée',
+    detail: sleepToday.length > 0
+      ? `${sleepToday.length} sieste${sleepToday.length>1?'s':''}${activeSleep?' · 1 en cours':''}`
+      : activeSleep ? '1 sieste en cours' : '',
+  });
+
+  // Couches d'aujourd'hui
+  const pipiToday  = diapToday.filter(e=>e.type==='pipi').length;
+  const cacaToday  = diapToday.filter(e=>e.type==='caca').length;
+  const mixteToday = diapToday.filter(e=>e.type==='mixte').length;
+  dayRows.push({
+    icon:'🧷', cls:'ii-green',
+    label:'Couches aujourd\'hui',
+    value: diapToday.length === 0 ? 'Aucune couche enregistrée' : `${diapToday.length} couche${diapToday.length>1?'s':''}`,
+    detail: diapToday.length > 0
+      ? [pipiToday&&`${pipiToday} pipi`, cacaToday&&`${cacaToday} caca`, mixteToday&&`${mixteToday} mixte`].filter(Boolean).join(' · ')
+      : '',
+  });
+
+  // Dernière tétée / prochaine
+  if (allTetees.length > 0) {
+    const lastTet = new Date(allTetees[0].timestamp);
+    const sinceMin = Math.round((now()-lastTet)/60000);
+    const typeMap = {sein_gauche:'Sein gauche',sein_droit:'Sein droit',biberon:'Biberon'};
+    dayRows.push({
+      icon:'⏱', cls:'ii-amber',
+      label:'Dernière tétée',
+      value: `${fmtHHMM(lastTet)} — il y a ${fmtMinutesAsTime(sinceMin)}`,
+      detail: typeMap[allTetees[0].type] || allTetees[0].type,
+    });
+  }
+
+  document.getElementById('insightDaySummary').innerHTML = dayRows.map(r=>`
+    <div class="insight-item">
+      <div class="insight-icon ${r.cls}">${r.icon}</div>
+      <div class="insight-body">
+        <div class="insight-label">${r.label}</div>
+        <div class="insight-value">${r.value}</div>
+        ${r.detail ? `<div class="insight-detail">${r.detail}</div>` : ''}
+      </div>
+    </div>`).join('');
+}
+
 // ─── DELETE ──────────────────────────────────────────────────────────────────
 function deleteEntry(storeKey,id,renderFn) {
   save(KEYS[storeKey],load(KEYS[storeKey]).filter(e=>e.id!==id));
@@ -1331,6 +2461,8 @@ function init() {
   document.getElementById('diaperTime').value=toLocalDatetimeStr(now());
   document.getElementById('weightDate').value=toLocalDateStr(now());
   document.getElementById('heightDate').value=toLocalDateStr(now());
+  document.getElementById('perimDate').value=toLocalDateStr(now());
+  document.getElementById('rdvDate').value=toLocalDateStr(now());
   document.getElementById('sleepStart').value=toLocalDatetimeStr(now());
   renderTetees(); renderSommeil(); renderCouches(); renderPoids();
   // Les charts OMS sont dessinés lors du premier affichage de l'onglet poids
