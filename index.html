@@ -4,406 +4,446 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>BabyTrack</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
   <style>
+    /* ── THEME ──────────────────────────────────────────────────────────── */
     :root {
-      --bg: #f7f4f0;
-      --surface: #ffffff;
-      --border: #e8e0d8;
-      --primary: #d4846a;
-      --primary-light: #f5e6e0;
-      --primary-dark: #b86a52;
-      --secondary: #7ab5c8;
-      --secondary-light: #e0f0f7;
-      --green: #7bc67a;
-      --green-light: #e0f5e0;
-      --purple: #a98bc8;
-      --purple-light: #ede0f7;
-      --text: #3a3330;
-      --text-muted: #8a7f78;
-      --shadow: 0 2px 12px rgba(0,0,0,0.08);
-      --radius: 14px;
-      --radius-sm: 8px;
+      --bg:         #0d1117;
+      --surface:    #161b26;
+      --surface2:   #1e2436;
+      --border:     rgba(255,255,255,0.07);
+      --text:       #e2e8f0;
+      --text-muted: #7a8899;
+      --shadow:     0 4px 32px rgba(0,0,0,0.5);
+      --radius:     16px;
+      --radius-sm:  10px;
+      --accent:       #60a5fa;
+      --accent-dim:   rgba(96,165,250,0.13);
+      --accent-glow:  rgba(96,165,250,0.25);
+      --accent-dark:  #3b82f6;
+      --sleep:      #818cf8;
+      --sleep-dim:  rgba(129,140,248,0.13);
+      --diaper:     #34d399;
+      --diaper-dim: rgba(52,211,153,0.13);
+      --weight:     #a78bfa;
+      --weight-dim: rgba(167,139,250,0.13);
     }
+    body.theme-girl {
+      --accent:      #f472b6;
+      --accent-dim:  rgba(244,114,182,0.13);
+      --accent-glow: rgba(244,114,182,0.28);
+      --accent-dark: #ec4899;
+    }
+    body.theme-boy {
+      --accent:      #60a5fa;
+      --accent-dim:  rgba(96,165,250,0.13);
+      --accent-glow: rgba(96,165,250,0.28);
+      --accent-dark: #3b82f6;
+    }
+
+    /* ── RESET ──────────────────────────────────────────────────────────── */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      padding-bottom: 80px;
+      padding-bottom: 84px;
     }
-    /* Header */
+
+    /* ── ONBOARDING ─────────────────────────────────────────────────────── */
+    .onboarding {
+      position: fixed; inset: 0;
+      background: var(--bg);
+      z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .onboarding.hidden { display: none; }
+    .onboard-card {
+      width: 100%; max-width: 400px;
+      background: var(--surface);
+      border-radius: 24px;
+      padding: 36px 28px 28px;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+    }
+    .onboard-logo { text-align: center; font-size: 3rem; margin-bottom: 6px; }
+    .onboard-title {
+      text-align: center; font-size: 1.5rem; font-weight: 800;
+      color: var(--text); margin-bottom: 4px; letter-spacing: -0.5px;
+    }
+    .onboard-subtitle {
+      text-align: center; font-size: 0.82rem; color: var(--text-muted);
+      margin-bottom: 30px; line-height: 1.5;
+    }
+    .onboard-field { margin-bottom: 18px; }
+    .onboard-field label {
+      display: block; font-size: 0.72rem; font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase;
+      letter-spacing: 0.6px; margin-bottom: 7px;
+    }
+    .onboard-field input {
+      width: 100%; background: var(--surface2);
+      border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+      color: var(--text); font-size: 1rem; padding: 12px 14px;
+      outline: none; transition: border-color 0.2s; -webkit-appearance: none;
+    }
+    .onboard-field input:focus { border-color: var(--accent); }
+    .sex-group { display: flex; gap: 10px; }
+    .sex-btn {
+      flex: 1; padding: 14px 8px;
+      border-radius: var(--radius-sm); border: 2px solid var(--border);
+      background: var(--surface2); color: var(--text-muted);
+      font-size: 0.9rem; font-weight: 700; cursor: pointer;
+      text-align: center; transition: all 0.2s; user-select: none;
+    }
+    .sex-btn span { display: block; font-size: 1.8rem; margin-bottom: 4px; }
+    .sex-btn.active-girl { border-color: #f472b6; background: rgba(244,114,182,0.12); color: #f472b6; }
+    .sex-btn.active-boy  { border-color: #60a5fa; background: rgba(96,165,250,0.12);  color: #60a5fa; }
+    .onboard-submit {
+      width: 100%; padding: 14px; border: none;
+      border-radius: var(--radius-sm); background: var(--accent);
+      color: #fff; font-size: 1rem; font-weight: 800; cursor: pointer;
+      margin-top: 6px; letter-spacing: 0.3px; transition: opacity 0.15s, transform 0.1s;
+    }
+    .onboard-submit:hover { opacity: 0.88; }
+    .onboard-submit:active { transform: scale(0.98); }
+
+    /* ── HEADER ─────────────────────────────────────────────────────────── */
     .app-header {
       background: var(--surface);
-      padding: 18px 20px 14px;
-      box-shadow: var(--shadow);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .app-header h1 {
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--primary);
-      letter-spacing: -0.3px;
-    }
-    .app-header .subtitle {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-top: 1px;
-    }
-    .header-date {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      text-align: right;
-    }
-    /* Nav */
-    .nav-tabs {
-      display: flex;
-      background: var(--surface);
+      padding: 14px 20px 12px;
       border-bottom: 1px solid var(--border);
-      overflow-x: auto;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .header-baby-name { font-size: 1.15rem; font-weight: 800; color: var(--accent); letter-spacing: -0.3px; }
+    .header-baby-age  { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
+    .header-right { text-align: right; font-size: 0.72rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* ── NAV ────────────────────────────────────────────────────────────── */
+    .nav-tabs {
+      display: flex; background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none;
     }
     .nav-tabs::-webkit-scrollbar { display: none; }
     .nav-tab {
-      flex: 1;
-      min-width: 70px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 10px 8px;
-      cursor: pointer;
-      border-bottom: 3px solid transparent;
-      transition: all 0.2s;
-      user-select: none;
-      gap: 3px;
+      flex: 1; min-width: 60px;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 10px 6px 8px; cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.18s; user-select: none; gap: 3px;
     }
-    .nav-tab .tab-icon { font-size: 1.3rem; }
-    .nav-tab .tab-label { font-size: 0.65rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3px; }
-    .nav-tab.active .tab-label { color: var(--primary); }
-    .nav-tab[data-tab="tétées"].active { border-color: var(--primary); }
-    .nav-tab[data-tab="sommeil"].active { border-color: var(--secondary); }
-    .nav-tab[data-tab="couches"].active { border-color: var(--green); }
-    .nav-tab[data-tab="poids"].active { border-color: var(--purple); }
-    .nav-tab[data-tab="paramètres"].active { border-color: #8a9bb0; }
-    .nav-tab[data-tab="paramètres"].active .tab-label { color: #8a9bb0; }
-    /* Settings tab */
-    .settings-section { margin-bottom: 20px; }
-    .settings-section p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 14px; }
-    .btn-export { background: #4a7fa5; color: #fff; }
-    .btn-export:hover { background: #3a6a8e; }
-    .btn-import { background: #5a9a72; color: #fff; }
-    .btn-import:hover { background: #4a8560; }
-    .import-info { font-size: 0.78rem; color: var(--text-muted); margin-top: 8px; font-style: italic; }
-    #importFileInput { display: none; }
-    /* Main */
+    .nav-tab .tab-icon  { font-size: 1.2rem; }
+    .nav-tab .tab-label { font-size: 0.58rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; }
+    .nav-tab[data-tab="tétées"].active    { border-color: var(--accent); }
+    .nav-tab[data-tab="tétées"].active .tab-label    { color: var(--accent); }
+    .nav-tab[data-tab="sommeil"].active   { border-color: var(--sleep); }
+    .nav-tab[data-tab="sommeil"].active .tab-label   { color: var(--sleep); }
+    .nav-tab[data-tab="couches"].active   { border-color: var(--diaper); }
+    .nav-tab[data-tab="couches"].active .tab-label   { color: var(--diaper); }
+    .nav-tab[data-tab="poids"].active     { border-color: var(--weight); }
+    .nav-tab[data-tab="poids"].active .tab-label     { color: var(--weight); }
+    .nav-tab[data-tab="paramètres"].active { border-color: var(--text-muted); }
+    .nav-tab[data-tab="paramètres"].active .tab-label { color: var(--text-muted); }
+
+    /* ── MAIN ───────────────────────────────────────────────────────────── */
     .main { padding: 16px; max-width: 520px; margin: 0 auto; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
-    /* Cards */
+
+    /* ── CARDS ──────────────────────────────────────────────────────────── */
     .card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: var(--shadow);
-      margin-bottom: 16px;
+      background: var(--surface); border-radius: var(--radius);
+      padding: 18px; border: 1px solid var(--border); margin-bottom: 14px;
     }
     .card-title {
-      font-size: 0.85rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--text-muted);
-      margin-bottom: 14px;
+      font-size: 0.7rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.8px; color: var(--text-muted); margin-bottom: 14px;
     }
-    /* Forms */
-    .form-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 12px;
-      align-items: flex-end;
-    }
-    .form-group {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-    .form-group label {
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--text-muted);
-    }
+
+    /* ── FORMS ──────────────────────────────────────────────────────────── */
+    .form-row { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-end; }
+    .form-group { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+    .form-group label { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); }
     .form-group input, .form-group select {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-sm);
-      font-size: 0.95rem;
-      color: var(--text);
-      background: var(--bg);
-      outline: none;
-      transition: border-color 0.2s;
-      -webkit-appearance: none;
+      width: 100%; padding: 10px 12px;
+      border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+      font-size: 0.95rem; color: var(--text); background: var(--surface2);
+      outline: none; transition: border-color 0.18s; -webkit-appearance: none;
     }
-    .form-group input:focus, .form-group select:focus {
-      border-color: var(--primary);
-    }
-    /* Segment buttons */
+    .form-group input:focus, .form-group select:focus { border-color: var(--accent); }
+    input[type="date"]::-webkit-calendar-picker-indicator,
+    input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+    input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.6); }
+
+    /* ── SEGMENT BUTTONS ────────────────────────────────────────────────── */
     .seg-group { display: flex; gap: 6px; }
     .seg-btn {
-      flex: 1;
-      padding: 9px 6px;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-sm);
-      background: var(--bg);
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.15s;
-      user-select: none;
+      flex: 1; padding: 9px 6px;
+      border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+      background: var(--surface2); font-size: 0.8rem; font-weight: 700;
+      color: var(--text-muted); cursor: pointer; text-align: center;
+      transition: all 0.15s; user-select: none;
     }
-    .seg-btn.active-primary { background: var(--primary-light); border-color: var(--primary); color: var(--primary-dark); }
-    .seg-btn.active-secondary { background: var(--secondary-light); border-color: var(--secondary); color: #3a7a8a; }
-    .seg-btn.active-green { background: var(--green-light); border-color: var(--green); color: #2a7a2a; }
-    .seg-btn.active-purple { background: var(--purple-light); border-color: var(--purple); color: #5a3a8a; }
-    /* Buttons */
+    .seg-btn.active-primary  { background: var(--accent-dim);  border-color: var(--accent);  color: var(--accent); }
+    .seg-btn.active-secondary{ background: var(--sleep-dim);   border-color: var(--sleep);   color: var(--sleep); }
+    .seg-btn.active-green    { background: var(--diaper-dim);  border-color: var(--diaper);  color: var(--diaper); }
+    .seg-btn.active-purple   { background: var(--weight-dim);  border-color: var(--weight);  color: var(--weight); }
+
+    /* ── BUTTONS ────────────────────────────────────────────────────────── */
     .btn {
-      width: 100%;
-      padding: 13px;
-      border: none;
-      border-radius: var(--radius-sm);
-      font-size: 0.95rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.15s;
-      letter-spacing: 0.2px;
+      width: 100%; padding: 13px; border: none; border-radius: var(--radius-sm);
+      font-size: 0.95rem; font-weight: 800; cursor: pointer;
+      transition: all 0.15s; letter-spacing: 0.2px;
     }
     .btn:active { transform: scale(0.98); }
-    .btn-primary { background: var(--primary); color: white; }
-    .btn-primary:hover { background: var(--primary-dark); }
-    .btn-secondary { background: var(--secondary); color: white; }
-    .btn-secondary:hover { background: #5a9ab0; }
-    .btn-green { background: var(--green); color: white; }
-    .btn-green:hover { background: #5aaa5a; }
-    .btn-purple { background: var(--purple); color: white; }
-    .btn-purple:hover { background: #8a6aaa; }
-    /* Timer */
+    .btn-primary   { background: var(--accent); color: #fff; }
+    .btn-primary:hover   { opacity: 0.88; }
+    .btn-secondary { background: var(--sleep); color: #fff; }
+    .btn-secondary:hover { opacity: 0.88; }
+    .btn-green     { background: var(--diaper); color: #071a10; }
+    .btn-green:hover     { opacity: 0.88; }
+    .btn-purple    { background: var(--weight); color: #fff; }
+    .btn-purple:hover    { opacity: 0.88; }
+    .btn-ghost {
+      background: var(--surface2); color: var(--text-muted);
+      border: 1.5px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--text-muted); color: var(--text); }
+
+    /* ── TIMER ──────────────────────────────────────────────────────────── */
     .timer-display {
-      text-align: center;
-      padding: 14px;
-      background: var(--primary-light);
-      border-radius: var(--radius-sm);
-      margin-bottom: 12px;
+      text-align: center; padding: 16px;
+      background: var(--accent-dim); border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--radius-sm); margin-bottom: 12px;
     }
     .timer-display .timer-time {
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: var(--primary);
-      letter-spacing: 2px;
+      font-size: 2.4rem; font-weight: 800;
+      color: var(--accent); letter-spacing: 3px;
       font-variant-numeric: tabular-nums;
     }
-    .timer-display .timer-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+    .timer-display .timer-label { font-size: 0.68rem; color: var(--text-muted); margin-top: 3px; }
     .timer-controls { display: flex; gap: 8px; margin-bottom: 12px; }
     .timer-controls .btn { font-size: 0.85rem; padding: 10px; }
-    /* Stats bar */
-    .stats-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
+
+    /* ── STATS ──────────────────────────────────────────────────────────── */
+    .stats-row { display: flex; gap: 8px; margin-bottom: 14px; }
     .stat-box {
-      flex: 1;
-      background: var(--surface);
-      border-radius: var(--radius-sm);
-      padding: 12px 10px;
-      text-align: center;
-      box-shadow: var(--shadow);
+      flex: 1; background: var(--surface);
+      border-radius: var(--radius-sm); border: 1px solid var(--border);
+      padding: 12px 8px; text-align: center;
     }
-    .stat-box .stat-val { font-size: 1.3rem; font-weight: 700; }
-    .stat-box .stat-lbl { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; margin-top: 2px; }
-    .stat-val.c-primary { color: var(--primary); }
-    .stat-val.c-secondary { color: var(--secondary); }
-    .stat-val.c-green { color: var(--green); }
-    .stat-val.c-purple { color: var(--purple); }
-    /* History list */
-    .history-list { display: flex; flex-direction: column; gap: 8px; }
+    .stat-box .stat-val { font-size: 1.22rem; font-weight: 800; }
+    .stat-box .stat-lbl { font-size: 0.58rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; margin-top: 3px; }
+    .stat-val.c-primary   { color: var(--accent); }
+    .stat-val.c-secondary { color: var(--sleep); }
+    .stat-val.c-green     { color: var(--diaper); }
+    .stat-val.c-purple    { color: var(--weight); }
+
+    /* ── HISTORY ────────────────────────────────────────────────────────── */
+    .history-list { display: flex; flex-direction: column; gap: 7px; }
     .history-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 14px;
-      background: var(--bg);
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
+      display: flex; align-items: center; gap: 11px;
+      padding: 11px 13px; background: var(--surface2);
+      border-radius: var(--radius-sm); border: 1px solid var(--border);
     }
     .history-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      flex-shrink: 0;
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
     }
-    .hi-primary { background: var(--primary-light); }
-    .hi-secondary { background: var(--secondary-light); }
-    .hi-green { background: var(--green-light); }
-    .hi-purple { background: var(--purple-light); }
+    .hi-primary   { background: var(--accent-dim); }
+    .hi-secondary { background: var(--sleep-dim); }
+    .hi-green     { background: var(--diaper-dim); }
+    .hi-purple    { background: var(--weight-dim); }
     .history-info { flex: 1; min-width: 0; }
-    .history-info .hi-main { font-size: 0.9rem; font-weight: 600; }
-    .history-info .hi-sub { font-size: 0.75rem; color: var(--text-muted); margin-top: 1px; }
-    .history-time { font-size: 0.75rem; color: var(--text-muted); text-align: right; flex-shrink: 0; }
+    .history-info .hi-main { font-size: 0.87rem; font-weight: 700; }
+    .history-info .hi-sub  { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
+    .history-time { font-size: 0.72rem; color: var(--text-muted); text-align: right; flex-shrink: 0; }
     .delete-btn {
-      background: none;
-      border: none;
-      color: #ccc;
-      cursor: pointer;
-      font-size: 1rem;
-      padding: 4px;
-      border-radius: 50%;
-      transition: color 0.15s;
-      flex-shrink: 0;
+      background: none; border: none; color: rgba(255,255,255,0.15);
+      cursor: pointer; font-size: 0.88rem; padding: 5px; border-radius: 50%;
+      transition: color 0.15s; flex-shrink: 0;
     }
-    .delete-btn:hover { color: #e05a4a; }
-    .empty-state {
-      text-align: center;
-      padding: 30px 20px;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-    }
-    .empty-state .empty-icon { font-size: 2.5rem; margin-bottom: 10px; }
-    /* Sleep active indicator */
+    .delete-btn:hover { color: #ef4444; }
+    .empty-state { text-align: center; padding: 32px 16px; color: var(--text-muted); font-size: 0.85rem; }
+    .empty-state .empty-icon { font-size: 2.2rem; margin-bottom: 10px; opacity: 0.5; }
+
+    /* ── SLEEP BADGE ────────────────────────────────────────────────────── */
     .sleep-active-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--secondary-light);
-      border: 1.5px solid var(--secondary);
-      border-radius: 20px;
-      padding: 6px 14px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: #3a7a8a;
-      margin-bottom: 12px;
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--sleep-dim); border: 1px solid rgba(129,140,248,0.3);
+      border-radius: 20px; padding: 6px 14px;
+      font-size: 0.82rem; font-weight: 700; color: var(--sleep); margin-bottom: 12px;
     }
     .sleep-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--secondary);
-      animation: pulse 1.5s infinite;
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--sleep); animation: pulse 1.5s infinite;
     }
     @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.8); }
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.4; transform: scale(0.7); }
     }
-    /* Weight chart */
-    .weight-chart {
-      width: 100%;
-      height: 160px;
-      position: relative;
-      margin-bottom: 8px;
-    }
+
+    /* ── WEIGHT CHART ───────────────────────────────────────────────────── */
+    .weight-chart { width: 100%; height: 160px; position: relative; margin-bottom: 8px; }
     .weight-chart canvas { width: 100% !important; height: 100% !important; }
-    /* Toast */
+
+    /* ── TOAST ──────────────────────────────────────────────────────────── */
     .toast {
-      position: fixed;
-      bottom: 90px;
-      left: 50%;
+      position: fixed; bottom: 90px; left: 50%;
       transform: translateX(-50%) translateY(20px);
-      background: #333;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      opacity: 0;
-      transition: all 0.3s;
-      z-index: 999;
-      pointer-events: none;
-      white-space: nowrap;
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text); padding: 10px 20px; border-radius: 20px;
+      font-size: 0.85rem; font-weight: 600;
+      opacity: 0; transition: all 0.28s; z-index: 999;
+      pointer-events: none; white-space: nowrap;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-    /* Bottom nav spacing helper */
-    .section-divider {
-      height: 1px;
-      background: var(--border);
-      margin: 4px 0 16px;
+
+    /* ── SETTINGS ───────────────────────────────────────────────────────── */
+    .settings-section p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 14px; }
+    .btn-export { background: #2563eb; color: #fff; }
+    .btn-export:hover { background: #1d4ed8; }
+    .btn-import { background: #059669; color: #fff; }
+    .btn-import:hover { background: #047857; }
+    .import-info { font-size: 0.73rem; color: var(--text-muted); margin-top: 8px; font-style: italic; }
+    #importFileInput { display: none; }
+    .profile-preview {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 16px; background: var(--surface2);
+      border-radius: var(--radius-sm); border: 1px solid var(--border); margin-bottom: 14px;
     }
-    /* Responsive tweaks */
+    .profile-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; background: var(--accent-dim);
+      border: 2px solid var(--accent); flex-shrink: 0;
+    }
+    .profile-info .pname  { font-weight: 800; font-size: 1rem; color: var(--accent); }
+    .profile-info .pdetail { font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; }
+    .btn-reset {
+      width: 100%; padding: 10px; text-align: center; cursor: pointer;
+      background: rgba(239,68,68,0.1); color: #ef4444;
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: var(--radius-sm); font-size: 0.82rem; font-weight: 700;
+      transition: all 0.15s;
+    }
+    .btn-reset:hover { background: rgba(239,68,68,0.2); }
+
+    /* ── WHO CHARTS ─────────────────────────────────────────────────────── */
+    .who-chart-wrap { position: relative; height: 280px; margin-bottom: 4px; }
+    .who-legend {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      margin-bottom: 12px; font-size: 0.68rem; color: var(--text-muted);
+    }
+    .who-legend-item { display: flex; align-items: center; gap: 5px; }
+    .who-legend-dot { width: 20px; height: 3px; border-radius: 2px; }
+    .who-section-label {
+      font-size: 0.68rem; font-weight: 700; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.6px;
+      margin-bottom: 6px; opacity: 0.7;
+    }
+    .stats-row-2col { display: flex; gap: 8px; margin-bottom: 14px; }
+    .stats-row-2col .stat-box { flex: 1; }
+    /* ── RESPONSIVE ─────────────────────────────────────────────────────── */
     @media (max-width: 360px) {
       .form-row { flex-direction: column; }
-      .seg-btn { font-size: 0.75rem; padding: 8px 4px; }
+      .seg-btn { font-size: 0.72rem; padding: 8px 4px; }
     }
   </style>
 </head>
 <body>
 
-<div class="app-header">
-  <div>
-    <h1>&#128118; BabyTrack</h1>
-    <div class="subtitle">Carnet de bord du bébé</div>
+<!-- ═══════════════ ONBOARDING ═══════════════ -->
+<div class="onboarding" id="onboarding">
+  <div class="onboard-card">
+    <div class="onboard-logo">👶</div>
+    <div class="onboard-title">BabyTrack</div>
+    <div class="onboard-subtitle">Carnet de bord pour votre bébé.<br>Configurons l'application en 30 secondes.</div>
+
+    <div class="onboard-field">
+      <label>Prénom du bébé</label>
+      <input type="text" id="obName" placeholder="Ex : Léa, Noah, Emma…" autocomplete="off" />
+    </div>
+
+    <div class="onboard-field">
+      <label>Date de naissance</label>
+      <input type="date" id="obBirthdate" />
+    </div>
+
+    <div class="onboard-field">
+      <label>Sexe</label>
+      <div class="sex-group">
+        <div class="sex-btn" id="obGirl" onclick="selectSex('fille')">
+          <span>👧</span>Fille
+        </div>
+        <div class="sex-btn" id="obBoy" onclick="selectSex('garçon')">
+          <span>👦</span>Garçon
+        </div>
+      </div>
+    </div>
+
+    <button class="onboard-submit" id="obSubmit" onclick="submitOnboarding()">Commencer →</button>
   </div>
-  <div class="header-date" id="headerDate"></div>
 </div>
 
+<!-- ═══════════════ HEADER ═══════════════ -->
+<div class="app-header">
+  <div>
+    <div class="header-baby-name" id="headerName">BabyTrack</div>
+    <div class="header-baby-age"  id="headerAge"></div>
+  </div>
+  <div class="header-right" id="headerDate"></div>
+</div>
+
+<!-- ═══════════════ NAV ═══════════════ -->
 <nav class="nav-tabs">
   <div class="nav-tab active" data-tab="tétées" onclick="switchTab('tétées')">
-    <span class="tab-icon">&#127868;</span>
-    <span class="tab-label">Tétées</span>
+    <span class="tab-icon">🍼</span><span class="tab-label">Tétées</span>
   </div>
   <div class="nav-tab" data-tab="sommeil" onclick="switchTab('sommeil')">
-    <span class="tab-icon">&#128164;</span>
-    <span class="tab-label">Sommeil</span>
+    <span class="tab-icon">😴</span><span class="tab-label">Sommeil</span>
   </div>
   <div class="nav-tab" data-tab="couches" onclick="switchTab('couches')">
-    <span class="tab-icon">&#129686;</span>
-    <span class="tab-label">Couches</span>
+    <span class="tab-icon">🧷</span><span class="tab-label">Couches</span>
   </div>
   <div class="nav-tab" data-tab="poids" onclick="switchTab('poids')">
-    <span class="tab-icon">&#9878;</span>
-    <span class="tab-label">Poids</span>
+    <span class="tab-icon">⚖️</span><span class="tab-label">Poids</span>
   </div>
   <div class="nav-tab" data-tab="paramètres" onclick="switchTab('paramètres')">
-    <span class="tab-icon">&#9881;</span>
-    <span class="tab-label">Réglages</span>
+    <span class="tab-icon">⚙️</span><span class="tab-label">Réglages</span>
   </div>
 </nav>
 
+<!-- ═══════════════ CONTENU ═══════════════ -->
 <div class="main">
 
-  <!-- ═══════════════ TETEES ═══════════════ -->
+  <!-- TÉTÉES -->
   <div class="tab-content active" id="tab-tétées">
     <div class="stats-row" id="tetStats"></div>
     <div class="card">
       <div class="card-title">Nouvelle tétée</div>
-
       <div style="margin-bottom:12px;">
-        <label style="font-size:0.78rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:6px;">Type</label>
+        <label style="font-size:0.72rem;font-weight:700;color:var(--text-muted);display:block;margin-bottom:7px;">Type</label>
         <div class="seg-group" id="tetTypeGroup">
-          <div class="seg-btn active-primary" data-val="sein_gauche" onclick="selectSeg('tetTypeGroup','active-primary',this)">&#9792; Gauche</div>
-          <div class="seg-btn" data-val="sein_droit" onclick="selectSeg('tetTypeGroup','active-primary',this)">&#9792; Droit</div>
-          <div class="seg-btn" data-val="biberon" onclick="selectSeg('tetTypeGroup','active-primary',this)">&#127868; Biberon</div>
+          <div class="seg-btn active-primary" data-val="sein_gauche" onclick="selectSeg('tetTypeGroup','active-primary',this)">♀ Gauche</div>
+          <div class="seg-btn" data-val="sein_droit"  onclick="selectSeg('tetTypeGroup','active-primary',this)">♀ Droit</div>
+          <div class="seg-btn" data-val="biberon"     onclick="selectSeg('tetTypeGroup','active-primary',this)">🍼 Biberon</div>
         </div>
       </div>
-
-      <div class="timer-display" id="tetTimerDisplay">
+      <div class="timer-display">
         <div class="timer-time" id="tetTimerClock">00:00</div>
         <div class="timer-label">Durée de la tétée</div>
       </div>
       <div class="timer-controls">
-        <button class="btn btn-primary" onclick="tetTimerToggle()" id="tetTimerBtn">&#9654; Démarrer</button>
-        <button class="btn" style="background:var(--border);color:var(--text-muted);flex:0 0 80px;" onclick="tetTimerReset()">Réinitialiser</button>
+        <button class="btn btn-primary" onclick="tetTimerToggle()" id="tetTimerBtn">▶ Démarrer</button>
+        <button class="btn btn-ghost" style="flex:0 0 94px;" onclick="tetTimerReset()">Réinitialiser</button>
       </div>
-
       <div class="form-row">
         <div class="form-group">
           <label>Heure (si manuelle)</label>
@@ -411,33 +451,31 @@
         </div>
         <div class="form-group">
           <label>Durée (min)</label>
-          <input type="number" id="tetDuration" placeholder="Ex: 15" min="1" max="120" />
+          <input type="number" id="tetDuration" placeholder="Ex : 15" min="1" max="120" />
         </div>
       </div>
       <div class="form-group" id="tetMlGroup" style="margin-bottom:12px;display:none;">
         <label>Quantité (ml) — biberon</label>
-        <input type="number" id="tetMl" placeholder="Ex: 90" min="10" max="300" />
+        <input type="number" id="tetMl" placeholder="Ex : 90" min="10" max="300" />
       </div>
-
-      <button class="btn btn-primary" onclick="saveTetee()">&#10003; Enregistrer la tétée</button>
+      <button class="btn btn-primary" onclick="saveTetee()">✓ Enregistrer la tétée</button>
     </div>
-
     <div class="card">
       <div class="card-title">Historique — 24 dernières heures</div>
       <div class="history-list" id="tetHistory"></div>
     </div>
   </div>
 
-  <!-- ═══════════════ SOMMEIL ═══════════════ -->
+  <!-- SOMMEIL -->
   <div class="tab-content" id="tab-sommeil">
     <div class="stats-row" id="sleepStats"></div>
     <div class="card" id="sleepActiveCard" style="display:none;">
       <div class="sleep-active-badge"><div class="sleep-dot"></div>Bébé dort depuis <span id="sleepSinceTxt">…</span></div>
-      <div class="timer-display" style="background:var(--secondary-light);">
-        <div class="timer-time" style="color:var(--secondary);" id="sleepTimerClock">00:00:00</div>
+      <div class="timer-display" style="background:var(--sleep-dim);">
+        <div class="timer-time" style="color:var(--sleep);" id="sleepTimerClock">00:00:00</div>
         <div class="timer-label">Durée du sommeil en cours</div>
       </div>
-      <button class="btn btn-secondary" onclick="stopSleep()">&#9632; Terminer le sommeil</button>
+      <button class="btn btn-secondary" onclick="stopSleep()">■ Terminer le sommeil</button>
     </div>
     <div class="card" id="sleepStartCard">
       <div class="card-title">Enregistrer le sommeil</div>
@@ -447,39 +485,36 @@
           <input type="datetime-local" id="sleepStart" />
         </div>
       </div>
-      <div class="form-row" id="sleepEndRow">
+      <div class="form-row">
         <div class="form-group">
           <label>Heure de fin (optionnel)</label>
           <input type="datetime-local" id="sleepEnd" />
         </div>
       </div>
       <div style="display:flex;gap:8px;">
-        <button class="btn btn-secondary" style="flex:1;" onclick="startSleepNow()">&#9654; Commencer maintenant</button>
-        <button class="btn" style="flex:1;background:var(--border);color:var(--text-muted);" onclick="saveSleepManual()">&#10003; Enregistrer</button>
+        <button class="btn btn-secondary" style="flex:1;" onclick="startSleepNow()">▶ Commencer maintenant</button>
+        <button class="btn btn-ghost" style="flex:1;" onclick="saveSleepManual()">✓ Enregistrer</button>
       </div>
     </div>
-
     <div class="card">
       <div class="card-title">Historique du sommeil</div>
       <div class="history-list" id="sleepHistory"></div>
     </div>
   </div>
 
-  <!-- ═══════════════ COUCHES ═══════════════ -->
+  <!-- COUCHES -->
   <div class="tab-content" id="tab-couches">
     <div class="stats-row" id="diaperStats"></div>
     <div class="card">
       <div class="card-title">Nouvelle couche</div>
-
       <div style="margin-bottom:12px;">
-        <label style="font-size:0.78rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:6px;">Type de couche</label>
+        <label style="font-size:0.72rem;font-weight:700;color:var(--text-muted);display:block;margin-bottom:7px;">Type de couche</label>
         <div class="seg-group" id="diaperTypeGroup">
-          <div class="seg-btn active-green" data-val="pipi" onclick="selectSeg('diaperTypeGroup','active-green',this)">&#128166; Pipi</div>
-          <div class="seg-btn" data-val="caca" onclick="selectSeg('diaperTypeGroup','active-green',this)">&#128169; Caca</div>
-          <div class="seg-btn" data-val="mixte" onclick="selectSeg('diaperTypeGroup','active-green',this)">&#128293; Mixte</div>
+          <div class="seg-btn active-green" data-val="pipi"  onclick="selectSeg('diaperTypeGroup','active-green',this)">💧 Pipi</div>
+          <div class="seg-btn" data-val="caca"  onclick="selectSeg('diaperTypeGroup','active-green',this)">💩 Caca</div>
+          <div class="seg-btn" data-val="mixte" onclick="selectSeg('diaperTypeGroup','active-green',this)">🔥 Mixte</div>
         </div>
       </div>
-
       <div class="form-row">
         <div class="form-group">
           <label>Heure</label>
@@ -488,22 +523,23 @@
       </div>
       <div class="form-group" style="margin-bottom:12px;">
         <label>Note (optionnel)</label>
-        <input type="text" id="diaperNote" placeholder="Ex: couleur, consistance…" />
+        <input type="text" id="diaperNote" placeholder="Ex : couleur, consistance…" />
       </div>
-      <button class="btn btn-green" onclick="saveDiaper()">&#10003; Enregistrer la couche</button>
+      <button class="btn btn-green" onclick="saveDiaper()">✓ Enregistrer la couche</button>
     </div>
-
     <div class="card">
       <div class="card-title">Historique — aujourd'hui</div>
       <div class="history-list" id="diaperHistory"></div>
     </div>
   </div>
 
-  <!-- ═══════════════ POIDS ═══════════════ -->
+  <!-- POIDS -->
   <div class="tab-content" id="tab-poids">
     <div class="stats-row" id="weightStats"></div>
+
+    <!-- Saisie poids + taille côte à côte -->
     <div class="card">
-      <div class="card-title">Nouvelle pesée</div>
+      <div class="card-title">⚖️ Nouvelle pesée</div>
       <div class="form-row">
         <div class="form-group">
           <label>Date</label>
@@ -511,230 +547,378 @@
         </div>
         <div class="form-group">
           <label>Poids (grammes)</label>
-          <input type="number" id="weightVal" placeholder="Ex: 3450" min="500" max="15000" />
+          <input type="number" id="weightVal" placeholder="Ex : 3450" min="500" max="15000" />
         </div>
       </div>
       <div class="form-group" style="margin-bottom:12px;">
         <label>Note (optionnel)</label>
-        <input type="text" id="weightNote" placeholder="Ex: après le bain, habillé…" />
+        <input type="text" id="weightNote" placeholder="Ex : après le bain, habillé…" />
       </div>
-      <button class="btn btn-purple" onclick="saveWeight()">&#10003; Enregistrer le poids</button>
+      <button class="btn btn-purple" onclick="saveWeight()">✓ Enregistrer le poids</button>
     </div>
 
     <div class="card">
-      <div class="card-title">Courbe de poids</div>
-      <div class="weight-chart">
-        <canvas id="weightCanvas"></canvas>
+      <div class="card-title">📏 Nouvelle taille</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="heightDate" />
+        </div>
+        <div class="form-group">
+          <label>Taille (cm)</label>
+          <input type="number" id="heightVal" placeholder="Ex : 52.5" min="30" max="120" step="0.1" />
+        </div>
       </div>
+      <div class="form-group" style="margin-bottom:12px;">
+        <label>Note (optionnel)</label>
+        <input type="text" id="heightNote" placeholder="Ex : couché, en pédiatrie…" />
+      </div>
+      <button class="btn btn-purple" onclick="saveHeight()">✓ Enregistrer la taille</button>
     </div>
 
+    <!-- Courbe OMS — Poids -->
+    <div class="card">
+      <div class="card-title">📈 Courbe de poids — référence OMS</div>
+      <div class="who-legend" id="whoWeightLegend"></div>
+      <div class="who-chart-wrap"><canvas id="whoWeightChart"></canvas></div>
+      <div class="who-section-label" style="margin-top:6px;">Âge en semaines (0 – 52)</div>
+    </div>
+
+    <!-- Courbe OMS — Taille -->
+    <div class="card">
+      <div class="card-title">📏 Courbe de taille — référence OMS</div>
+      <div class="who-legend" id="whoHeightLegend"></div>
+      <div class="who-chart-wrap"><canvas id="whoHeightChart"></canvas></div>
+      <div class="who-section-label" style="margin-top:6px;">Âge en semaines (0 – 52)</div>
+    </div>
+
+    <!-- Historiques -->
     <div class="card">
       <div class="card-title">Historique des pesées</div>
       <div class="history-list" id="weightHistory"></div>
     </div>
+    <div class="card">
+      <div class="card-title">Historique des tailles</div>
+      <div class="history-list" id="heightHistory"></div>
+    </div>
   </div>
 
-  <!-- ═══════════════ PARAMÈTRES ═══════════════ -->
+  <!-- PARAMÈTRES -->
   <div class="tab-content" id="tab-paramètres">
 
     <div class="card settings-section">
-      <div class="card-title">&#128190; Exporter les données</div>
-      <p>Téléchargez une copie de toutes vos données (tétées, sommeil, couches, poids) dans un fichier JSON. Conservez ce fichier en lieu sûr pour pouvoir les restaurer plus tard ou les transférer sur un autre appareil.</p>
-      <button class="btn btn-export" onclick="exportData()">&#8595; Télécharger mes données</button>
+      <div class="card-title">👶 Profil du bébé</div>
+      <div class="profile-preview" id="profilePreview"></div>
+      <button class="btn-reset" onclick="resetProfile()">Modifier le profil / Recommencer</button>
     </div>
 
     <div class="card settings-section">
-      <div class="card-title">&#128228; Importer des données</div>
-      <p>Restaurez vos données à partir d'un fichier JSON précédemment exporté. <strong>Attention :</strong> cette action remplacera toutes les données actuelles par celles du fichier importé.</p>
-      <button class="btn btn-import" onclick="document.getElementById('importFileInput').click()">&#8593; Charger un fichier de sauvegarde</button>
+      <div class="card-title">💾 Exporter les données</div>
+      <p>Téléchargez une copie de toutes vos données (tétées, sommeil, couches, poids) dans un fichier JSON. Conservez ce fichier pour restaurer ou transférer vos données.</p>
+      <button class="btn btn-export" onclick="exportData()">↓ Télécharger mes données</button>
+    </div>
+
+    <div class="card settings-section">
+      <div class="card-title">📂 Importer des données</div>
+      <p>Restaurez vos données depuis un fichier JSON exporté. <strong style="color:var(--text);">Attention :</strong> cela remplacera toutes les données actuelles.</p>
+      <button class="btn btn-import" onclick="document.getElementById('importFileInput').click()">↑ Charger une sauvegarde</button>
       <input type="file" id="importFileInput" accept=".json,application/json" onchange="importData(event)" />
-      <p class="import-info">Formats acceptés : fichier .json exporté depuis cette application.</p>
+      <p class="import-info">Format accepté : fichier .json exporté depuis BabyTrack.</p>
     </div>
 
   </div>
 
-</div>
+</div><!-- /.main -->
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── DATA ───────────────────────────────────────────────────────────────────
-const KEYS = { tetees: 'bt_tetees', sommeil: 'bt_sommeil', couches: 'bt_couches', poids: 'bt_poids', activeSleep: 'bt_active_sleep' };
+// ─── CLÉS ────────────────────────────────────────────────────────────────────
+const KEYS = {
+  tetees: 'bt_tetees', sommeil: 'bt_sommeil', couches: 'bt_couches',
+  poids: 'bt_poids', tailles: 'bt_tailles', activeSleep: 'bt_active_sleep', profile: 'bt_profile'
+};
 
-function load(key) {
-  try { return JSON.parse(localStorage.getItem(key)) || []; } catch { return []; }
-}
-function loadObj(key) {
-  try { return JSON.parse(localStorage.getItem(key)) || null; } catch { return null; }
-}
-function save(key, data) { localStorage.setItem(key, JSON.stringify(data)); }
+// ─── DONNÉES OMS ─────────────────────────────────────────────────────────────
+// Poids (kg) par mois 0-12 : [P3, P15, P50, P85, P97]
+// Source : WHO Child Growth Standards (2006)
+const WHO_POIDS = {
+  garçon: [
+    [2.46, 2.89, 3.35, 3.89, 4.34],
+    [3.38, 3.92, 4.47, 5.12, 5.68],
+    [4.26, 4.95, 5.57, 6.30, 7.03],
+    [5.03, 5.74, 6.39, 7.18, 7.96],
+    [5.61, 6.38, 7.07, 7.89, 8.73],
+    [6.05, 6.88, 7.60, 8.47, 9.35],
+    [6.40, 7.25, 8.00, 8.90, 9.83],
+    [6.69, 7.58, 8.35, 9.28,10.23],
+    [6.95, 7.86, 8.65, 9.60,10.59],
+    [7.17, 8.10, 8.91, 9.88,10.89],
+    [7.38, 8.31, 9.15,10.13,11.16],
+    [7.57, 8.53, 9.37,10.37,11.42],
+    [7.74, 8.71, 9.57,10.59,11.66],
+  ],
+  fille: [
+    [2.35, 2.76, 3.23, 3.77, 4.18],
+    [3.17, 3.69, 4.20, 4.87, 5.44],
+    [3.94, 4.56, 5.13, 5.89, 6.60],
+    [4.60, 5.28, 5.88, 6.73, 7.49],
+    [5.10, 5.85, 6.49, 7.38, 8.19],
+    [5.51, 6.30, 6.97, 7.90, 8.75],
+    [5.85, 6.68, 7.37, 8.33, 9.24],
+    [6.13, 7.00, 7.71, 8.70, 9.67],
+    [6.37, 7.26, 7.99, 9.01,10.02],
+    [6.58, 7.49, 8.25, 9.30,10.34],
+    [6.78, 7.71, 8.49, 9.57,10.65],
+    [6.96, 7.91, 8.70, 9.82,10.93],
+    [7.13, 8.09, 8.91,10.05,11.20],
+  ],
+};
 
-// ─── UTILS ──────────────────────────────────────────────────────────────────
+// Taille (cm) par mois 0-12 : [P3, P15, P50, P85, P97]
+const WHO_TAILLE = {
+  garçon: [
+    [46.1, 48.0, 49.9, 51.8, 53.7],
+    [51.1, 52.8, 54.7, 56.7, 58.5],
+    [54.7, 56.4, 58.4, 60.4, 62.4],
+    [57.6, 59.4, 61.4, 63.5, 65.5],
+    [60.0, 61.8, 63.9, 66.0, 68.0],
+    [61.7, 63.6, 65.9, 68.0, 70.1],
+    [63.3, 65.2, 67.6, 69.8, 71.9],
+    [64.8, 66.8, 69.2, 71.4, 73.5],
+    [66.2, 68.2, 70.6, 72.9, 75.0],
+    [67.5, 69.5, 72.0, 74.3, 76.5],
+    [68.7, 70.7, 73.3, 75.6, 77.9],
+    [69.9, 71.9, 74.5, 76.9, 79.2],
+    [71.0, 73.1, 75.7, 78.1, 80.5],
+  ],
+  fille: [
+    [45.4, 47.2, 49.1, 51.0, 52.9],
+    [50.0, 51.7, 53.7, 55.7, 57.5],
+    [53.2, 55.1, 57.1, 59.1, 61.1],
+    [55.8, 57.7, 59.8, 61.9, 63.9],
+    [57.8, 59.8, 62.1, 64.2, 66.2],
+    [59.6, 61.6, 64.0, 66.2, 68.3],
+    [61.2, 63.3, 65.7, 68.0, 70.2],
+    [62.7, 64.9, 67.3, 69.7, 71.9],
+    [64.0, 66.4, 68.7, 71.2, 73.5],
+    [65.3, 67.7, 70.1, 72.6, 74.9],
+    [66.5, 69.0, 71.5, 73.9, 76.3],
+    [67.7, 70.2, 72.8, 75.2, 77.7],
+    [68.9, 71.4, 74.0, 76.5, 79.0],
+  ],
+};
+
+// Interpolation mensuelle → hebdomadaire (0..52)
+function whoToWeekly(monthTable) {
+  // monthTable : 13 entrées (mois 0 à 12), chaque entrée = [P3,P15,P50,P85,P97]
+  const result = [];
+  for (let w = 0; w <= 52; w++) {
+    const mf   = w * 12 / 52;          // position fractionnaire en mois
+    const m0   = Math.min(Math.floor(mf), 11);
+    const m1   = m0 + 1;
+    const frac = mf - m0;
+    result.push(monthTable[m0].map((v, i) => +(v + frac * (monthTable[m1][i] - v)).toFixed(3)));
+  }
+  return result;
+}
+
+// Instances Chart.js globales
+let chartWHOPoids  = null;
+let chartWHOTaille = null;
+function load(k)    { try { return JSON.parse(localStorage.getItem(k)) || []; }   catch { return []; } }
+function loadObj(k) { try { return JSON.parse(localStorage.getItem(k)) || null; } catch { return null; } }
+function save(k,v)  { localStorage.setItem(k, JSON.stringify(v)); }
+
+// ─── UTILS ───────────────────────────────────────────────────────────────────
 function now() { return new Date(); }
+function pad(n) { return String(n).padStart(2,'0'); }
 function toLocalDatetimeStr(d) {
-  const p = n => String(n).padStart(2,'0');
-  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 function toLocalDateStr(d) {
-  const p = n => String(n).padStart(2,'0');
-  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`;
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 }
-function fmtTime(dateStr) {
-  const d = new Date(dateStr);
-  return d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+function fmtTime(s)  { return new Date(s).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}); }
+function fmtDate(s)  { return new Date(s).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}); }
+function fmtDuration(min) {
+  if (!min && min !== 0) return '—';
+  if (min < 60) return `${Math.round(min)} min`;
+  return `${Math.floor(min/60)}h${pad(Math.round(min%60))}`;
 }
-function fmtDate(dateStr) {
-  const d = new Date(dateStr);
-  return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' });
-}
-function fmtDatetime(dateStr) {
-  const d = new Date(dateStr);
-  return d.toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
-}
-function fmtDuration(minutes) {
-  if (!minutes && minutes !== 0) return '—';
-  if (minutes < 60) return `${Math.round(minutes)} min`;
-  return `${Math.floor(minutes/60)}h${String(Math.round(minutes%60)).padStart(2,'0')}`;
-}
-function fmtDurationSec(seconds) {
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  const s = seconds % 60;
-  const p = n => String(n).padStart(2,'0');
-  if (h > 0) return `${p(h)}:${p(m)}:${p(s)}`;
-  return `${p(m)}:${p(s)}`;
+function fmtDurationSec(sec) {
+  const h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60), s=sec%60;
+  if (h>0) return `${pad(h)}:${pad(m)}:${pad(s)}`;
+  return `${pad(m)}:${pad(s)}`;
 }
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
 }
-function selectSeg(groupId, activeClass, el) {
-  document.querySelectorAll(`#${groupId} .seg-btn`).forEach(b => b.classList.remove('active-primary','active-secondary','active-green','active-purple'));
-  el.classList.add(activeClass);
-  if (groupId === 'tetTypeGroup') {
-    const mlGroup = document.getElementById('tetMlGroup');
-    mlGroup.style.display = el.dataset.val === 'biberon' ? 'block' : 'none';
-  }
+function selectSeg(groupId, cls, el) {
+  document.querySelectorAll(`#${groupId} .seg-btn`).forEach(b =>
+    b.classList.remove('active-primary','active-secondary','active-green','active-purple'));
+  el.classList.add(cls);
+  if (groupId === 'tetTypeGroup')
+    document.getElementById('tetMlGroup').style.display = el.dataset.val === 'biberon' ? 'block' : 'none';
 }
 function getSegVal(groupId) {
   const el = document.querySelector(`#${groupId} .seg-btn[class*="active-"]`);
   return el ? el.dataset.val : null;
 }
 
-// ─── HEADER ─────────────────────────────────────────────────────────────────
+// ─── HEADER ──────────────────────────────────────────────────────────────────
 function updateHeader() {
   const d = now();
   document.getElementById('headerDate').innerHTML =
-    d.toLocaleDateString('fr-FR', { weekday:'short', day:'2-digit', month:'long' }) +
-    '<br>' + d.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+    d.toLocaleDateString('fr-FR',{weekday:'short',day:'2-digit',month:'long'}) +
+    '<br>' + d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+}
+function updateHeaderProfile() {
+  const p = loadObj(KEYS.profile);
+  if (!p) return;
+  document.getElementById('headerName').textContent = (p.sexe==='fille' ? '👧 ' : '👦 ') + p.prenom;
+  if (p.naissance) {
+    const days = Math.floor((Date.now() - new Date(p.naissance)) / 86400000);
+    let age;
+    if      (days <  7)   age = `${days} jour${days>1?'s':''}`;
+    else if (days < 30)   age = `${Math.floor(days/7)} semaine${Math.floor(days/7)>1?'s':''}`;
+    else if (days < 365)  age = `${Math.floor(days/30)} mois`;
+    else                  age = `${Math.floor(days/365)} an${Math.floor(days/365)>1?'s':''}`;
+    document.getElementById('headerAge').textContent = age;
+  }
 }
 setInterval(updateHeader, 30000);
 updateHeader();
+
+// ─── ONBOARDING ───────────────────────────────────────────────────────────────
+let selectedSex = null;
+
+function selectSex(sex) {
+  selectedSex = sex;
+  document.getElementById('obGirl').className = 'sex-btn' + (sex==='fille'   ? ' active-girl' : '');
+  document.getElementById('obBoy').className  = 'sex-btn' + (sex==='garçon'  ? ' active-boy'  : '');
+  applyTheme(sex);
+  document.getElementById('obSubmit').style.background = sex==='fille' ? '#f472b6' : '#60a5fa';
+}
+
+function applyTheme(sex) {
+  document.body.classList.remove('theme-girl','theme-boy');
+  if (sex==='fille')  document.body.classList.add('theme-girl');
+  if (sex==='garçon') document.body.classList.add('theme-boy');
+}
+
+function submitOnboarding() {
+  const name  = document.getElementById('obName').value.trim();
+  const birth = document.getElementById('obBirthdate').value;
+  if (!name)        { showToast('Veuillez saisir le prénom du bébé'); return; }
+  if (!selectedSex) { showToast('Veuillez sélectionner le sexe');     return; }
+  save(KEYS.profile, { prenom: name, naissance: birth, sexe: selectedSex });
+  document.getElementById('onboarding').classList.add('hidden');
+  applyTheme(selectedSex);
+  updateHeaderProfile();
+  renderProfilePreview();
+}
+
+function resetProfile() {
+  if (!confirm('Le profil sera effacé et l\'écran de démarrage s\'affichera à nouveau. Continuer ?')) return;
+  localStorage.removeItem(KEYS.profile);
+  location.reload();
+}
+
+function renderProfilePreview() {
+  const p = loadObj(KEYS.profile);
+  if (!p) return;
+  const birth = p.naissance ? new Date(p.naissance+'T12:00:00').toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'}) : 'Date non renseignée';
+  document.getElementById('profilePreview').innerHTML = `
+    <div class="profile-avatar">${p.sexe==='fille'?'👧':'👦'}</div>
+    <div class="profile-info">
+      <div class="pname">${p.prenom}</div>
+      <div class="pdetail">${p.sexe==='fille'?'Fille':'Garçon'} · Né(e) le ${birth}</div>
+    </div>`;
+}
 
 // ─── TABS ────────────────────────────────────────────────────────────────────
 function switchTab(name) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-' + name).classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
   document.querySelector(`.nav-tab[data-tab="${name}"]`).classList.add('active');
-  if (name === 'tétées') renderTetees();
-  if (name === 'sommeil') renderSommeil();
-  if (name === 'couches') renderCouches();
-  if (name === 'poids') { renderPoids(); drawWeightChart(); }
+  if (name==='tétées')    renderTetees();
+  if (name==='sommeil')   renderSommeil();
+  if (name==='couches')   renderCouches();
+  if (name==='poids')     { renderPoids(); drawWHOCharts(); }
 }
 
-// ══════════════════════════════════════════════════════════════════════
-// PARAMÈTRES — EXPORT / IMPORT
-// ══════════════════════════════════════════════════════════════════════
+// ─── EXPORT / IMPORT ─────────────────────────────────────────────────────────
 function exportData() {
   const data = {
-    version: 1,
-    exportedAt: new Date().toISOString(),
-    tetees: load(KEYS.tetees),
-    sommeil: load(KEYS.sommeil),
-    couches: load(KEYS.couches),
-    poids: load(KEYS.poids),
-    activeSleep: loadObj(KEYS.activeSleep)
+    version:1, exportedAt: new Date().toISOString(),
+    tetees:   load(KEYS.tetees),
+    sommeil:  load(KEYS.sommeil),
+    couches:  load(KEYS.couches),
+    poids:    load(KEYS.poids),
+    tailles:  load(KEYS.tailles),
+    activeSleep: loadObj(KEYS.activeSleep),
+    profile:  loadObj(KEYS.profile)
   };
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  const date = new Date().toISOString().slice(0, 10);
   a.href = url;
-  a.download = `babytrack-sauvegarde-${date}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast('✓ Données exportées avec succès !');
+  a.download = `babytrack-${new Date().toISOString().slice(0,10)}.json`;
+  a.click(); URL.revokeObjectURL(url);
+  showToast('✓ Données exportées !');
 }
 
 function importData(event) {
-  const file = event.target.files[0];
-  if (!file) return;
+  const file = event.target.files[0]; if (!file) return;
   const reader = new FileReader();
-  reader.onload = function(e) {
+  reader.onload = e => {
     try {
       const data = JSON.parse(e.target.result);
-      if (!data.version || !Array.isArray(data.tetees) || !Array.isArray(data.sommeil) || !Array.isArray(data.couches) || !Array.isArray(data.poids)) {
-        showToast('⚠ Fichier invalide ou incompatible.');
-        return;
+      if (!data.version || !Array.isArray(data.tetees) || !Array.isArray(data.sommeil) ||
+          !Array.isArray(data.couches) || !Array.isArray(data.poids)) {
+        showToast('⚠ Fichier invalide ou incompatible.'); return;
       }
-      if (!confirm('Cette action va remplacer toutes vos données actuelles. Continuer ?')) return;
-      save(KEYS.tetees, data.tetees);
-      save(KEYS.sommeil, data.sommeil);
-      save(KEYS.couches, data.couches);
-      save(KEYS.poids, data.poids);
-      if (data.activeSleep) {
-        localStorage.setItem(KEYS.activeSleep, JSON.stringify(data.activeSleep));
-      } else {
-        localStorage.removeItem(KEYS.activeSleep);
-      }
-      showToast('✓ Données restaurées avec succès !');
+      if (!confirm('Cette action remplacera toutes vos données actuelles. Continuer ?')) return;
+      save(KEYS.tetees, data.tetees); save(KEYS.sommeil, data.sommeil);
+      save(KEYS.couches, data.couches); save(KEYS.poids, data.poids);
+      if (data.tailles) save(KEYS.tailles, data.tailles);
+      if (data.activeSleep) localStorage.setItem(KEYS.activeSleep, JSON.stringify(data.activeSleep));
+      else localStorage.removeItem(KEYS.activeSleep);
+      showToast('✓ Données restaurées !');
       switchTab('tétées');
-    } catch {
-      showToast('⚠ Erreur lors de la lecture du fichier.');
-    }
+    } catch { showToast('⚠ Erreur de lecture du fichier.'); }
   };
-  reader.readAsText(file);
-  event.target.value = '';
+  reader.readAsText(file); event.target.value = '';
 }
 
-// ══════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════════════════
 // TÉTÉES
-// ══════════════════════════════════════════════════════════════════════
-let tetTimerInterval = null;
-let tetTimerStart = null;
-let tetTimerRunning = false;
-let tetTimerSeconds = 0;
+// ══════════════════════════════════════════════════════════════════════════════
+let tetTimerInterval=null, tetTimerStart=null, tetTimerRunning=false, tetTimerSeconds=0;
 
 function tetTimerToggle() {
   const btn = document.getElementById('tetTimerBtn');
   if (!tetTimerRunning) {
-    tetTimerStart = Date.now() - tetTimerSeconds * 1000;
-    tetTimerRunning = true;
-    btn.textContent = '⏸ Pause';
-    btn.style.background = 'var(--primary-dark)';
+    tetTimerStart = Date.now() - tetTimerSeconds*1000;
+    tetTimerRunning = true; btn.textContent = '⏸ Pause';
     tetTimerInterval = setInterval(() => {
-      tetTimerSeconds = Math.floor((Date.now() - tetTimerStart) / 1000);
+      tetTimerSeconds = Math.floor((Date.now()-tetTimerStart)/1000);
       document.getElementById('tetTimerClock').textContent = fmtDurationSec(tetTimerSeconds);
-      document.getElementById('tetDuration').value = Math.round(tetTimerSeconds / 60) || '';
+      document.getElementById('tetDuration').value = Math.round(tetTimerSeconds/60) || '';
     }, 500);
   } else {
-    clearInterval(tetTimerInterval);
-    tetTimerRunning = false;
-    btn.textContent = '▶ Reprendre';
-    btn.style.background = 'var(--primary)';
+    clearInterval(tetTimerInterval); tetTimerRunning=false; btn.textContent='▶ Reprendre';
   }
 }
 function tetTimerReset() {
-  clearInterval(tetTimerInterval);
-  tetTimerRunning = false;
-  tetTimerSeconds = 0;
-  document.getElementById('tetTimerClock').textContent = '00:00';
-  document.getElementById('tetTimerBtn').textContent = '▶ Démarrer';
-  document.getElementById('tetTimerBtn').style.background = 'var(--primary)';
-  document.getElementById('tetDuration').value = '';
+  clearInterval(tetTimerInterval); tetTimerRunning=false; tetTimerSeconds=0;
+  document.getElementById('tetTimerClock').textContent='00:00';
+  document.getElementById('tetTimerBtn').textContent='▶ Démarrer';
+  document.getElementById('tetDuration').value='';
 }
 
 function saveTetee() {
@@ -742,398 +926,418 @@ function saveTetee() {
   const rawTime = document.getElementById('tetTime').value;
   const duration = parseFloat(document.getElementById('tetDuration').value);
   const ml = document.getElementById('tetMl').value;
-
   const timestamp = rawTime ? new Date(rawTime).toISOString() : now().toISOString();
-
   const entry = {
-    id: Date.now(),
-    timestamp,
-    type,
-    duration: duration || tetTimerSeconds > 0 ? Math.round(tetTimerSeconds / 60) || duration || null : null,
-    ml: type === 'biberon' && ml ? parseInt(ml) : null
+    id: Date.now(), timestamp, type,
+    duration: duration || tetTimerSeconds>0 ? Math.round(tetTimerSeconds/60)||duration||null : null,
+    ml: type==='biberon' && ml ? parseInt(ml) : null
   };
-
-  const data = load(KEYS.tetees);
-  data.unshift(entry);
-  save(KEYS.tetees, data);
-
+  const data = load(KEYS.tetees); data.unshift(entry); save(KEYS.tetees, data);
   tetTimerReset();
-  document.getElementById('tetTime').value = '';
-  document.getElementById('tetDuration').value = '';
-  document.getElementById('tetMl').value = '';
-  renderTetees();
-  showToast('Tétée enregistrée ✓');
+  document.getElementById('tetTime').value='';
+  document.getElementById('tetDuration').value='';
+  document.getElementById('tetMl').value='';
+  renderTetees(); showToast('Tétée enregistrée ✓');
 }
 
 function renderTetees() {
   const data = load(KEYS.tetees);
-  const now24 = Date.now() - 24 * 3600 * 1000;
-  const recent = data.filter(e => new Date(e.timestamp).getTime() > now24);
-
-  // Stats
-  const total = recent.length;
-  const totalMin = recent.reduce((s, e) => s + (e.duration || 0), 0);
-  const lastEntry = recent[0];
-  let lastAgo = '—';
-  if (lastEntry) {
-    const mins = Math.round((Date.now() - new Date(lastEntry.timestamp)) / 60000);
-    lastAgo = mins < 60 ? `${mins}m` : `${Math.floor(mins/60)}h${String(mins%60).padStart(2,'0')}`;
+  const cutoff = Date.now()-24*3600*1000;
+  const recent = data.filter(e => new Date(e.timestamp).getTime()>cutoff);
+  const total=recent.length, totalMin=recent.reduce((s,e)=>s+(e.duration||0),0);
+  const last=recent[0]; let lastAgo='—';
+  if (last) {
+    const m = Math.round((Date.now()-new Date(last.timestamp))/60000);
+    lastAgo = m<60 ? `${m}m` : `${Math.floor(m/60)}h${pad(m%60)}`;
   }
-
-  document.getElementById('tetStats').innerHTML = `
+  document.getElementById('tetStats').innerHTML=`
     <div class="stat-box"><div class="stat-val c-primary">${total}</div><div class="stat-lbl">Tétées 24h</div></div>
     <div class="stat-box"><div class="stat-val c-primary">${fmtDuration(totalMin)}</div><div class="stat-lbl">Durée totale</div></div>
-    <div class="stat-box"><div class="stat-val c-primary">${lastAgo}</div><div class="stat-lbl">Dernière</div></div>
-  `;
-
-  // History
-  const container = document.getElementById('tetHistory');
-  if (recent.length === 0) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🍼</div>Aucune tétée enregistrée<br>dans les dernières 24h</div>';
-    return;
-  }
-  const typeLabels = { sein_gauche: '♀ Sein gauche', sein_droit: '♀ Sein droit', biberon: '🍼 Biberon' };
-  container.innerHTML = recent.map(e => `
+    <div class="stat-box"><div class="stat-val c-primary">${lastAgo}</div><div class="stat-lbl">Dernière</div></div>`;
+  const c = document.getElementById('tetHistory');
+  if (!recent.length) { c.innerHTML='<div class="empty-state"><div class="empty-icon">🍼</div>Aucune tétée dans les dernières 24h</div>'; return; }
+  const labels={sein_gauche:'♀ Sein gauche',sein_droit:'♀ Sein droit',biberon:'🍼 Biberon'};
+  c.innerHTML=recent.map(e=>`
     <div class="history-item">
-      <div class="history-icon hi-primary">${e.type === 'biberon' ? '🍼' : '🤱'}</div>
+      <div class="history-icon hi-primary">${e.type==='biberon'?'🍼':'🤱'}</div>
       <div class="history-info">
-        <div class="hi-main">${typeLabels[e.type] || e.type}</div>
-        <div class="hi-sub">${e.duration ? fmtDuration(e.duration) : ''}${e.ml ? ` · ${e.ml} ml` : ''}</div>
+        <div class="hi-main">${labels[e.type]||e.type}</div>
+        <div class="hi-sub">${e.duration?fmtDuration(e.duration):''}${e.ml?` · ${e.ml} ml`:''}</div>
       </div>
       <div class="history-time">${fmtTime(e.timestamp)}</div>
       <button class="delete-btn" onclick="deleteEntry('tetees',${e.id},'renderTetees')">✕</button>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
-// ══════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════════════════
 // SOMMEIL
-// ══════════════════════════════════════════════════════════════════════
-let sleepTimerInterval = null;
+// ══════════════════════════════════════════════════════════════════════════════
+let sleepTimerInterval=null;
 
 function startSleepNow() {
-  const start = now().toISOString();
-  save(KEYS.activeSleep, { start });
-  renderSommeil();
-  showToast('Sommeil démarré ✓');
+  save(KEYS.activeSleep,{start:now().toISOString()});
+  renderSommeil(); showToast('Sommeil démarré ✓');
 }
-
 function stopSleep() {
-  const active = loadObj(KEYS.activeSleep);
-  if (!active) return;
-  const end = now().toISOString();
-  const startD = new Date(active.start);
-  const endD = new Date(end);
-  const duration = (endD - startD) / 60000;
-
-  const data = load(KEYS.sommeil);
-  data.unshift({ id: Date.now(), start: active.start, end, duration });
-  save(KEYS.sommeil, data);
-  localStorage.removeItem(KEYS.activeSleep);
-  clearInterval(sleepTimerInterval);
-  renderSommeil();
-  showToast('Sommeil enregistré ✓');
+  const active=loadObj(KEYS.activeSleep); if (!active) return;
+  const end=now().toISOString();
+  const duration=(new Date(end)-new Date(active.start))/60000;
+  const data=load(KEYS.sommeil); data.unshift({id:Date.now(),start:active.start,end,duration});
+  save(KEYS.sommeil,data); localStorage.removeItem(KEYS.activeSleep);
+  clearInterval(sleepTimerInterval); renderSommeil(); showToast('Sommeil enregistré ✓');
 }
-
 function saveSleepManual() {
-  const startVal = document.getElementById('sleepStart').value;
-  const endVal = document.getElementById('sleepEnd').value;
+  const startVal=document.getElementById('sleepStart').value;
+  const endVal=document.getElementById('sleepEnd').value;
   if (!startVal) { showToast('Veuillez saisir une heure de début'); return; }
-
-  const startD = new Date(startVal);
-  const endD = endVal ? new Date(endVal) : null;
-  const duration = endD ? (endD - startD) / 60000 : null;
-
-  const data = load(KEYS.sommeil);
-  data.unshift({ id: Date.now(), start: startD.toISOString(), end: endD ? endD.toISOString() : null, duration });
-  save(KEYS.sommeil, data);
-  document.getElementById('sleepStart').value = '';
-  document.getElementById('sleepEnd').value = '';
-  renderSommeil();
-  showToast('Sommeil enregistré ✓');
+  const startD=new Date(startVal), endD=endVal?new Date(endVal):null;
+  const data=load(KEYS.sommeil);
+  data.unshift({id:Date.now(),start:startD.toISOString(),end:endD?endD.toISOString():null,duration:endD?(endD-startD)/60000:null});
+  save(KEYS.sommeil,data);
+  document.getElementById('sleepStart').value=''; document.getElementById('sleepEnd').value='';
+  renderSommeil(); showToast('Sommeil enregistré ✓');
 }
-
 function renderSommeil() {
-  const active = loadObj(KEYS.activeSleep);
-  const activeCard = document.getElementById('sleepActiveCard');
-  const startCard = document.getElementById('sleepStartCard');
-
+  const active=loadObj(KEYS.activeSleep);
+  const ac=document.getElementById('sleepActiveCard'), sc=document.getElementById('sleepStartCard');
   clearInterval(sleepTimerInterval);
-
   if (active) {
-    activeCard.style.display = 'block';
-    startCard.style.display = 'none';
-    const startD = new Date(active.start);
-    document.getElementById('sleepSinceTxt').textContent = fmtTime(active.start);
-    sleepTimerInterval = setInterval(() => {
-      const elapsed = Math.floor((Date.now() - startD) / 1000);
-      document.getElementById('sleepTimerClock').textContent = fmtDurationSec(elapsed);
-    }, 1000);
+    ac.style.display='block'; sc.style.display='none';
+    document.getElementById('sleepSinceTxt').textContent=fmtTime(active.start);
+    const startD=new Date(active.start);
+    sleepTimerInterval=setInterval(()=>{
+      document.getElementById('sleepTimerClock').textContent=fmtDurationSec(Math.floor((Date.now()-startD)/1000));
+    },1000);
   } else {
-    activeCard.style.display = 'none';
-    startCard.style.display = 'block';
-    document.getElementById('sleepStart').value = toLocalDatetimeStr(now());
+    ac.style.display='none'; sc.style.display='block';
+    document.getElementById('sleepStart').value=toLocalDatetimeStr(now());
   }
-
-  const data = load(KEYS.sommeil);
-  // Stats last 24h
-  const now24 = Date.now() - 24 * 3600 * 1000;
-  const recent = data.filter(e => new Date(e.start).getTime() > now24 && e.duration);
-  const totalSleep = recent.reduce((s, e) => s + (e.duration || 0), 0);
-  const sessions = recent.length;
-
-  document.getElementById('sleepStats').innerHTML = `
+  const data=load(KEYS.sommeil);
+  const cutoff=Date.now()-24*3600*1000;
+  const recent=data.filter(e=>new Date(e.start).getTime()>cutoff&&e.duration);
+  const totalSleep=recent.reduce((s,e)=>s+(e.duration||0),0), sessions=recent.length;
+  document.getElementById('sleepStats').innerHTML=`
     <div class="stat-box"><div class="stat-val c-secondary">${sessions}</div><div class="stat-lbl">Siestes 24h</div></div>
     <div class="stat-box"><div class="stat-val c-secondary">${fmtDuration(totalSleep)}</div><div class="stat-lbl">Sommeil total</div></div>
-    <div class="stat-box"><div class="stat-val c-secondary">${sessions > 0 ? fmtDuration(totalSleep/sessions) : '—'}</div><div class="stat-lbl">Moy. sieste</div></div>
-  `;
-
-  const container = document.getElementById('sleepHistory');
-  if (data.length === 0) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">😴</div>Aucun sommeil enregistré</div>';
-    return;
-  }
-  container.innerHTML = data.slice(0, 15).map(e => {
-    const ended = e.end ? fmtTime(e.end) : '<em>en cours</em>';
-    return `
+    <div class="stat-box"><div class="stat-val c-secondary">${sessions>0?fmtDuration(totalSleep/sessions):'—'}</div><div class="stat-lbl">Moy. sieste</div></div>`;
+  const c=document.getElementById('sleepHistory');
+  if (!data.length) { c.innerHTML='<div class="empty-state"><div class="empty-icon">😴</div>Aucun sommeil enregistré</div>'; return; }
+  c.innerHTML=data.slice(0,15).map(e=>`
     <div class="history-item">
       <div class="history-icon hi-secondary">😴</div>
       <div class="history-info">
-        <div class="hi-main">${fmtTime(e.start)} → ${ended}</div>
-        <div class="hi-sub">${e.duration ? fmtDuration(e.duration) : '—'} · ${fmtDate(e.start)}</div>
+        <div class="hi-main">${fmtTime(e.start)} → ${e.end?fmtTime(e.end):'<em>en cours</em>'}</div>
+        <div class="hi-sub">${e.duration?fmtDuration(e.duration):'—'} · ${fmtDate(e.start)}</div>
       </div>
       <div class="history-time">${fmtDate(e.start)}</div>
       <button class="delete-btn" onclick="deleteEntry('sommeil',${e.id},'renderSommeil')">✕</button>
-    </div>`;
-  }).join('');
+    </div>`).join('');
 }
 
-// ══════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════════════════
 // COUCHES
-// ══════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════════════════
 function saveDiaper() {
-  const type = getSegVal('diaperTypeGroup');
-  const timeVal = document.getElementById('diaperTime').value;
-  const note = document.getElementById('diaperNote').value.trim();
-  const timestamp = timeVal ? new Date(timeVal).toISOString() : now().toISOString();
-
-  const data = load(KEYS.couches);
-  data.unshift({ id: Date.now(), timestamp, type, note });
-  save(KEYS.couches, data);
-  document.getElementById('diaperTime').value = toLocalDatetimeStr(now());
-  document.getElementById('diaperNote').value = '';
-  renderCouches();
-  showToast('Couche enregistrée ✓');
+  const type=getSegVal('diaperTypeGroup');
+  const timeVal=document.getElementById('diaperTime').value;
+  const note=document.getElementById('diaperNote').value.trim();
+  const data=load(KEYS.couches);
+  data.unshift({id:Date.now(),timestamp:timeVal?new Date(timeVal).toISOString():now().toISOString(),type,note});
+  save(KEYS.couches,data);
+  document.getElementById('diaperTime').value=toLocalDatetimeStr(now());
+  document.getElementById('diaperNote').value='';
+  renderCouches(); showToast('Couche enregistrée ✓');
 }
-
 function renderCouches() {
-  const data = load(KEYS.couches);
-  const today = toLocalDateStr(now());
-  const todayEntries = data.filter(e => e.timestamp.startsWith(today) || toLocalDateStr(new Date(e.timestamp)) === today);
-
-  const pipi = todayEntries.filter(e => e.type === 'pipi').length;
-  const caca = todayEntries.filter(e => e.type === 'caca').length;
-  const mixte = todayEntries.filter(e => e.type === 'mixte').length;
-
-  document.getElementById('diaperStats').innerHTML = `
-    <div class="stat-box"><div class="stat-val c-green">${todayEntries.length}</div><div class="stat-lbl">Total auj.</div></div>
+  const data=load(KEYS.couches);
+  const today=toLocalDateStr(now());
+  const todayE=data.filter(e=>toLocalDateStr(new Date(e.timestamp))===today);
+  const pipi=todayE.filter(e=>e.type==='pipi').length;
+  const caca=todayE.filter(e=>e.type==='caca').length;
+  const mixte=todayE.filter(e=>e.type==='mixte').length;
+  document.getElementById('diaperStats').innerHTML=`
+    <div class="stat-box"><div class="stat-val c-green">${todayE.length}</div><div class="stat-lbl">Total auj.</div></div>
     <div class="stat-box"><div class="stat-val c-green">${pipi}</div><div class="stat-lbl">💧 Pipi</div></div>
     <div class="stat-box"><div class="stat-val c-green">${caca}</div><div class="stat-lbl">💩 Caca</div></div>
-    <div class="stat-box"><div class="stat-val c-green">${mixte}</div><div class="stat-lbl">🔥 Mixte</div></div>
-  `;
-
-  const typeIcons = { pipi: '💧', caca: '💩', mixte: '🔥' };
-  const typeLabels = { pipi: 'Couche pipi', caca: 'Couche caca', mixte: 'Couche mixte' };
-
-  const container = document.getElementById('diaperHistory');
-  if (todayEntries.length === 0) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🧷</div>Aucune couche aujourd\'hui</div>';
-    return;
-  }
-  container.innerHTML = todayEntries.map(e => `
+    <div class="stat-box"><div class="stat-val c-green">${mixte}</div><div class="stat-lbl">🔥 Mixte</div></div>`;
+  const icons={pipi:'💧',caca:'💩',mixte:'🔥'}, lbls={pipi:'Couche pipi',caca:'Couche caca',mixte:'Couche mixte'};
+  const c=document.getElementById('diaperHistory');
+  if (!todayE.length) { c.innerHTML='<div class="empty-state"><div class="empty-icon">🧷</div>Aucune couche aujourd\'hui</div>'; return; }
+  c.innerHTML=todayE.map(e=>`
     <div class="history-item">
-      <div class="history-icon hi-green">${typeIcons[e.type] || '🧷'}</div>
+      <div class="history-icon hi-green">${icons[e.type]||'🧷'}</div>
       <div class="history-info">
-        <div class="hi-main">${typeLabels[e.type] || e.type}</div>
-        <div class="hi-sub">${e.note || '—'}</div>
+        <div class="hi-main">${lbls[e.type]||e.type}</div>
+        <div class="hi-sub">${e.note||'—'}</div>
       </div>
       <div class="history-time">${fmtTime(e.timestamp)}</div>
       <button class="delete-btn" onclick="deleteEntry('couches',${e.id},'renderCouches')">✕</button>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
-// ══════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════════════════
 // POIDS
-// ══════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════════════════
 function saveWeight() {
-  const dateVal = document.getElementById('weightDate').value;
-  const val = parseFloat(document.getElementById('weightVal').value);
-  const note = document.getElementById('weightNote').value.trim();
-  if (!dateVal || !val) { showToast('Veuillez saisir une date et un poids'); return; }
-
-  const data = load(KEYS.poids);
-  data.push({ id: Date.now(), date: dateVal, weight: val, note });
-  data.sort((a, b) => a.date.localeCompare(b.date));
-  save(KEYS.poids, data);
-  document.getElementById('weightVal').value = '';
-  document.getElementById('weightNote').value = '';
-  renderPoids();
-  drawWeightChart();
-  showToast('Poids enregistré ✓');
+  const dateVal=document.getElementById('weightDate').value;
+  const val=parseFloat(document.getElementById('weightVal').value);
+  const note=document.getElementById('weightNote').value.trim();
+  if (!dateVal||!val) { showToast('Veuillez saisir une date et un poids'); return; }
+  const data=load(KEYS.poids);
+  data.push({id:Date.now(),date:dateVal,weight:val,note});
+  data.sort((a,b)=>a.date.localeCompare(b.date));
+  save(KEYS.poids,data);
+  document.getElementById('weightVal').value=''; document.getElementById('weightNote').value='';
+  renderPoids(); drawWHOCharts(); showToast('Poids enregistré ✓');
 }
-
 function renderPoids() {
-  const data = load(KEYS.poids);
-  if (data.length === 0) {
-    document.getElementById('weightStats').innerHTML = '';
-    document.getElementById('weightHistory').innerHTML = '<div class="empty-state"><div class="empty-icon">⚖️</div>Aucune pesée enregistrée</div>';
-    return;
+  const data=load(KEYS.poids);
+  const tdata=load(KEYS.tailles);
+  // Stats
+  if (data.length) {
+    const last=data[data.length-1], first=data[0], diff=last.weight-first.weight;
+    const lastT=tdata.length?tdata[tdata.length-1]:null;
+    document.getElementById('weightStats').innerHTML=`
+      <div class="stat-box"><div class="stat-val c-purple">${last.weight}g</div><div class="stat-lbl">Dernier poids</div></div>
+      <div class="stat-box"><div class="stat-val c-purple">${(last.weight/1000).toFixed(2)} kg</div><div class="stat-lbl">En kg</div></div>
+      <div class="stat-box"><div class="stat-val c-purple">${diff>=0?'+':''}${diff}g</div><div class="stat-lbl">Évolution poids</div></div>
+      ${lastT?`<div class="stat-box"><div class="stat-val c-purple">${lastT.height} cm</div><div class="stat-lbl">Dernière taille</div></div>`:''}`;
+  } else {
+    document.getElementById('weightStats').innerHTML='';
   }
-  const last = data[data.length - 1];
-  const first = data[0];
-  const diff = last.weight - first.weight;
-  const trend = diff >= 0 ? `+${diff}g` : `${diff}g`;
-
-  document.getElementById('weightStats').innerHTML = `
-    <div class="stat-box"><div class="stat-val c-purple">${last.weight}g</div><div class="stat-lbl">Dernier poids</div></div>
-    <div class="stat-box"><div class="stat-val c-purple">${(last.weight/1000).toFixed(2)} kg</div><div class="stat-lbl">En kg</div></div>
-    <div class="stat-box"><div class="stat-val c-purple">${trend}</div><div class="stat-lbl">Évolution</div></div>
-  `;
-
-  const container = document.getElementById('weightHistory');
-  container.innerHTML = [...data].reverse().map(e => `
+  // Historique poids
+  const c=document.getElementById('weightHistory');
+  if (!data.length) { c.innerHTML='<div class="empty-state"><div class="empty-icon">⚖️</div>Aucune pesée enregistrée</div>'; }
+  else c.innerHTML=[...data].reverse().map(e=>`
     <div class="history-item">
       <div class="history-icon hi-purple">⚖️</div>
       <div class="history-info">
         <div class="hi-main">${e.weight} g <span style="color:var(--text-muted);font-weight:400;">(${(e.weight/1000).toFixed(3)} kg)</span></div>
-        <div class="hi-sub">${e.note || '—'}</div>
+        <div class="hi-sub">${e.note||'—'}</div>
       </div>
-      <div class="history-time">${fmtDate(e.date + 'T12:00:00')}</div>
+      <div class="history-time">${fmtDate(e.date+'T12:00:00')}</div>
       <button class="delete-btn" onclick="deleteWeightEntry(${e.id})">✕</button>
-    </div>
-  `).join('');
+    </div>`).join('');
+  // Historique taille
+  renderHeightHistory();
 }
-
-function drawWeightChart() {
-  const data = load(KEYS.poids);
-  const canvas = document.getElementById('weightCanvas');
-  const ctx = canvas.getContext('2d');
-  const dpr = window.devicePixelRatio || 1;
-  const W = canvas.offsetWidth || 300;
-  const H = canvas.offsetHeight || 160;
-  canvas.width = W * dpr;
-  canvas.height = H * dpr;
-  ctx.scale(dpr, dpr);
-  ctx.clearRect(0, 0, W, H);
-
-  if (data.length < 2) {
-    ctx.fillStyle = '#ccc';
-    ctx.font = '13px -apple-system, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Ajoutez au moins 2 pesées pour voir la courbe', W/2, H/2);
+// ══════════════════════════════════════════════════════════════════════════════
+// TAILLE
+// ══════════════════════════════════════════════════════════════════════════════
+function saveHeight() {
+  const dateVal=document.getElementById('heightDate').value;
+  const val=parseFloat(document.getElementById('heightVal').value);
+  const note=document.getElementById('heightNote').value.trim();
+  if (!dateVal||!val) { showToast('Veuillez saisir une date et une taille'); return; }
+  const data=load(KEYS.tailles);
+  data.push({id:Date.now(),date:dateVal,height:val,note});
+  data.sort((a,b)=>a.date.localeCompare(b.date));
+  save(KEYS.tailles,data);
+  document.getElementById('heightVal').value=''; document.getElementById('heightNote').value='';
+  renderPoids(); drawWHOCharts(); showToast('Taille enregistrée ✓');
+}
+function renderHeightHistory() {
+  const data=load(KEYS.tailles);
+  const c=document.getElementById('heightHistory');
+  if (!data.length) {
+    c.innerHTML='<div class="empty-state"><div class="empty-icon">📏</div>Aucune taille enregistrée</div>';
     return;
   }
+  c.innerHTML=[...data].reverse().map(e=>`
+    <div class="history-item">
+      <div class="history-icon hi-purple">📏</div>
+      <div class="history-info">
+        <div class="hi-main">${e.height} cm</div>
+        <div class="hi-sub">${e.note||'—'}</div>
+      </div>
+      <div class="history-time">${fmtDate(e.date+'T12:00:00')}</div>
+      <button class="delete-btn" onclick="deleteHeightEntry(${e.id})">✕</button>
+    </div>`).join('');
+}
+function deleteHeightEntry(id) {
+  save(KEYS.tailles,load(KEYS.tailles).filter(e=>e.id!==id));
+  renderPoids(); drawWHOCharts();
+}
 
-  const weights = data.map(d => d.weight);
-  const minW = Math.min(...weights) * 0.98;
-  const maxW = Math.max(...weights) * 1.02;
-  const pad = { t: 16, b: 28, l: 50, r: 12 };
-  const cW = W - pad.l - pad.r;
-  const cH = H - pad.t - pad.b;
+// ══════════════════════════════════════════════════════════════════════════════
+// COURBES OMS — Chart.js
+// ══════════════════════════════════════════════════════════════════════════════
+function ageEnSemaines(dateStr) {
+  // Retourne l'âge en semaines (décimal) à partir d'une date YYYY-MM-DD
+  const profile = loadObj(KEYS.profile);
+  if (!profile || !profile.naissance) return null;
+  const birth = new Date(profile.naissance + 'T12:00:00');
+  const mesure= new Date(dateStr + 'T12:00:00');
+  return (mesure - birth) / (7 * 24 * 3600 * 1000);
+}
 
-  const toX = i => pad.l + (i / (data.length - 1)) * cW;
-  const toY = w => pad.t + cH - ((w - minW) / (maxW - minW)) * cH;
+function buildWHODatasets(whoTableSexe, userPoints, unitLabel, accentColor) {
+  const weekly = whoToWeekly(whoTableSexe);
+  const labels = ['P3','P15','P50','P85','P97'];
+  // Couleurs inspirées carnet de santé, adaptées fond sombre
+  const colors = [
+    'rgba(248,113,113,0.75)',  // P3  — rouge
+    'rgba(251,191,36,0.75)',   // P15 — jaune
+    'rgba(74,222,128,0.95)',   // P50 — vert médiane
+    'rgba(251,191,36,0.75)',   // P85 — jaune
+    'rgba(248,113,113,0.75)',  // P97 — rouge
+  ];
+  const dashes = [[6,3],[4,3],[],[4,3],[6,3]];
+  const widths = [1.5, 1.5, 2.5, 1.5, 1.5];
 
-  // Grid lines
-  ctx.strokeStyle = '#f0e8e0';
-  ctx.lineWidth = 1;
-  for (let i = 0; i <= 4; i++) {
-    const y = pad.t + (i / 4) * cH;
-    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
-    const label = Math.round(minW + ((maxW - minW) * (4-i) / 4));
-    ctx.fillStyle = '#b0a090';
-    ctx.font = '10px -apple-system, sans-serif';
-    ctx.textAlign = 'right';
-    ctx.fillText(label + 'g', pad.l - 4, y + 3);
-  }
+  const datasets = labels.map((lbl, pi) => ({
+    label: lbl,
+    data: weekly.map((w, wi) => ({ x: wi, y: w[pi] })),
+    borderColor: colors[pi],
+    borderWidth: widths[pi],
+    borderDash: dashes[pi],
+    pointRadius: 0,
+    fill: false,
+    tension: 0.35,
+    order: 10,
+  }));
 
-  // Area fill
-  ctx.beginPath();
-  ctx.moveTo(toX(0), toY(data[0].weight));
-  data.forEach((d, i) => { if (i > 0) ctx.lineTo(toX(i), toY(d.weight)); });
-  ctx.lineTo(toX(data.length - 1), H - pad.b);
-  ctx.lineTo(toX(0), H - pad.b);
-  ctx.closePath();
-  const grad = ctx.createLinearGradient(0, pad.t, 0, H - pad.b);
-  grad.addColorStop(0, 'rgba(169,139,200,0.25)');
-  grad.addColorStop(1, 'rgba(169,139,200,0.02)');
-  ctx.fillStyle = grad;
-  ctx.fill();
-
-  // Line
-  ctx.beginPath();
-  ctx.moveTo(toX(0), toY(data[0].weight));
-  data.forEach((d, i) => { if (i > 0) ctx.lineTo(toX(i), toY(d.weight)); });
-  ctx.strokeStyle = 'var(--purple)';
-  ctx.lineWidth = 2.5;
-  ctx.lineJoin = 'round';
-  ctx.lineCap = 'round';
-  ctx.stroke();
-
-  // Points & labels
-  data.forEach((d, i) => {
-    const x = toX(i), y = toY(d.weight);
-    ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2);
-    ctx.fillStyle = 'white';
-    ctx.fill();
-    ctx.strokeStyle = 'var(--purple)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    if (i === 0 || i === data.length - 1 || data.length <= 6) {
-      const parts = d.date.split('-');
-      ctx.fillStyle = '#8a7890';
-      ctx.font = '9px -apple-system, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(`${parts[2]}/${parts[1]}`, x, H - pad.b + 14);
-    }
+  // Points utilisateur
+  datasets.push({
+    label: 'Mesures',
+    data: userPoints,
+    borderColor: accentColor,
+    backgroundColor: accentColor,
+    pointRadius: 6,
+    pointHoverRadius: 8,
+    pointBorderColor: '#0d1117',
+    pointBorderWidth: 2,
+    showLine: userPoints.length >= 2,
+    borderWidth: 2,
+    tension: 0.3,
+    fill: false,
+    order: 1,
   });
+
+  return datasets;
+}
+
+function buildLegendHTML(accentColor) {
+  return `
+    <div class="who-legend-item"><div class="who-legend-dot" style="background:rgba(248,113,113,0.8)"></div>P3 / P97</div>
+    <div class="who-legend-item"><div class="who-legend-dot" style="background:rgba(251,191,36,0.8)"></div>P15 / P85</div>
+    <div class="who-legend-item"><div class="who-legend-dot" style="background:rgba(74,222,128,0.9);height:3px"></div>P50 — médiane</div>
+    <div class="who-legend-item"><div class="who-legend-dot" style="background:${accentColor};border-radius:50%;width:10px;height:10px"></div>Vos mesures</div>`;
+}
+
+function drawWHOCharts() {
+  const profile = loadObj(KEYS.profile);
+  const sexe    = profile ? profile.sexe : 'garçon';
+  const accent  = getComputedStyle(document.body).getPropertyValue('--weight').trim() || '#a78bfa';
+
+  // ── Poids ──
+  const poidsData = load(KEYS.poids);
+  const userPoids = poidsData
+    .map(e => { const w=ageEnSemaines(e.date); return w!==null&&w>=0&&w<=54 ? {x:+w.toFixed(2), y:+(e.weight/1000).toFixed(3)} : null; })
+    .filter(Boolean);
+
+  const datasetsP = buildWHODatasets(WHO_POIDS[sexe]||WHO_POIDS.garçon, userPoids, 'kg', accent);
+  document.getElementById('whoWeightLegend').innerHTML = buildLegendHTML(accent);
+
+  if (chartWHOPoids) chartWHOPoids.destroy();
+  chartWHOPoids = new Chart(document.getElementById('whoWeightChart'), {
+    type: 'line',
+    data: { datasets: datasetsP },
+    options: whoChartOptions('kg', 52),
+  });
+
+  // ── Taille ──
+  const tailleData = load(KEYS.tailles);
+  const userTaille = tailleData
+    .map(e => { const w=ageEnSemaines(e.date); return w!==null&&w>=0&&w<=54 ? {x:+w.toFixed(2), y:e.height} : null; })
+    .filter(Boolean);
+
+  const datasetsT = buildWHODatasets(WHO_TAILLE[sexe]||WHO_TAILLE.garçon, userTaille, 'cm', accent);
+  document.getElementById('whoHeightLegend').innerHTML = buildLegendHTML(accent);
+
+  if (chartWHOTaille) chartWHOTaille.destroy();
+  chartWHOTaille = new Chart(document.getElementById('whoHeightChart'), {
+    type: 'line',
+    data: { datasets: datasetsT },
+    options: whoChartOptions('cm', 52),
+  });
+}
+
+function whoChartOptions(unit, maxWeeks) {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: { duration: 400 },
+    scales: {
+      x: {
+        type: 'linear',
+        min: 0, max: maxWeeks,
+        title: { display: false },
+        ticks: {
+          color: '#4a5568',
+          font: { size: 10 },
+          stepSize: 4,
+          callback: v => v % 4 === 0 ? `S${v}` : '',
+        },
+        grid: { color: 'rgba(255,255,255,0.04)' },
+        border: { color: 'rgba(255,255,255,0.08)' },
+      },
+      y: {
+        title: { display: true, text: unit, color: '#4a5568', font: { size: 10 } },
+        ticks: { color: '#4a5568', font: { size: 10 } },
+        grid: { color: 'rgba(255,255,255,0.04)' },
+        border: { color: 'rgba(255,255,255,0.08)' },
+      },
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#1e2436',
+        borderColor: 'rgba(255,255,255,0.1)',
+        borderWidth: 1,
+        titleColor: '#e2e8f0',
+        bodyColor: '#7a8899',
+        callbacks: {
+          title: items => `Semaine ${items[0].parsed.x.toFixed(1)}`,
+          label: item => item.dataset.label === 'Mesures'
+            ? ` ${item.parsed.y} ${unit}`
+            : ` ${item.dataset.label} : ${item.parsed.y} ${unit}`,
+        },
+      },
+    },
+  };
 }
 
 // ─── DELETE ──────────────────────────────────────────────────────────────────
-function deleteEntry(storeKey, id, renderFn) {
-  const data = load(KEYS[storeKey]);
-  save(KEYS[storeKey], data.filter(e => e.id !== id));
+function deleteEntry(storeKey,id,renderFn) {
+  save(KEYS[storeKey],load(KEYS[storeKey]).filter(e=>e.id!==id));
   window[renderFn]();
 }
 function deleteWeightEntry(id) {
-  const data = load(KEYS.poids);
-  save(KEYS.poids, data.filter(e => e.id !== id));
-  renderPoids();
-  drawWeightChart();
+  save(KEYS.poids,load(KEYS.poids).filter(e=>e.id!==id));
+  renderPoids(); drawWHOCharts();
 }
 
-// ─── INIT ────────────────────────────────────────────────────────────────────
+// ─── INIT ─────────────────────────────────────────────────────────────────────
 function init() {
-  // Set default input values
-  document.getElementById('tetTime').value = '';
-  document.getElementById('diaperTime').value = toLocalDatetimeStr(now());
-  document.getElementById('weightDate').value = toLocalDateStr(now());
-  document.getElementById('sleepStart').value = toLocalDatetimeStr(now());
-
-  renderTetees();
-  renderSommeil();
-  renderCouches();
-  renderPoids();
-
-  // Redraw chart when tab switches to poids
-  window.addEventListener('resize', () => {
-    const active = document.querySelector('.tab-content.active');
-    if (active && active.id === 'tab-poids') drawWeightChart();
+  const profile=loadObj(KEYS.profile);
+  if (profile) {
+    document.getElementById('onboarding').classList.add('hidden');
+    applyTheme(profile.sexe);
+    updateHeaderProfile();
+    renderProfilePreview();
+  }
+  document.getElementById('tetTime').value='';
+  document.getElementById('diaperTime').value=toLocalDatetimeStr(now());
+  document.getElementById('weightDate').value=toLocalDateStr(now());
+  document.getElementById('heightDate').value=toLocalDateStr(now());
+  document.getElementById('sleepStart').value=toLocalDatetimeStr(now());
+  renderTetees(); renderSommeil(); renderCouches(); renderPoids();
+  // Les charts OMS sont dessinés lors du premier affichage de l'onglet poids
+  window.addEventListener('resize',()=>{
+    if (document.getElementById('tab-poids').classList.contains('active')) drawWHOCharts();
   });
 }
-
 init();
 </script>
 </body>
