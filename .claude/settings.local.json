@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3:*)",
+      "Bash(node replace-icons.js)",
+      "Bash(node -e ':*)",
+      "Bash(node replace-icons-v2.js)",
+      "Bash(node:*)",
+      "Bash(del \"C:\\\\Users\\\\Hub\\\\Documents\\\\baby-tracker\\\\check_script.js\")"
+    ]
+  }
+}

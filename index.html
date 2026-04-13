@@ -270,7 +270,8 @@
     }
     .delete-btn:hover { color: #ef4444; }
     .empty-state { text-align: center; padding: 32px 16px; color: var(--text-muted); font-size: 0.85rem; }
-    .empty-state .empty-icon { font-size: 2.2rem; margin-bottom: 10px; opacity: 0.5; }
+    .empty-state .empty-icon { font-size: 0; margin-bottom: 10px; opacity: 0.4; }
+    .empty-state .empty-icon svg { width: 36px; height: 36px; }
 
     /* ── SLEEP BADGE ────────────────────────────────────────────────────── */
     .sleep-active-badge {
@@ -500,7 +501,8 @@
       text-align: center; padding: 20px 12px; color: var(--text-muted);
       font-size: 0.82rem; line-height: 1.6;
     }
-    .no-data-msg .no-data-icon { font-size: 1.6rem; margin-bottom: 8px; opacity: 0.5; }
+    .no-data-msg .no-data-icon { font-size: 0; margin-bottom: 8px; opacity: 0.4; }
+    .no-data-msg .no-data-icon svg { width: 28px; height: 28px; }
 
     .section-summary {
       display: grid; grid-template-columns: repeat(3,1fr); gap: 8px;
@@ -540,6 +542,13 @@
       .form-row { flex-direction: column; }
       .seg-btn { font-size: 0.72rem; padding: 8px 4px; }
     }
+
+    /* ── SVG Lucide — ajustements globaux ─────────────────────────────── */
+    .history-icon svg { width: 16px; height: 16px; }
+    .anomaly-none svg { width: 15px; height: 15px; vertical-align: middle; margin-right: 6px; }
+    .insight-icon svg { width: 18px; height: 18px; }
+    .tab-icon svg { display: block; margin: 0 auto 2px; }
+    .onboard-logo svg { opacity: 0.9; }
   </style>
 </head>
 <body>
@@ -547,7 +556,7 @@
 <!-- ═══════════════ ONBOARDING ═══════════════ -->
 <div class="onboarding" id="onboarding">
   <div class="onboard-card">
-    <div class="onboard-logo">👶</div>
+    <div class="onboard-logo"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div>
     <div class="onboard-title">BabyTrack</div>
     <div class="onboard-subtitle">Carnet de bord pour votre bébé.<br>Configurons l'application en 30 secondes.</div>
 
@@ -565,10 +574,10 @@
       <label>Sexe</label>
       <div class="sex-group">
         <div class="sex-btn" id="obGirl" onclick="selectSex('fille')">
-          <span>👧</span>Fille
+          <span><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="8" r="6"/><line x1="12" x2="12" y1="14" y2="22"/><line x1="9" x2="15" y1="19" y2="19"/></svg></span>Fille
         </div>
         <div class="sex-btn" id="obBoy" onclick="selectSex('garçon')">
-          <span>👦</span>Garçon
+          <span><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="10" cy="14" r="6"/><line x1="21" x2="15" y1="3" y2="9"/><path d="M21 3h-6"/><path d="M21 9V3"/></svg></span>Garçon
         </div>
       </div>
     </div>
@@ -589,25 +598,25 @@
 <!-- ═══════════════ NAV ═══════════════ -->
 <nav class="nav-tabs">
   <div class="nav-tab active" data-tab="tétées" onclick="switchTab('tétées')">
-    <span class="tab-icon">🍼</span><span class="tab-label">Tétées</span>
+    <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2h8"/><path d="M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.788a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2"/><path d="M7 15a6.472 6.472 0 0 1 5 0 6.472 6.472 0 0 0 5 0"/></svg></span><span class="tab-label">Tétées</span>
   </div>
   <div class="nav-tab" data-tab="sommeil" onclick="switchTab('sommeil')">
-    <span class="tab-icon">😴</span><span class="tab-label">Sommeil</span>
+    <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span><span class="tab-label">Sommeil</span>
   </div>
   <div class="nav-tab" data-tab="couches" onclick="switchTab('couches')">
-    <span class="tab-icon">🧷</span><span class="tab-label">Couches</span>
+    <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></span><span class="tab-label">Couches</span>
   </div>
   <div class="nav-tab" data-tab="poids" onclick="switchTab('poids')">
-    <span class="tab-icon">⚖️</span><span class="tab-label">Poids</span>
+    <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg></span><span class="tab-label">Poids</span>
   </div>
   <div class="nav-tab" data-tab="santé" onclick="switchTab('santé')">
-    <span class="tab-icon">🏥</span><span class="tab-label">Santé</span>
+    <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2a2 2 0 0 0-2 2v5H4a2 2 0 0 0-2 2v2c0 1.1.9 2 2 2h5v5c0 1.1.9 2 2 2h2a2 2 0 0 0 2-2v-5h5a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2h-5V4a2 2 0 0 0-2-2h-2z"/></svg></span><span class="tab-label">Santé</span>
   </div>
   <div class="nav-tab" data-tab="insights" onclick="switchTab('insights')">
-    <span class="tab-icon">✨</span><span class="tab-label">Insights</span>
+    <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg></span><span class="tab-label">Insights</span>
   </div>
   <div class="nav-tab" data-tab="paramètres" onclick="switchTab('paramètres')">
-    <span class="tab-icon">⚙️</span><span class="tab-label">Réglages</span>
+    <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></span><span class="tab-label">Réglages</span>
   </div>
 </nav>
 
@@ -622,9 +631,9 @@
       <div style="margin-bottom:12px;">
         <label style="font-size:0.72rem;font-weight:700;color:var(--text-muted);display:block;margin-bottom:7px;">Type</label>
         <div class="seg-group" id="tetTypeGroup">
-          <div class="seg-btn active-primary" data-val="sein_gauche" onclick="selectSeg('tetTypeGroup','active-primary',this)">♀ Gauche</div>
-          <div class="seg-btn" data-val="sein_droit"  onclick="selectSeg('tetTypeGroup','active-primary',this)">♀ Droit</div>
-          <div class="seg-btn" data-val="biberon"     onclick="selectSeg('tetTypeGroup','active-primary',this)">🍼 Biberon</div>
+          <div class="seg-btn active-primary" data-val="sein_gauche" onclick="selectSeg('tetTypeGroup','active-primary',this)"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg> Gauche</div>
+          <div class="seg-btn" data-val="sein_droit"  onclick="selectSeg('tetTypeGroup','active-primary',this)"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg> Droit</div>
+          <div class="seg-btn" data-val="biberon"     onclick="selectSeg('tetTypeGroup','active-primary',this)"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M8 2h8"/><path d="M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.788a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2"/><path d="M7 15a6.472 6.472 0 0 1 5 0 6.472 6.472 0 0 0 5 0"/></svg> Biberon</div>
         </div>
       </div>
       <div class="timer-display">
@@ -632,7 +641,7 @@
         <div class="timer-label">Durée de la tétée</div>
       </div>
       <div class="timer-controls">
-        <button class="btn btn-primary" onclick="tetTimerToggle()" id="tetTimerBtn">▶ Démarrer</button>
+        <button class="btn btn-primary" onclick="tetTimerToggle()" id="tetTimerBtn"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><polygon points="5 3 19 12 5 21 5 3"/></svg> Démarrer</button>
         <button class="btn btn-ghost" style="flex:0 0 94px;" onclick="tetTimerReset()">Réinitialiser</button>
       </div>
       <div class="form-row">
@@ -649,7 +658,7 @@
         <label>Quantité (ml) — biberon</label>
         <input type="number" id="tetMl" placeholder="Ex : 90" min="10" max="300" />
       </div>
-      <button class="btn btn-primary" onclick="saveTetee()">✓ Enregistrer la tétée</button>
+      <button class="btn btn-primary" onclick="saveTetee()"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Enregistrer la tétée</button>
     </div>
     <div class="card">
       <div class="card-title">Historique — 24 dernières heures</div>
@@ -683,8 +692,8 @@
         </div>
       </div>
       <div style="display:flex;gap:8px;">
-        <button class="btn btn-secondary" style="flex:1;" onclick="startSleepNow()">▶ Commencer maintenant</button>
-        <button class="btn btn-ghost" style="flex:1;" onclick="saveSleepManual()">✓ Enregistrer</button>
+        <button class="btn btn-secondary" style="flex:1;" onclick="startSleepNow()"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><polygon points="5 3 19 12 5 21 5 3"/></svg> Commencer maintenant</button>
+        <button class="btn btn-ghost" style="flex:1;" onclick="saveSleepManual()"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Enregistrer</button>
       </div>
     </div>
     <div class="card">
@@ -701,9 +710,9 @@
       <div style="margin-bottom:12px;">
         <label style="font-size:0.72rem;font-weight:700;color:var(--text-muted);display:block;margin-bottom:7px;">Type de couche</label>
         <div class="seg-group" id="diaperTypeGroup">
-          <div class="seg-btn active-green" data-val="pipi"  onclick="selectSeg('diaperTypeGroup','active-green',this)">💧 Pipi</div>
-          <div class="seg-btn" data-val="caca"  onclick="selectSeg('diaperTypeGroup','active-green',this)">💩 Caca</div>
-          <div class="seg-btn" data-val="mixte" onclick="selectSeg('diaperTypeGroup','active-green',this)">🔥 Mixte</div>
+          <div class="seg-btn active-green" data-val="pipi"  onclick="selectSeg('diaperTypeGroup','active-green',this)"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg> Pipi</div>
+          <div class="seg-btn" data-val="caca"  onclick="selectSeg('diaperTypeGroup','active-green',this)"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><circle cx="12" cy="16" r=".5" fill="currentColor"/></svg> Caca</div>
+          <div class="seg-btn" data-val="mixte" onclick="selectSeg('diaperTypeGroup','active-green',this)"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg> Mixte</div>
         </div>
       </div>
       <div class="form-row">
@@ -716,7 +725,7 @@
         <label>Note (optionnel)</label>
         <input type="text" id="diaperNote" placeholder="Ex : couleur, consistance…" />
       </div>
-      <button class="btn btn-green" onclick="saveDiaper()">✓ Enregistrer la couche</button>
+      <button class="btn btn-green" onclick="saveDiaper()"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Enregistrer la couche</button>
     </div>
     <div class="card">
       <div class="card-title">Historique — aujourd'hui</div>
@@ -730,7 +739,7 @@
 
     <!-- Saisie poids + taille côte à côte -->
     <div class="card">
-      <div class="card-title">⚖️ Nouvelle pesée</div>
+      <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg> Nouvelle pesée</div>
       <div class="form-row">
         <div class="form-group">
           <label>Date</label>
@@ -745,11 +754,11 @@
         <label>Note (optionnel)</label>
         <input type="text" id="weightNote" placeholder="Ex : après le bain, habillé…" />
       </div>
-      <button class="btn btn-purple" onclick="saveWeight()">✓ Enregistrer le poids</button>
+      <button class="btn btn-purple" onclick="saveWeight()"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Enregistrer le poids</button>
     </div>
 
     <div class="card">
-      <div class="card-title">📏 Nouvelle taille</div>
+      <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.3 8.7 8.7 21.3c-1 1-2.5 1-3.4 0l-2.6-2.6c-1-1-1-2.5 0-3.4L15.3 2.7c1-1 2.5-1 3.4 0l2.6 2.6c1 1 1 2.5 0 3.4Z"/><path d="m7.5 10.5 2 2"/><path d="m10.5 7.5 2 2"/><path d="m13.5 4.5 2 2"/><path d="m4.5 13.5 2 2"/></svg> Nouvelle taille</div>
       <div class="form-row">
         <div class="form-group">
           <label>Date</label>
@@ -764,12 +773,12 @@
         <label>Note (optionnel)</label>
         <input type="text" id="heightNote" placeholder="Ex : couché, en pédiatrie…" />
       </div>
-      <button class="btn btn-purple" onclick="saveHeight()">✓ Enregistrer la taille</button>
+      <button class="btn btn-purple" onclick="saveHeight()"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Enregistrer la taille</button>
     </div>
 
     <!-- Courbe OMS — Poids -->
     <div class="card">
-      <div class="card-title">📈 Courbe de poids — référence OMS</div>
+      <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg> Courbe de poids — référence OMS</div>
       <div class="who-legend" id="whoWeightLegend"></div>
       <div class="who-chart-wrap"><canvas id="whoWeightChart"></canvas></div>
       <div class="who-section-label" style="margin-top:6px;">Âge en semaines (0 – 52)</div>
@@ -777,7 +786,7 @@
 
     <!-- Courbe OMS — Taille -->
     <div class="card">
-      <div class="card-title">📏 Courbe de taille — référence OMS</div>
+      <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.3 8.7 8.7 21.3c-1 1-2.5 1-3.4 0l-2.6-2.6c-1-1-1-2.5 0-3.4L15.3 2.7c1-1 2.5-1 3.4 0l2.6 2.6c1 1 1 2.5 0 3.4Z"/><path d="m7.5 10.5 2 2"/><path d="m10.5 7.5 2 2"/><path d="m13.5 4.5 2 2"/><path d="m4.5 13.5 2 2"/></svg> Courbe de taille — référence OMS</div>
       <div class="who-legend" id="whoHeightLegend"></div>
       <div class="who-chart-wrap"><canvas id="whoHeightChart"></canvas></div>
       <div class="who-section-label" style="margin-top:6px;">Âge en semaines (0 – 52)</div>
@@ -799,9 +808,9 @@
 
     <!-- Sous-navigation -->
     <div class="health-subnav">
-      <div class="health-subnav-btn active" data-sect="vaccins"    onclick="switchHealthSection('vaccins')">💉 Vaccins</div>
-      <div class="health-subnav-btn"         data-sect="rdv"       onclick="switchHealthSection('rdv')">📅 Rendez-vous</div>
-      <div class="health-subnav-btn"         data-sect="perimetre" onclick="switchHealthSection('perimetre')">📐 Périmètre crânien</div>
+      <div class="health-subnav-btn active" data-sect="vaccins"    onclick="switchHealthSection('vaccins')"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5"/><line x1="9" x2="13" y1="11" y2="15"/><line x1="5" x2="2" y1="19" y2="22"/><line x1="14" x2="20" y1="4" y2="10"/></svg> Vaccins</div>
+      <div class="health-subnav-btn"         data-sect="rdv"       onclick="switchHealthSection('rdv')"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg> Rendez-vous</div>
+      <div class="health-subnav-btn"         data-sect="perimetre" onclick="switchHealthSection('perimetre')"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21.3 8.7 8.7 21.3c-1 1-2.5 1-3.4 0l-2.6-2.6c-1-1-1-2.5 0-3.4L15.3 2.7c1-1 2.5-1 3.4 0l2.6 2.6c1 1 1 2.5 0 3.4Z"/><path d="m7.5 10.5 2 2"/><path d="m10.5 7.5 2 2"/><path d="m13.5 4.5 2 2"/><path d="m4.5 13.5 2 2"/></svg> Périmètre crânien</div>
     </div>
 
     <!-- ─── VACCINS ─── -->
@@ -809,8 +818,8 @@
       <div class="card">
         <div class="card-title">Programme de vaccination</div>
         <div class="seg-group" id="vaccCountryGroup" style="margin-bottom:10px;">
-          <div class="seg-btn active-primary" data-val="FR"   onclick="selectVaccCountry('FR')">🇫🇷 France</div>
-          <div class="seg-btn"               data-val="TH"   onclick="selectVaccCountry('TH')">🇹🇭 Thaïlande</div>
+          <div class="seg-btn active-primary" data-val="FR"   onclick="selectVaccCountry('FR')">France</div>
+          <div class="seg-btn"               data-val="TH"   onclick="selectVaccCountry('TH')">Thaïlande</div>
           <div class="seg-btn"               data-val="BOTH" onclick="selectVaccCountry('BOTH')">Les deux</div>
         </div>
         <p class="vacc-country-note" id="vaccCountryNote"></p>
@@ -835,10 +844,10 @@
         <div style="margin-bottom:10px;">
           <label style="font-size:0.72rem;font-weight:700;color:var(--text-muted);display:block;margin-bottom:7px;">Type</label>
           <div class="seg-group" id="rdvTypeGroup">
-            <div class="seg-btn active-primary" data-val="pédiatre"    onclick="selectSeg('rdvTypeGroup','active-primary',this)">👶 Pédiatre</div>
-            <div class="seg-btn"               data-val="généraliste" onclick="selectSeg('rdvTypeGroup','active-primary',this)">🩺 Généraliste</div>
-            <div class="seg-btn"               data-val="spécialiste" onclick="selectSeg('rdvTypeGroup','active-primary',this)">⚕️ Spécialiste</div>
-            <div class="seg-btn"               data-val="urgences"    onclick="selectSeg('rdvTypeGroup','active-primary',this)">🚨 Urgences</div>
+            <div class="seg-btn active-primary" data-val="pédiatre"    onclick="selectSeg('rdvTypeGroup','active-primary',this)"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Pédiatre</div>
+            <div class="seg-btn"               data-val="généraliste" onclick="selectSeg('rdvTypeGroup','active-primary',this)"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/></svg> Généraliste</div>
+            <div class="seg-btn"               data-val="spécialiste" onclick="selectSeg('rdvTypeGroup','active-primary',this)"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg> Spécialiste</div>
+            <div class="seg-btn"               data-val="urgences"    onclick="selectSeg('rdvTypeGroup','active-primary',this)"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg> Urgences</div>
           </div>
         </div>
         <div class="form-row">
@@ -855,7 +864,7 @@
           <label>Notes (optionnel)</label>
           <input type="text" id="rdvNotes" placeholder="Questions à poser, documents à apporter…" />
         </div>
-        <button class="btn btn-primary" onclick="addRDV()">✓ Ajouter le rendez-vous</button>
+        <button class="btn btn-primary" onclick="addRDV()"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Ajouter le rendez-vous</button>
       </div>
       <div id="rdvContainer"></div>
     </div>
@@ -864,7 +873,7 @@
     <div class="health-section" id="hsect-perimetre">
       <div class="stats-row" id="perimStats"></div>
       <div class="card">
-        <div class="card-title">📐 Nouvelle mesure</div>
+        <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.3 8.7 8.7 21.3c-1 1-2.5 1-3.4 0l-2.6-2.6c-1-1-1-2.5 0-3.4L15.3 2.7c1-1 2.5-1 3.4 0l2.6 2.6c1 1 1 2.5 0 3.4Z"/><path d="m7.5 10.5 2 2"/><path d="m10.5 7.5 2 2"/><path d="m13.5 4.5 2 2"/><path d="m4.5 13.5 2 2"/></svg> Nouvelle mesure</div>
         <div class="form-row">
           <div class="form-group">
             <label>Date</label>
@@ -879,7 +888,7 @@
           <label>Note (optionnel)</label>
           <input type="text" id="perimNote" placeholder="Ex : pédiatre, maternité…" />
         </div>
-        <button class="btn" style="background:#2dd4bf;color:#07201e;font-weight:800;" onclick="savePerimetre()">✓ Enregistrer la mesure</button>
+        <button class="btn" style="background:#2dd4bf;color:#07201e;font-weight:800;" onclick="savePerimetre()"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Enregistrer la mesure</button>
       </div>
       <div class="card">
         <div class="card-title">Courbe de croissance crânienne — OMS</div>
@@ -904,28 +913,28 @@
           <div class="insight-header-title" id="insightTitle">Analyse de Bébé</div>
           <div class="insight-header-sub" id="insightSubtitle">Basée sur les 7 derniers jours</div>
         </div>
-        <button class="refresh-btn" onclick="renderInsights()">↻ Actualiser</button>
+        <button class="refresh-btn" onclick="renderInsights()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Actualiser</button>
       </div>
       <div class="section-summary" id="insightSummaryToday"></div>
     </div>
 
     <div class="card" id="insightPredCard">
-      <div class="card-title">🔮 Prédictions</div>
+      <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg> Prédictions</div>
       <div class="insight-row" id="insightPredictions"></div>
     </div>
 
     <div class="card" id="insightRhythmCard">
-      <div class="card-title">📊 Rythmes — 7 derniers jours</div>
+      <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></svg> Rythmes — 7 derniers jours</div>
       <div class="insight-row" id="insightRhythms"></div>
     </div>
 
     <div class="card" id="insightAnomalyCard">
-      <div class="card-title">⚠️ Points d'attention aujourd'hui</div>
+      <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg> Points d'attention aujourd'hui</div>
       <div id="insightAnomalies"></div>
     </div>
 
     <div class="card" id="insightDayCard">
-      <div class="card-title">📝 Résumé de la journée</div>
+      <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg> Résumé de la journée</div>
       <div class="insight-row" id="insightDaySummary"></div>
     </div>
 
@@ -935,21 +944,21 @@
   <div class="tab-content" id="tab-paramètres">
 
     <div class="card settings-section">
-      <div class="card-title">👶 Profil du bébé</div>
+      <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Profil du bébé</div>
       <div class="profile-preview" id="profilePreview"></div>
       <button class="btn-reset" onclick="resetProfile()">Modifier le profil / Recommencer</button>
     </div>
 
     <div class="card settings-section">
-      <div class="card-title">💾 Exporter les données</div>
+      <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg> Exporter les données</div>
       <p>Téléchargez une copie de toutes vos données (tétées, sommeil, couches, poids) dans un fichier JSON. Conservez ce fichier pour restaurer ou transférer vos données.</p>
-      <button class="btn btn-export" onclick="exportData()">↓ Télécharger mes données</button>
+      <button class="btn btn-export" onclick="exportData()"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg> Télécharger mes données</button>
     </div>
 
     <div class="card settings-section">
-      <div class="card-title">📂 Importer des données</div>
+      <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg> Importer des données</div>
       <p>Restaurez vos données depuis un fichier JSON exporté. <strong style="color:var(--text);">Attention :</strong> cela remplacera toutes les données actuelles.</p>
-      <button class="btn btn-import" onclick="document.getElementById('importFileInput').click()">↑ Charger une sauvegarde</button>
+      <button class="btn btn-import" onclick="document.getElementById('importFileInput').click()"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg> Charger une sauvegarde</button>
       <input type="file" id="importFileInput" accept=".json,application/json" onchange="importData(event)" />
       <p class="import-info">Format accepté : fichier .json exporté depuis BabyTrack.</p>
     </div>
@@ -961,6 +970,13 @@
 <div class="toast" id="toast"></div>
 
 <script>
+// ── Icônes Lucide dynamiques ─────────────────────────────────────────────────
+const _IC_P = {"bottle":"<path d=\"M8 2h8\"/><path d=\"M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.788a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2\"/><path d=\"M7 15a6.472 6.472 0 0 1 5 0 6.472 6.472 0 0 0 5 0\"/>","moon":"<path d=\"M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z\"/>","shield":"<path d=\"M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z\"/>","scale":"<path d=\"m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z\"/><path d=\"m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z\"/><path d=\"M7 21h10\"/><path d=\"M12 3v18\"/><path d=\"M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2\"/>","chart":"<line x1=\"12\" x2=\"12\" y1=\"20\" y2=\"10\"/><line x1=\"18\" x2=\"18\" y1=\"20\" y2=\"4\"/><line x1=\"6\" x2=\"6\" y1=\"20\" y2=\"16\"/>","ruler":"<path d=\"M21.3 8.7 8.7 21.3c-1 1-2.5 1-3.4 0l-2.6-2.6c-1-1-1-2.5 0-3.4L15.3 2.7c1-1 2.5-1 3.4 0l2.6 2.6c1 1 1 2.5 0 3.4Z\"/><path d=\"m7.5 10.5 2 2\"/><path d=\"m10.5 7.5 2 2\"/><path d=\"m13.5 4.5 2 2\"/><path d=\"m4.5 13.5 2 2\"/>","calendar":"<rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\" ry=\"2\"/><line x1=\"16\" x2=\"16\" y1=\"2\" y2=\"6\"/><line x1=\"8\" x2=\"8\" y1=\"2\" y2=\"6\"/><line x1=\"3\" x2=\"21\" y1=\"10\" y2=\"10\"/>","sparkles":"<path d=\"m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z\"/><path d=\"M5 3v4\"/><path d=\"M19 17v4\"/><path d=\"M3 5h4\"/><path d=\"M17 19h4\"/>","check":"<polyline points=\"20 6 9 17 4 12\"/>","play":"<polygon points=\"5 3 19 12 5 21 5 3\"/>","pause":"<rect width=\"4\" height=\"16\" x=\"6\" y=\"4\"/><rect width=\"4\" height=\"16\" x=\"14\" y=\"4\"/>","refresh":"<path d=\"M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8\"/><path d=\"M21 3v5h-5\"/><path d=\"M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16\"/><path d=\"M8 16H3v5\"/>","download":"<path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/><polyline points=\"7 10 12 15 17 10\"/><line x1=\"12\" x2=\"12\" y1=\"15\" y2=\"3\"/>","upload":"<path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/><polyline points=\"17 8 12 3 7 8\"/><line x1=\"12\" x2=\"12\" y1=\"3\" y2=\"15\"/>","heart":"<path d=\"M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z\"/>","venus":"<circle cx=\"12\" cy=\"8\" r=\"6\"/><line x1=\"12\" x2=\"12\" y1=\"14\" y2=\"22\"/><line x1=\"9\" x2=\"15\" y1=\"19\" y2=\"19\"/>","mars":"<circle cx=\"10\" cy=\"14\" r=\"6\"/><line x1=\"21\" x2=\"15\" y1=\"3\" y2=\"9\"/><path d=\"M21 3h-6\"/><path d=\"M21 9V3\"/>","settings":"<path d=\"M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/>","cross":"<path d=\"M11 2a2 2 0 0 0-2 2v5H4a2 2 0 0 0-2 2v2c0 1.1.9 2 2 2h5v5c0 1.1.9 2 2 2h2a2 2 0 0 0 2-2v-5h5a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2h-5V4a2 2 0 0 0-2-2h-2z\"/>","droplet":"<path d=\"M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z\"/>","alertcircle":"<circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"12\" x2=\"12\" y1=\"8\" y2=\"12\"/><circle cx=\"12\" cy=\"16\" r=\".5\" fill=\"currentColor\"/>","layers":"<polygon points=\"12 2 2 7 12 12 22 7 12 2\"/><polyline points=\"2 17 12 22 22 17\"/><polyline points=\"2 12 12 17 22 12\"/>","trending":"<polyline points=\"22 7 13.5 15.5 8.5 10.5 2 17\"/><polyline points=\"16 7 22 7 22 13\"/>","timer":"<line x1=\"10\" x2=\"14\" y1=\"2\" y2=\"2\"/><line x1=\"12\" x2=\"15\" y1=\"14\" y2=\"11\"/><circle cx=\"12\" cy=\"14\" r=\"8\"/>","bed":"<path d=\"M2 4v16\"/><path d=\"M2 8h18a2 2 0 0 1 2 2v10\"/><path d=\"M2 17h20\"/><path d=\"M6 8v9\"/>","clock":"<circle cx=\"12\" cy=\"12\" r=\"10\"/><polyline points=\"12 6 12 12 16 14\"/>","alarmclock":"<circle cx=\"12\" cy=\"13\" r=\"8\"/><path d=\"M12 9v4l2 2\"/><path d=\"M5 3 2 6\"/><path d=\"m22 6-3-3\"/><path d=\"M6.38 18.7 4 21\"/><path d=\"M17.64 18.67 20 21\"/>","alert":"<path d=\"m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z\"/><line x1=\"12\" x2=\"12\" y1=\"9\" y2=\"13\"/><line x1=\"12\" x2=\"12.01\" y1=\"17\" y2=\"17\"/>","pin":"<line x1=\"12\" x2=\"12\" y1=\"17\" y2=\"22\"/><path d=\"M5 17H4a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1\"/><polygon points=\"12 17 8 11 16 11 12 17\"/>","mappin":"<path d=\"M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z\"/><circle cx=\"12\" cy=\"10\" r=\"3\"/>","user":"<path d=\"M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2\"/><circle cx=\"12\" cy=\"7\" r=\"4\"/>","stethoscope":"<path d=\"M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3\"/><path d=\"M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4\"/><circle cx=\"20\" cy=\"10\" r=\"2\"/>","plus":"<line x1=\"12\" x2=\"12\" y1=\"5\" y2=\"19\"/><line x1=\"5\" x2=\"19\" y1=\"12\" y2=\"12\"/>","syringe":"<path d=\"m18 2 4 4\"/><path d=\"m17 7 3-3\"/><path d=\"M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5\"/><line x1=\"9\" x2=\"13\" y1=\"11\" y2=\"15\"/><line x1=\"5\" x2=\"2\" y1=\"19\" y2=\"22\"/><line x1=\"14\" x2=\"20\" y1=\"4\" y2=\"10\"/>","filetext":"<path d=\"M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z\"/><polyline points=\"14 2 14 8 20 8\"/><line x1=\"16\" x2=\"8\" y1=\"13\" y2=\"13\"/><line x1=\"16\" x2=\"8\" y1=\"17\" y2=\"17\"/><line x1=\"10\" x2=\"8\" y1=\"9\" y2=\"9\"/>"};
+const _IC_A = 'fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"';
+function ic(name, size=18) {
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="'+size+'" height="'+size+'" viewBox="0 0 24 24" '+_IC_A+'>'+(_IC_P[name]||'')+'</svg>';
+}
+// ─────────────────────────────────────────────────────────────────────────────
 // ─── CLÉS ────────────────────────────────────────────────────────────────────
 const KEYS = {
   tetees: 'bt_tetees', sommeil: 'bt_sommeil', couches: 'bt_couches',
@@ -1107,7 +1123,7 @@ function updateHeader() {
 function updateHeaderProfile() {
   const p = loadObj(KEYS.profile);
   if (!p) return;
-  document.getElementById('headerName').textContent = (p.sexe==='fille' ? '👧 ' : '👦 ') + p.prenom;
+  document.getElementById('headerName').innerHTML = ic(p.sexe==='fille'?'venus':'mars', 14) + ' ' + p.prenom;
   if (p.naissance) {
     const days = Math.floor((Date.now() - new Date(p.naissance)) / 86400000);
     let age;
@@ -1161,7 +1177,7 @@ function renderProfilePreview() {
   if (!p) return;
   const birth = p.naissance ? new Date(p.naissance+'T12:00:00').toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'}) : 'Date non renseignée';
   document.getElementById('profilePreview').innerHTML = `
-    <div class="profile-avatar">${p.sexe==='fille'?'👧':'👦'}</div>
+    <div class="profile-avatar">${ic(p.sexe==='fille'?'venus':'mars',28)}</div>
     <div class="profile-info">
       <div class="pname">${p.prenom}</div>
       <div class="pdetail">${p.sexe==='fille'?'Fille':'Garçon'} · Né(e) le ${birth}</div>
@@ -1241,20 +1257,20 @@ function tetTimerToggle() {
   const btn = document.getElementById('tetTimerBtn');
   if (!tetTimerRunning) {
     tetTimerStart = Date.now() - tetTimerSeconds*1000;
-    tetTimerRunning = true; btn.textContent = '⏸ Pause';
+    tetTimerRunning = true; btn.innerHTML = ic('pause',15)+' Pause';
     tetTimerInterval = setInterval(() => {
       tetTimerSeconds = Math.floor((Date.now()-tetTimerStart)/1000);
       document.getElementById('tetTimerClock').textContent = fmtDurationSec(tetTimerSeconds);
       document.getElementById('tetDuration').value = Math.round(tetTimerSeconds/60) || '';
     }, 500);
   } else {
-    clearInterval(tetTimerInterval); tetTimerRunning=false; btn.textContent='▶ Reprendre';
+    clearInterval(tetTimerInterval); tetTimerRunning=false; btn.innerHTML=ic('play',15)+' Reprendre';
   }
 }
 function tetTimerReset() {
   clearInterval(tetTimerInterval); tetTimerRunning=false; tetTimerSeconds=0;
   document.getElementById('tetTimerClock').textContent='00:00';
-  document.getElementById('tetTimerBtn').textContent='▶ Démarrer';
+  document.getElementById('tetTimerBtn').innerHTML=ic('play',15)+' Démarrer';
   document.getElementById('tetDuration').value='';
 }
 
@@ -1292,11 +1308,11 @@ function renderTetees() {
     <div class="stat-box"><div class="stat-val c-primary">${fmtDuration(totalMin)}</div><div class="stat-lbl">Durée totale</div></div>
     <div class="stat-box"><div class="stat-val c-primary">${lastAgo}</div><div class="stat-lbl">Dernière</div></div>`;
   const c = document.getElementById('tetHistory');
-  if (!recent.length) { c.innerHTML='<div class="empty-state"><div class="empty-icon">🍼</div>Aucune tétée dans les dernières 24h</div>'; return; }
-  const labels={sein_gauche:'♀ Sein gauche',sein_droit:'♀ Sein droit',biberon:'🍼 Biberon'};
+  if (!recent.length) { c.innerHTML='<div class="empty-state"><div class="empty-icon">'+ic('bottle',36)+'</div>Aucune tétée dans les dernières 24h</div>'; return; }
+  const labels={sein_gauche:'Sein gauche',sein_droit:'Sein droit',biberon:'Biberon'};
   c.innerHTML=recent.map(e=>`
     <div class="history-item">
-      <div class="history-icon hi-primary">${e.type==='biberon'?'🍼':'🤱'}</div>
+      <div class="history-icon hi-primary">${e.type==='biberon'?ic('bottle',16):ic('heart',16)}</div>
       <div class="history-info">
         <div class="hi-main">${labels[e.type]||e.type}</div>
         <div class="hi-sub">${e.duration?fmtDuration(e.duration):''}${e.ml?` · ${e.ml} ml`:''}</div>
@@ -1358,10 +1374,10 @@ function renderSommeil() {
     <div class="stat-box"><div class="stat-val c-secondary">${fmtDuration(totalSleep)}</div><div class="stat-lbl">Sommeil total</div></div>
     <div class="stat-box"><div class="stat-val c-secondary">${sessions>0?fmtDuration(totalSleep/sessions):'—'}</div><div class="stat-lbl">Moy. sieste</div></div>`;
   const c=document.getElementById('sleepHistory');
-  if (!data.length) { c.innerHTML='<div class="empty-state"><div class="empty-icon">😴</div>Aucun sommeil enregistré</div>'; return; }
+  if (!data.length) { c.innerHTML='<div class="empty-state"><div class="empty-icon">'+ic('moon',36)+'</div>Aucun sommeil enregistré</div>'; return; }
   c.innerHTML=data.slice(0,15).map(e=>`
     <div class="history-item">
-      <div class="history-icon hi-secondary">😴</div>
+      <div class="history-icon hi-secondary">${ic('moon',16)}</div>
       <div class="history-info">
         <div class="hi-main">${fmtTime(e.start)} → ${e.end?fmtTime(e.end):'<em>en cours</em>'}</div>
         <div class="hi-sub">${e.duration?fmtDuration(e.duration):'—'} · ${fmtDate(e.start)}</div>
@@ -1394,15 +1410,15 @@ function renderCouches() {
   const mixte=todayE.filter(e=>e.type==='mixte').length;
   document.getElementById('diaperStats').innerHTML=`
     <div class="stat-box"><div class="stat-val c-green">${todayE.length}</div><div class="stat-lbl">Total auj.</div></div>
-    <div class="stat-box"><div class="stat-val c-green">${pipi}</div><div class="stat-lbl">💧 Pipi</div></div>
-    <div class="stat-box"><div class="stat-val c-green">${caca}</div><div class="stat-lbl">💩 Caca</div></div>
-    <div class="stat-box"><div class="stat-val c-green">${mixte}</div><div class="stat-lbl">🔥 Mixte</div></div>`;
-  const icons={pipi:'💧',caca:'💩',mixte:'🔥'}, lbls={pipi:'Couche pipi',caca:'Couche caca',mixte:'Couche mixte'};
+    <div class="stat-box"><div class="stat-val c-green">${pipi}</div><div class="stat-lbl"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg> Pipi</div></div>
+    <div class="stat-box"><div class="stat-val c-green">${caca}</div><div class="stat-lbl"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><circle cx="12" cy="16" r=".5" fill="currentColor"/></svg> Caca</div></div>
+    <div class="stat-box"><div class="stat-val c-green">${mixte}</div><div class="stat-lbl"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg> Mixte</div></div>`;
+  const icons={pipi:ic('droplet',16),caca:ic('alertcircle',16),mixte:ic('layers',16)}, lbls={pipi:'Couche pipi',caca:'Couche caca',mixte:'Couche mixte'};
   const c=document.getElementById('diaperHistory');
-  if (!todayE.length) { c.innerHTML='<div class="empty-state"><div class="empty-icon">🧷</div>Aucune couche aujourd\'hui</div>'; return; }
+  if (!todayE.length) { c.innerHTML='<div class="empty-state"><div class="empty-icon">'+ic('shield',36)+'</div>Aucune couche aujourd\'hui</div>'; return; }
   c.innerHTML=todayE.map(e=>`
     <div class="history-item">
-      <div class="history-icon hi-green">${icons[e.type]||'🧷'}</div>
+      <div class="history-icon hi-green">${icons[e.type]||ic('shield',16)}</div>
       <div class="history-info">
         <div class="hi-main">${lbls[e.type]||e.type}</div>
         <div class="hi-sub">${e.note||'—'}</div>
@@ -1444,10 +1460,10 @@ function renderPoids() {
   }
   // Historique poids
   const c=document.getElementById('weightHistory');
-  if (!data.length) { c.innerHTML='<div class="empty-state"><div class="empty-icon">⚖️</div>Aucune pesée enregistrée</div>'; }
+  if (!data.length) { c.innerHTML='<div class="empty-state"><div class="empty-icon">'+ic('scale',36)+'</div>Aucune pesée enregistrée</div>'; }
   else c.innerHTML=[...data].reverse().map(e=>`
     <div class="history-item">
-      <div class="history-icon hi-purple">⚖️</div>
+      <div class="history-icon hi-purple">${ic('scale',16)}</div>
       <div class="history-info">
         <div class="hi-main">${e.weight} g <span style="color:var(--text-muted);font-weight:400;">(${(e.weight/1000).toFixed(3)} kg)</span></div>
         <div class="hi-sub">${e.note||'—'}</div>
@@ -1477,12 +1493,12 @@ function renderHeightHistory() {
   const data=load(KEYS.tailles);
   const c=document.getElementById('heightHistory');
   if (!data.length) {
-    c.innerHTML='<div class="empty-state"><div class="empty-icon">📏</div>Aucune taille enregistrée</div>';
+    c.innerHTML='<div class="empty-state"><div class="empty-icon">'+ic('ruler',36)+'</div>Aucune taille enregistrée</div>';
     return;
   }
   c.innerHTML=[...data].reverse().map(e=>`
     <div class="history-item">
-      <div class="history-icon hi-purple">📏</div>
+      <div class="history-icon hi-purple">${ic('ruler',16)}</div>
       <div class="history-info">
         <div class="hi-main">${e.height} cm</div>
         <div class="hi-sub">${e.note||'—'}</div>
@@ -1842,14 +1858,14 @@ function renderRDV() {
   const data = load(KEYS.rdv);
   const container = document.getElementById('rdvContainer');
   if (!data.length) {
-    container.innerHTML = `<div class="empty-state"><div class="empty-icon">📅</div>Aucun rendez-vous enregistré</div>`;
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">${ic('calendar',36)}</div>Aucun rendez-vous enregistré</div>`;
     return;
   }
   const todayStr = toLocalDateStr(now());
   const upcoming = data.filter(r => r.date >= todayStr);
   const past     = data.filter(r => r.date < todayStr).reverse();
 
-  const typeEmoji = { pédiatre:'👶', généraliste:'🩺', spécialiste:'⚕️', urgences:'🚨' };
+  const typeEmoji = { pédiatre:ic('user'), généraliste:ic('stethoscope'), spécialiste:ic('plus'), urgences:ic('alert') };
 
   const renderItem = (r, isUpcoming) => {
     const d = new Date(r.date + 'T12:00:00');
@@ -1862,9 +1878,9 @@ function renderRDV() {
       </div>
       <div class="rdv-info">
         <div class="rdv-time">${r.heure} &nbsp;·&nbsp; ${d.toLocaleDateString('fr-FR',{weekday:'long'})}</div>
-        <div class="rdv-title">${typeEmoji[r.type]||'📋'} ${r.type.charAt(0).toUpperCase()+r.type.slice(1)}</div>
-        ${r.medecin ? `<div class="rdv-sub">👤 ${r.medecin}${r.lieu?' · 📍 '+r.lieu:''}</div>` : r.lieu ? `<div class="rdv-sub">📍 ${r.lieu}</div>` : ''}
-        ${r.notes   ? `<div class="rdv-notes">📝 ${r.notes}</div>` : ''}
+        <div class="rdv-title">${typeEmoji[r.type]||ic('calendar')} ${r.type.charAt(0).toUpperCase()+r.type.slice(1)}</div>
+        ${r.medecin ? `<div class="rdv-sub">${ic('user',13)} ${r.medecin}${r.lieu?' · '+ic('mappin',13)+' '+r.lieu:''}</div>` : r.lieu ? `<div class="rdv-sub">${ic('mappin',13)} ${r.lieu}</div>` : ''}
+        ${r.notes   ? `<div class="rdv-notes">${ic('filetext',13)} ${r.notes}</div>` : ''}
         <span class="rdv-type-chip">${r.type}</span>
       </div>
       <button class="delete-btn" onclick="deleteRDV(${r.id})">✕</button>
@@ -1873,7 +1889,7 @@ function renderRDV() {
 
   let html = '';
   if (upcoming.length) {
-    html += `<div class="rdv-upcoming-label">📌 Prochains rendez-vous (${upcoming.length})</div>`;
+    html += `<div class="rdv-upcoming-label">${ic('pin',13)} Prochains rendez-vous (${upcoming.length})</div>`;
     html += upcoming.map(r => renderItem(r, true)).join('');
   }
   if (past.length) {
@@ -1925,12 +1941,12 @@ function renderPerimetre() {
   }
   const c = document.getElementById('perimHistory');
   if (!data.length) {
-    c.innerHTML = '<div class="empty-state"><div class="empty-icon">📐</div>Aucune mesure enregistrée</div>';
+    c.innerHTML = '<div class="empty-state"><div class="empty-icon">'+ic('ruler',36)+'</div>Aucune mesure enregistrée</div>';
     return;
   }
   c.innerHTML = [...data].reverse().map(e => `
     <div class="history-item">
-      <div class="history-icon" style="background:rgba(45,212,191,0.12);">📐</div>
+      <div class="history-icon" style="background:rgba(45,212,191,0.12);">${ic('ruler',16)}</div>
       <div class="history-info">
         <div class="hi-main">${e.value} cm</div>
         <div class="hi-sub">${e.note||'—'}</div>
@@ -2136,9 +2152,9 @@ function renderInsights() {
   // ── RÉSUMÉ DU JOUR (pills) ──
   const totalSleepTodayMin = sleepToday.reduce((s,e)=>s+(e.duration||0),0);
   document.getElementById('insightSummaryToday').innerHTML = `
-    <div class="summary-pill"><div class="sp-val">${tetToday.length}</div><div class="sp-lbl">🍼 Tétées</div></div>
-    <div class="summary-pill"><div class="sp-val">${fmtMinutesAsTime(totalSleepTodayMin)}</div><div class="sp-lbl">😴 Sommeil</div></div>
-    <div class="summary-pill"><div class="sp-val">${diapToday.length}</div><div class="sp-lbl">🧷 Couches</div></div>`;
+    <div class="summary-pill"><div class="sp-val">${tetToday.length}</div><div class="sp-lbl">${ic('bottle',11)} Tétées</div></div>
+    <div class="summary-pill"><div class="sp-val">${fmtMinutesAsTime(totalSleepTodayMin)}</div><div class="sp-lbl">${ic('moon',11)} Sommeil</div></div>
+    <div class="summary-pill"><div class="sp-val">${diapToday.length}</div><div class="sp-lbl">${ic('shield',11)} Couches</div></div>`;
 
   // ── RYTHMES ──
   const intervals   = computeIntervals(tet7);
@@ -2157,48 +2173,48 @@ function renderInsights() {
 
   const rhythmEl = document.getElementById('insightRhythms');
   if (tet7.length < 5 && sleep7.length < 3) {
-    rhythmEl.innerHTML = `<div class="no-data-msg"><div class="no-data-icon">📊</div>
+    rhythmEl.innerHTML = `<div class="no-data-msg"><div class="no-data-icon">${ic('chart',28)}</div>
       Pas encore assez de données.<br>Revenez après quelques jours de suivi !</div>`;
   } else {
     const rows = [];
     if (avgInterval !== null) rows.push({
-      icon:'⏱', cls:'ii-amber',
+      icon:ic('timer'), cls:'ii-amber',
       label:'Intervalle moyen entre tétées',
       value: fmtMinutesAsTime(avgInterval),
       detail: `Basé sur ${intervals.length} intervalle${intervals.length>1?'s':''} mesurés`,
     });
     if (avgTetDur !== null) rows.push({
-      icon:'🍼', cls:'ii-blue',
+      icon:ic('bottle'), cls:'ii-blue',
       label:'Durée moyenne d\'une tétée',
       value: fmtMinutesAsTime(avgTetDur),
       detail: `Sur ${tet7.filter(e=>e.duration).length} tétées chronométrées`,
     });
     if (avgTetPerDay !== null) rows.push({
-      icon:'📅', cls:'ii-purple',
+      icon:ic('calendar'), cls:'ii-purple',
       label:'Tétées par jour en moyenne',
       value: avgTetPerDay.toFixed(1),
       detail: `Sur les 7 derniers jours`,
     });
     if (avgSleepDur !== null) rows.push({
-      icon:'😴', cls:'ii-blue',
+      icon:ic('moon'), cls:'ii-blue',
       label:'Durée moyenne d\'une sieste',
       value: fmtMinutesAsTime(avgSleepDur),
       detail: avgSleepPerDay ? `Environ ${avgSleepPerDay.toFixed(1)} sieste${avgSleepPerDay>1?'s':''}/jour` : '',
     });
     if (delayFeedSleep !== null) rows.push({
-      icon:'💤', cls:'ii-purple',
+      icon:ic('bed'), cls:'ii-purple',
       label:`${babyName} s'endort généralement`,
       value: `${fmtMinutesAsTime(delayFeedSleep)} après une tétée`,
       detail: `Pattern détecté sur 7 jours`,
     });
     if (avgDiapPerDay !== null) rows.push({
-      icon:'🧷', cls:'ii-green',
+      icon:ic('shield'), cls:'ii-green',
       label:'Couches par jour en moyenne',
       value: avgDiapPerDay.toFixed(1),
       detail: `Sur les 7 derniers jours`,
     });
     if (clusters.length) rows.push({
-      icon:'🕐', cls:'ii-amber',
+      icon:ic('clock'), cls:'ii-amber',
       label:'Créneaux habituels des tétées',
       value: clusters.join(' · '),
       detail: `Tranches de 3h les plus actives`,
@@ -2233,7 +2249,7 @@ function renderInsights() {
         timeStr = `vers ${fmtHHMM(predicted)}`;
       }
       preds.push({
-        icon:'🍼', cls:'ii-amber',
+        icon:ic('bottle'), cls:'ii-amber',
         label:'Prochaine tétée probable',
         value: timeStr,
         detail: `Dernière : ${fmtHHMM(lastTet)} · intervalle moyen : ${fmtMinutesAsTime(avgInterval)}`,
@@ -2241,7 +2257,7 @@ function renderInsights() {
       });
     } else {
       preds.push({
-        icon:'🍼', cls:'ii-blue',
+        icon:ic('bottle'), cls:'ii-blue',
         label:'Prochaine tétée probable',
         value: `vers ${fmtHHMM(predicted)}`,
         detail: `Intervalle moyen : ${fmtMinutesAsTime(avgInterval)}`,
@@ -2252,7 +2268,7 @@ function renderInsights() {
   // Durée probable prochaine tétée
   if (avgTetDur !== null) {
     preds.push({
-      icon:'⏱', cls:'ii-purple',
+      icon:ic('timer'), cls:'ii-purple',
       label:'Durée probable',
       value: `~${fmtMinutesAsTime(avgTetDur)}`,
       detail: `Basé sur la moyenne des 7 derniers jours`,
@@ -2265,7 +2281,7 @@ function renderInsights() {
     const predictedSleep = addMinutesToDate(lastTet, (allTetees[0].duration||0) + delayFeedSleep);
     const diffSleep = (predictedSleep - now()) / 60000;
     preds.push({
-      icon:'💤', cls:'ii-blue',
+      icon:ic('bed'), cls:'ii-blue',
       label:`${babyName} devrait s'endormir`,
       value: diffSleep > 0
         ? `dans ~${fmtMinutesAsTime(diffSleep)} (vers ${fmtHHMM(predictedSleep)})`
@@ -2277,7 +2293,7 @@ function renderInsights() {
   // Durée probable sieste
   if (avgSleepDur !== null) {
     preds.push({
-      icon:'😴', cls:'ii-blue',
+      icon:ic('moon'), cls:'ii-blue',
       label:'Durée probable de la sieste',
       value: `~${fmtMinutesAsTime(avgSleepDur)}`,
       detail: `Moyenne des 7 derniers jours`,
@@ -2285,7 +2301,7 @@ function renderInsights() {
   }
 
   if (!preds.length) {
-    predEl.innerHTML = `<div class="no-data-msg"><div class="no-data-icon">🔮</div>
+    predEl.innerHTML = `<div class="no-data-msg"><div class="no-data-icon">${ic('sparkles',28)}</div>
       Pas encore assez de données pour faire des prédictions.<br>
       Continuez le suivi pendant quelques jours !</div>`;
   } else {
@@ -2306,7 +2322,7 @@ function renderInsights() {
 
   if (avgTetPerDay !== null && tetToday.length < avgTetPerDay * 0.65) {
     anomalies.push({
-      icon:'⚠️', cls:'ii-red',
+      icon:ic('alert'), cls:'ii-red',
       label:'Moins de tétées qu\'habituellement',
       value: `${tetToday.length} tétée${tetToday.length>1?'s':''} aujourd'hui (moy. ${avgTetPerDay.toFixed(1)}/j)`,
       detail: `${babyName} a moins mangé que d'habitude`,
@@ -2314,7 +2330,7 @@ function renderInsights() {
   }
   if (avgTetPerDay !== null && tetToday.length > avgTetPerDay * 1.4) {
     anomalies.push({
-      icon:'📈', cls:'ii-green',
+      icon:ic('trending'), cls:'ii-green',
       label:'Plus de tétées qu\'habituellement',
       value: `${tetToday.length} tétées aujourd'hui (moy. ${avgTetPerDay.toFixed(1)}/j)`,
       detail: `Poussée de croissance possible`,
@@ -2325,7 +2341,7 @@ function renderInsights() {
   const avgDailySleep = avgSleepPerDay !== null && avgSleepDur !== null ? avgSleepPerDay * avgSleepDur : null;
   if (avgDailySleep !== null && todaySleepMin < avgDailySleep * 0.6 && todaySleepMin > 0) {
     anomalies.push({
-      icon:'😟', cls:'ii-red',
+      icon:ic('alertcircle'), cls:'ii-red',
       label:'Moins de sommeil qu\'habituellement',
       value: `${fmtMinutesAsTime(todaySleepMin)} aujourd'hui (moy. ${fmtMinutesAsTime(avgDailySleep)}/j)`,
       detail: `${babyName} a moins dormi aujourd'hui`,
@@ -2334,7 +2350,7 @@ function renderInsights() {
 
   if (avgDiapPerDay !== null && diapToday.length < avgDiapPerDay * 0.5 && new Date().getHours() >= 12) {
     anomalies.push({
-      icon:'🧷', cls:'ii-red',
+      icon:ic('shield'), cls:'ii-red',
       label:'Peu de couches aujourd\'hui',
       value: `${diapToday.length} couche${diapToday.length>1?'s':''} (moy. ${avgDiapPerDay.toFixed(1)}/j)`,
       detail: `Surveiller l'hydratation`,
@@ -2346,7 +2362,7 @@ function renderInsights() {
     const sinceLastTet = (now() - new Date(allTetees[0].timestamp)) / 60000;
     if (sinceLastTet > avgInterval * 1.6 && sinceLastTet > 30) {
       anomalies.push({
-        icon:'⏰', cls:'ii-red',
+        icon:ic('alarmclock'), cls:'ii-red',
         label:`Longtemps sans tétée`,
         value: `${fmtMinutesAsTime(sinceLastTet)} depuis la dernière tétée`,
         detail: `Intervalle habituel : ${fmtMinutesAsTime(avgInterval)}`,
@@ -2357,7 +2373,7 @@ function renderInsights() {
 
   const anomalyEl = document.getElementById('insightAnomalies');
   if (!anomalies.length) {
-    anomalyEl.innerHTML = `<div class="anomaly-none">✓ Tout se passe normalement aujourd'hui !</div>`;
+    anomalyEl.innerHTML = `<div class="anomaly-none"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Tout se passe normalement aujourd'hui !</div>`;
   } else {
     anomalyEl.innerHTML = `<div class="insight-row">${anomalies.map(a=>`
       <div class="insight-item">
@@ -2379,7 +2395,7 @@ function renderInsights() {
   const biberonToday = tetToday.filter(e=>e.type==='biberon');
   const mlTotal = biberonToday.reduce((s,e)=>s+(e.ml||0),0);
   dayRows.push({
-    icon:'🍼', cls:'ii-pink',
+    icon:ic('bottle'), cls:'ii-pink',
     label:`Tétées aujourd'hui`,
     value: tetToday.length === 0
       ? 'Aucune tétée enregistrée'
@@ -2391,7 +2407,7 @@ function renderInsights() {
   // Sommeil d'aujourd'hui
   const activeSleep = loadObj(KEYS.activeSleep);
   dayRows.push({
-    icon:'😴', cls:'ii-blue',
+    icon:ic('moon'), cls:'ii-blue',
     label:'Sommeil aujourd\'hui',
     value: totalSleepTodayMin > 0 || activeSleep
       ? `${fmtMinutesAsTime(totalSleepTodayMin)}${activeSleep ? ' (+ en cours)' : ''}`
@@ -2406,7 +2422,7 @@ function renderInsights() {
   const cacaToday  = diapToday.filter(e=>e.type==='caca').length;
   const mixteToday = diapToday.filter(e=>e.type==='mixte').length;
   dayRows.push({
-    icon:'🧷', cls:'ii-green',
+    icon:ic('shield'), cls:'ii-green',
     label:'Couches aujourd\'hui',
     value: diapToday.length === 0 ? 'Aucune couche enregistrée' : `${diapToday.length} couche${diapToday.length>1?'s':''}`,
     detail: diapToday.length > 0
@@ -2420,7 +2436,7 @@ function renderInsights() {
     const sinceMin = Math.round((now()-lastTet)/60000);
     const typeMap = {sein_gauche:'Sein gauche',sein_droit:'Sein droit',biberon:'Biberon'};
     dayRows.push({
-      icon:'⏱', cls:'ii-amber',
+      icon:ic('timer'), cls:'ii-amber',
       label:'Dernière tétée',
       value: `${fmtHHMM(lastTet)} — il y a ${fmtMinutesAsTime(sinceMin)}`,
       detail: typeMap[allTetees[0].type] || allTetees[0].type,
