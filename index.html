@@ -235,6 +235,39 @@
       border-radius: 4px; transition: color 0.15s;
     }
     .dp-clear:hover { color: #f87171; }
+    /* datetime picker time controls */
+    #dtpCal {
+      display: none; position: fixed; z-index: 9999;
+      background: #161b26; border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px; box-shadow: 0 20px 48px rgba(0,0,0,0.65);
+      width: 270px; padding: 14px; box-sizing: border-box;
+      opacity: 0; transform: translateY(-8px) scale(0.97);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+    #dtpCal.dp-open { opacity: 1; transform: translateY(0) scale(1); }
+    .dtp-time-row {
+      display: flex; align-items: center; justify-content: center;
+      gap: 6px; margin-top: 10px; padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .dtp-time-label { font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-right: 4px; }
+    .dtp-time-ctrl { display: flex; align-items: center; gap: 4px; }
+    .dtp-spin {
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text); width: 26px; height: 26px; border-radius: 6px;
+      cursor: pointer; font-size: 1rem; line-height: 1;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.12s; padding: 0;
+    }
+    .dtp-spin:hover { background: rgba(255,255,255,0.12); }
+    .dtp-time-val { font-size: 1.1rem; font-weight: 800; color: var(--text); min-width: 30px; text-align: center; }
+    .dtp-sep { font-size: 1.1rem; font-weight: 800; color: var(--text-muted); line-height: 1; }
+    .dtp-confirm {
+      background: var(--accent); border: none; color: #0d1117;
+      font-size: 0.72rem; font-weight: 800; padding: 5px 14px;
+      border-radius: 6px; cursor: pointer; transition: opacity 0.15s;
+    }
+    .dtp-confirm:hover { opacity: 0.85; }
     /* compact variant for vaccine / milestone fields */
     .vacc-meta .dp-trigger, .mem-fields .dp-trigger {
       font-size: 0.78rem; padding: 4px 8px; gap: 5px;
@@ -862,13 +895,13 @@
       <div class="form-row">
         <div class="form-group">
           <label>Heure de début</label>
-          <input type="datetime-local" id="sleepStart" />
+          <div class="dp-wrap"><div class="dp-trigger" onclick="DTP.open(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="dp-val">Sélectionner</span></div><input type="hidden" class="dtp-hidden" id="sleepStart" /></div>
         </div>
       </div>
       <div class="form-row">
         <div class="form-group">
           <label>Heure de fin (optionnel)</label>
-          <input type="datetime-local" id="sleepEnd" />
+          <div class="dp-wrap"><div class="dp-trigger" onclick="DTP.open(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="dp-val">Sélectionner</span></div><input type="hidden" class="dtp-hidden" id="sleepEnd" /></div>
         </div>
       </div>
       <div style="display:flex;gap:8px;">
@@ -898,7 +931,7 @@
       <div class="form-row">
         <div class="form-group">
           <label>Heure</label>
-          <input type="datetime-local" id="diaperTime" />
+          <div class="dp-wrap"><div class="dp-trigger" onclick="DTP.open(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="dp-val">Sélectionner</span></div><input type="hidden" class="dtp-hidden" id="diaperTime" /></div>
         </div>
       </div>
       <div class="form-group" style="margin-bottom:12px;">
@@ -1289,6 +1322,159 @@ const DP = (() => {
 
   return { init, open, pick, set, prev, next, fmtDisplay };
 })();
+// ─── DATETIME PICKER ─────────────────────────────────────────────────────────
+const DTP = (() => {
+  const MONTHS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  const DAYS   = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+  let cal, curY, curM, active, selDate, selH, selMin;
+
+  function init() {
+    cal = document.createElement('div');
+    cal.id = 'dtpCal';
+    document.body.appendChild(cal);
+    document.addEventListener('click', e => {
+      if (!cal.contains(e.target) && !e.target.closest('.dp-trigger[onclick*="DTP"]')) _close();
+    }, true);
+  }
+
+  function fmtDisplay(v) {
+    if (!v) return '';
+    const d = new Date(v);
+    return d.toLocaleDateString('fr-FR', {day:'2-digit', month:'2-digit', year:'numeric'}) +
+           ' ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+  }
+
+  function open(triggerEl) {
+    const wrap = triggerEl.closest('.dp-wrap');
+    active = wrap.querySelector('.dtp-hidden');
+    const v = active ? active.value : '';
+    const d = v ? new Date(v) : new Date();
+    curY = d.getFullYear(); curM = d.getMonth();
+    selDate = v ? v.slice(0, 10) : new Date().toISOString().slice(0, 10);
+    selH = d.getHours();
+    selMin = d.getMinutes();
+    _render();
+    const r = triggerEl.getBoundingClientRect();
+    cal.style.top  = (r.bottom + 6) + 'px';
+    cal.style.left = r.left + 'px';
+    cal.style.display = 'block';
+    requestAnimationFrame(() => {
+      const cr = cal.getBoundingClientRect();
+      if (cr.right > window.innerWidth - 6)
+        cal.style.left = Math.max(6, window.innerWidth - cr.width - 6) + 'px';
+      if (cr.bottom > window.innerHeight - 6)
+        cal.style.top = (r.top - cr.height - 6) + 'px';
+      cal.classList.add('dp-open');
+    });
+    document.querySelectorAll('.dp-trigger[onclick*="DTP"]').forEach(t => t.classList.remove('dp-active'));
+    triggerEl.classList.add('dp-active');
+  }
+
+  function _close() {
+    cal.classList.remove('dp-open');
+    document.querySelectorAll('.dp-trigger[onclick*="DTP"]').forEach(t => t.classList.remove('dp-active'));
+    setTimeout(() => { if (!cal.classList.contains('dp-open')) cal.style.display = 'none'; }, 200);
+  }
+
+  function _render() {
+    const first = new Date(curY, curM, 1);
+    const last  = new Date(curY, curM + 1, 0);
+    const startDow = (first.getDay() + 6) % 7;
+    const todayStr = new Date().toISOString().slice(0, 10);
+    let h = `<div class="dp-header">
+      <button class="dp-nav" onclick="DTP.prev()">&#8249;</button>
+      <span class="dp-month-label">${MONTHS[curM]} ${curY}</span>
+      <button class="dp-nav" onclick="DTP.next()">&#8250;</button>
+    </div><div class="dp-grid">`;
+    DAYS.forEach(d => { h += `<div class="dp-dh">${d}</div>`; });
+    for (let i = 0; i < startDow; i++) h += '<div></div>';
+    for (let d = 1; d <= last.getDate(); d++) {
+      const ds = `${curY}-${String(curM+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const cls = (ds===selDate?'dp-sel ':'') + (ds===todayStr?'dp-today ':'');
+      h += `<div class="dp-day ${cls}" onclick="DTP.pickDate('${ds}')">${d}</div>`;
+    }
+    h += `</div>
+    <div class="dtp-time-row">
+      <span class="dtp-time-label">Heure</span>
+      <div class="dtp-time-ctrl">
+        <button class="dtp-spin" onclick="DTP.adjH(-1)">−</button>
+        <span class="dtp-time-val" id="dtpH">${String(selH).padStart(2,'0')}</span>
+        <button class="dtp-spin" onclick="DTP.adjH(1)">+</button>
+      </div>
+      <span class="dtp-sep">:</span>
+      <div class="dtp-time-ctrl">
+        <button class="dtp-spin" onclick="DTP.adjM(-5)">−</button>
+        <span class="dtp-time-val" id="dtpM">${String(selMin).padStart(2,'0')}</span>
+        <button class="dtp-spin" onclick="DTP.adjM(5)">+</button>
+      </div>
+    </div>
+    <div class="dp-footer">
+      <button class="dp-clear" onclick="DTP.clearVal()">Effacer</button>
+      <button class="dtp-confirm" onclick="DTP.confirm()">Confirmer</button>
+    </div>`;
+    cal.innerHTML = h;
+  }
+
+  function pickDate(dateStr) { selDate = dateStr; _render(); }
+
+  function adjH(delta) {
+    selH = (selH + delta + 24) % 24;
+    const el = document.getElementById('dtpH');
+    if (el) el.textContent = String(selH).padStart(2,'0');
+  }
+
+  function adjM(delta) {
+    selMin = ((selMin + delta) % 60 + 60) % 60;
+    const el = document.getElementById('dtpM');
+    if (el) el.textContent = String(selMin).padStart(2,'0');
+  }
+
+  function confirm() {
+    if (active) {
+      const val = `${selDate}T${String(selH).padStart(2,'0')}:${String(selMin).padStart(2,'0')}`;
+      active.value = val;
+      const wrap = active.closest('.dp-wrap');
+      if (wrap) {
+        const disp = wrap.querySelector('.dp-val');
+        if (disp) { disp.textContent = fmtDisplay(val); disp.classList.add('dp-val-set'); }
+      }
+      active.dispatchEvent(new Event('change', {bubbles:true}));
+    }
+    _close();
+  }
+
+  function clearVal() {
+    if (active) {
+      active.value = '';
+      const wrap = active.closest('.dp-wrap');
+      if (wrap) {
+        const disp = wrap.querySelector('.dp-val');
+        if (disp) { disp.textContent = wrap.dataset.placeholder || 'Sélectionner'; disp.classList.remove('dp-val-set'); }
+      }
+      active.dispatchEvent(new Event('change', {bubbles:true}));
+    }
+    _close();
+  }
+
+  function set(id, dtStr) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.value = dtStr;
+    const wrap = el.closest('.dp-wrap');
+    if (wrap) {
+      const disp = wrap.querySelector('.dp-val');
+      if (disp) {
+        disp.textContent = dtStr ? fmtDisplay(dtStr) : (wrap.dataset.placeholder || 'Sélectionner');
+        disp.classList.toggle('dp-val-set', !!dtStr);
+      }
+    }
+  }
+
+  function prev() { curM--; if (curM < 0) { curM = 11; curY--; } _render(); }
+  function next() { curM++; if (curM > 11) { curM = 0; curY++; } _render(); }
+
+  return { init, open, pickDate, adjH, adjM, confirm, clearVal, set, prev, next, fmtDisplay };
+})();
 // ─── CLÉS ────────────────────────────────────────────────────────────────────
 const KEYS = {
   tetees: 'bt_tetees', sommeil: 'bt_sommeil', couches: 'bt_couches',
@@ -1662,7 +1848,7 @@ function saveSleepManual() {
   const data=load(KEYS.sommeil);
   data.unshift({id:Date.now(),start:startD.toISOString(),end:endD?endD.toISOString():null,duration:endD?(endD-startD)/60000:null});
   save(KEYS.sommeil,data);
-  document.getElementById('sleepStart').value=''; document.getElementById('sleepEnd').value='';
+  DTP.set('sleepStart',''); DTP.set('sleepEnd','');
   renderSommeil(); showToast('Sommeil enregistré ✓');
 }
 function renderSommeil() {
@@ -1678,7 +1864,7 @@ function renderSommeil() {
     },1000);
   } else {
     ac.style.display='none'; sc.style.display='block';
-    document.getElementById('sleepStart').value=toLocalDatetimeStr(now());
+    DTP.set('sleepStart', toLocalDatetimeStr(now()));
   }
   const data=load(KEYS.sommeil);
   const cutoff=Date.now()-24*3600*1000;
@@ -1712,7 +1898,7 @@ function saveDiaper() {
   const data=load(KEYS.couches);
   data.unshift({id:Date.now(),timestamp:timeVal?new Date(timeVal).toISOString():now().toISOString(),type,note});
   save(KEYS.couches,data);
-  document.getElementById('diaperTime').value=toLocalDatetimeStr(now());
+  DTP.set('diaperTime', toLocalDatetimeStr(now()));
   document.getElementById('diaperNote').value='';
   renderCouches(); showToast('Couche enregistrée ✓');
 }
@@ -2994,7 +3180,7 @@ function deleteWeightEntry(id) {
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 function init() {
-  DP.init();
+  DP.init(); DTP.init();
   const profile=loadObj(KEYS.profile);
   if (profile) {
     document.getElementById('onboarding').classList.add('hidden');
@@ -3003,12 +3189,12 @@ function init() {
     renderProfilePreview();
   }
   document.getElementById('tetTime').value='';
-  document.getElementById('diaperTime').value=toLocalDatetimeStr(now());
+  DTP.set('diaperTime', toLocalDatetimeStr(now()));
   DP.set('weightDate', toLocalDateStr(now()));
   DP.set('heightDate', toLocalDateStr(now()));
   DP.set('perimDate',  toLocalDateStr(now()));
   DP.set('rdvDate',    toLocalDateStr(now()));
-  document.getElementById('sleepStart').value=toLocalDatetimeStr(now());
+  DTP.set('sleepStart', toLocalDatetimeStr(now()));
   renderTetees(); renderSommeil(); renderCouches(); renderPoids();
   // Les charts OMS sont dessinés lors du premier affichage de l'onglet poids
   window.addEventListener('resize',()=>{
