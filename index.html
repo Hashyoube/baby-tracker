@@ -211,7 +211,10 @@
     }
 
     /* ── FORMS ──────────────────────────────────────────────────────────── */
-    .form-row { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-end; }
+    .form-row { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+    @media (min-width: 540px) {
+      .form-row { flex-direction: row; align-items: flex-end; }
+    }
     .form-group { flex: 1; display: flex; flex-direction: column; gap: 5px; }
     .form-group label { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); }
     .form-group input, .form-group select {
@@ -483,15 +486,14 @@
 
     /* Sub-navigation */
     .health-subnav {
-      display: flex; gap: 6px; margin-bottom: 14px; overflow-x: auto;
-      scrollbar-width: none; padding-bottom: 2px;
+      display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px;
     }
-    .health-subnav::-webkit-scrollbar { display: none; }
     .health-subnav-btn {
-      flex-shrink: 0; padding: 8px 14px; border-radius: 20px;
+      flex: 1 1 auto; min-height: 40px; padding: 8px 12px; border-radius: 20px;
       font-size: 0.78rem; font-weight: 700; cursor: pointer; user-select: none;
       background: var(--surface); border: 1.5px solid var(--border);
-      color: var(--text-muted); transition: all 0.18s;
+      color: var(--text-muted); transition: all 0.18s; text-align: center;
+      white-space: nowrap; -webkit-tap-highlight-color: transparent;
     }
     .health-subnav-btn.active {
       background: rgba(45,212,191,0.12); border-color: #2dd4bf; color: #2dd4bf;
@@ -694,13 +696,11 @@
     }
     .tet-reset-btn:hover { color: var(--text); }
     /* ── RESPONSIVE ─────────────────────────────────────────────────────── */
-    @media (max-width: 390px) {
-      .form-row { flex-direction: column; }
+    @media (max-width: 400px) {
       .more-grid { grid-template-columns: repeat(3,1fr); }
     }
     @media (max-width: 360px) {
       .seg-btn { font-size: 0.72rem; }
-      .more-grid { grid-template-columns: repeat(3,1fr); }
     }
 
     /* ── SVG Lucide — ajustements globaux ─────────────────────────────── */
@@ -989,14 +989,22 @@
       <div class="card-title">Enregistrer le sommeil</div>
       <div class="form-row">
         <div class="form-group">
+          <label>Date de début</label>
+          <div class="dp-wrap"><div class="dp-trigger" onclick="DP.open(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg><span class="dp-val">Sélectionner</span></div><input type="hidden" class="dp-hidden" id="sleepStartDate" /></div>
+        </div>
+        <div class="form-group">
           <label>Heure de début</label>
-          <div class="dp-wrap"><div class="dp-trigger" onclick="DTP.open(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="dp-val">Sélectionner</span></div><input type="hidden" class="dtp-hidden" id="sleepStart" /></div>
+          <input type="time" id="sleepStartTime" />
         </div>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label>Heure de fin (optionnel)</label>
-          <div class="dp-wrap"><div class="dp-trigger" onclick="DTP.open(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="dp-val">Sélectionner</span></div><input type="hidden" class="dtp-hidden" id="sleepEnd" /></div>
+          <label>Date de fin (optionnel)</label>
+          <div class="dp-wrap"><div class="dp-trigger" onclick="DP.open(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg><span class="dp-val">Sélectionner</span></div><input type="hidden" class="dp-hidden" id="sleepEndDate" /></div>
+        </div>
+        <div class="form-group">
+          <label>Heure de fin</label>
+          <input type="time" id="sleepEndTime" />
         </div>
       </div>
       <div style="display:flex;gap:8px;">
@@ -1675,6 +1683,7 @@ function pad(n) { return String(n).padStart(2,'0'); }
 function toLocalDatetimeStr(d) {
   return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
+function toLocalTimeStr(d) { return `${pad(d.getHours())}:${pad(d.getMinutes())}`; }
 function toLocalDateStr(d) {
   return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 }
@@ -1963,15 +1972,24 @@ function stopSleep() {
   save(KEYS.sommeil,data); localStorage.removeItem(KEYS.activeSleep);
   clearInterval(sleepTimerInterval); renderSommeil(); showToast('Sommeil enregistré ✓');
 }
+function _sleepResetFields() {
+  DP.set('sleepStartDate', toLocalDateStr(now()));
+  document.getElementById('sleepStartTime').value = toLocalTimeStr(now());
+  DP.set('sleepEndDate', '');
+  document.getElementById('sleepEndTime').value = '';
+}
 function saveSleepManual() {
-  const startVal=document.getElementById('sleepStart').value;
-  const endVal=document.getElementById('sleepEnd').value;
-  if (!startVal) { showToast('Veuillez saisir une heure de début'); return; }
-  const startD=new Date(startVal), endD=endVal?new Date(endVal):null;
+  const startDate=document.getElementById('sleepStartDate').value;
+  const startTime=document.getElementById('sleepStartTime').value;
+  const endDate=document.getElementById('sleepEndDate').value;
+  const endTime=document.getElementById('sleepEndTime').value;
+  if (!startDate || !startTime) { showToast('Veuillez saisir une date et heure de début'); return; }
+  const startD=new Date(startDate+'T'+startTime);
+  const endD=(endDate && endTime) ? new Date(endDate+'T'+endTime) : null;
   const data=load(KEYS.sommeil);
   data.unshift({id:Date.now(),start:startD.toISOString(),end:endD?endD.toISOString():null,duration:endD?(endD-startD)/60000:null});
   save(KEYS.sommeil,data);
-  DTP.set('sleepStart',''); DTP.set('sleepEnd','');
+  _sleepResetFields();
   renderSommeil(); showToast('Sommeil enregistré ✓');
 }
 function renderSommeil() {
@@ -1987,7 +2005,7 @@ function renderSommeil() {
     },1000);
   } else {
     ac.style.display='none'; sc.style.display='block';
-    DTP.set('sleepStart', toLocalDatetimeStr(now()));
+    _sleepResetFields();
   }
   const data=load(KEYS.sommeil);
   const cutoff=Date.now()-24*3600*1000;
@@ -3317,7 +3335,7 @@ function init() {
   DP.set('heightDate', toLocalDateStr(now()));
   DP.set('perimDate',  toLocalDateStr(now()));
   DP.set('rdvDate',    toLocalDateStr(now()));
-  DTP.set('sleepStart', toLocalDatetimeStr(now()));
+  DP.set('sleepStartDate', toLocalDateStr(now())); document.getElementById('sleepStartTime').value = toLocalTimeStr(now());
   renderTetees(); renderSommeil(); renderCouches(); renderPoids();
   // Les charts OMS sont dessinés lors du premier affichage de l'onglet poids
   window.addEventListener('resize',()=>{
