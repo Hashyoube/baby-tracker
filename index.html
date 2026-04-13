@@ -175,9 +175,72 @@
       outline: none; transition: border-color 0.18s; -webkit-appearance: none;
     }
     .form-group input:focus, .form-group select:focus { border-color: var(--accent); }
-    input[type="date"]::-webkit-calendar-picker-indicator,
-    input[type="datetime-local"]::-webkit-calendar-picker-indicator,
     input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.6); }
+
+    /* ── CUSTOM DATE PICKER ─────────────────────────────────────────────── */
+    .dp-wrap { position: relative; }
+    .dp-trigger {
+      display: flex; align-items: center; gap: 8px;
+      width: 100%; padding: 10px 12px; box-sizing: border-box;
+      border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+      background: var(--surface2); cursor: pointer;
+      font-size: 0.95rem; color: var(--text-muted);
+      transition: border-color 0.18s; user-select: none;
+    }
+    .dp-trigger:hover { border-color: rgba(255,255,255,0.18); }
+    .dp-trigger.dp-active { border-color: var(--accent); }
+    .dp-val { flex: 1; }
+    .dp-val.dp-val-set { color: var(--text); }
+    #dpCal {
+      display: none; position: fixed; z-index: 9999;
+      background: #161b26; border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px; box-shadow: 0 20px 48px rgba(0,0,0,0.65);
+      width: 270px; padding: 14px; box-sizing: border-box;
+      opacity: 0; transform: translateY(-8px) scale(0.97);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+    #dpCal.dp-open { opacity: 1; transform: translateY(0) scale(1); }
+    .dp-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .dp-month-label { font-size: 0.88rem; font-weight: 800; color: var(--text); }
+    .dp-nav {
+      background: none; border: none; color: var(--text-muted);
+      cursor: pointer; font-size: 1.4rem; line-height: 1;
+      padding: 2px 8px; border-radius: 6px;
+      transition: background 0.14s, color 0.14s;
+    }
+    .dp-nav:hover { background: var(--surface2); color: var(--text); }
+    .dp-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; }
+    .dp-dh {
+      font-size: 0.6rem; font-weight: 700; color: var(--text-muted);
+      text-align: center; padding: 4px 0; text-transform: uppercase;
+    }
+    .dp-day {
+      text-align: center; padding: 6px 0;
+      font-size: 0.82rem; border-radius: 6px; cursor: pointer;
+      color: var(--text); transition: background 0.12s;
+    }
+    .dp-day:hover { background: var(--surface2); }
+    .dp-today { color: var(--accent); font-weight: 700; }
+    .dp-sel {
+      background: var(--accent) !important;
+      color: #0d1117 !important; font-weight: 800;
+    }
+    .dp-footer { margin-top: 8px; display: flex; justify-content: flex-end; }
+    .dp-clear {
+      background: none; border: none; font-size: 0.72rem;
+      color: var(--text-muted); cursor: pointer; padding: 3px 8px;
+      border-radius: 4px; transition: color 0.15s;
+    }
+    .dp-clear:hover { color: #f87171; }
+    /* compact variant for vaccine / milestone fields */
+    .vacc-meta .dp-trigger, .mem-fields .dp-trigger {
+      font-size: 0.78rem; padding: 4px 8px; gap: 5px;
+    }
+    .vacc-meta .dp-trigger { min-width: 118px; flex: 0 0 auto; }
+    .mem-fields .dp-trigger { width: 140px; flex: 0 0 140px; }
 
     /* ── SEGMENT BUTTONS ────────────────────────────────────────────────── */
     .seg-group { display: flex; gap: 6px; }
@@ -389,12 +452,7 @@
     .vb-opt   { background: rgba(96,165,250,0.12); color: #60a5fa; }
     .vacc-detail { font-size: 0.73rem; color: var(--text-muted); margin-bottom: 6px; line-height: 1.4; }
     .vacc-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-    .vacc-date-input {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 6px; color: var(--text); font-size: 0.8rem;
-      padding: 4px 8px; outline: none; transition: border-color 0.18s;
-    }
-    .vacc-date-input:focus { border-color: #2dd4bf; }
+    .vacc-meta .dp-trigger:hover { border-color: #2dd4bf; }
     .vacc-note-input {
       flex: 1; min-width: 80px;
       background: var(--surface); border: 1px solid var(--border);
@@ -627,13 +685,7 @@
     }
     .mem-label.done { color: #34d399; }
     .mem-fields { display: flex; gap: 6px; flex-wrap: wrap; }
-    .mem-date {
-      background: var(--surface2); border: 1px solid var(--border);
-      border-radius: var(--radius-sm); color: var(--text);
-      font-size: 0.72rem; padding: 4px 7px;
-      width: 130px; box-sizing: border-box;
-    }
-    .mem-date:focus { outline: none; border-color: var(--accent); }
+    .mem-fields .dp-trigger:hover { border-color: var(--accent); }
     .mem-note {
       flex: 1; min-width: 100px;
       background: var(--surface2); border: 1px solid var(--border);
@@ -689,7 +741,7 @@
 
     <div class="onboard-field">
       <label>Date de naissance</label>
-      <input type="date" id="obBirthdate" />
+      <div class="dp-wrap"><div class="dp-trigger" onclick="DP.open(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg><span class="dp-val">Sélectionner une date</span></div><input type="hidden" class="dp-hidden" id="obBirthdate" /></div>
     </div>
 
     <div class="onboard-field">
@@ -871,7 +923,7 @@
       <div class="form-row">
         <div class="form-group">
           <label>Date</label>
-          <input type="date" id="weightDate" />
+          <div class="dp-wrap"><div class="dp-trigger" onclick="DP.open(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg><span class="dp-val">Sélectionner</span></div><input type="hidden" class="dp-hidden" id="weightDate" /></div>
         </div>
         <div class="form-group">
           <label>Poids (grammes)</label>
@@ -890,7 +942,7 @@
       <div class="form-row">
         <div class="form-group">
           <label>Date</label>
-          <input type="date" id="heightDate" />
+          <div class="dp-wrap"><div class="dp-trigger" onclick="DP.open(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg><span class="dp-val">Sélectionner</span></div><input type="hidden" class="dp-hidden" id="heightDate" /></div>
         </div>
         <div class="form-group">
           <label>Taille (cm)</label>
@@ -962,7 +1014,7 @@
         <div class="form-row">
           <div class="form-group">
             <label>Date</label>
-            <input type="date" id="rdvDate" />
+            <div class="dp-wrap"><div class="dp-trigger" onclick="DP.open(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg><span class="dp-val">Sélectionner</span></div><input type="hidden" class="dp-hidden" id="rdvDate" /></div>
           </div>
           <div class="form-group">
             <label>Heure</label>
@@ -1005,7 +1057,7 @@
         <div class="form-row">
           <div class="form-group">
             <label>Date</label>
-            <input type="date" id="perimDate" />
+            <div class="dp-wrap"><div class="dp-trigger" onclick="DP.open(this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg><span class="dp-val">Sélectionner</span></div><input type="hidden" class="dp-hidden" id="perimDate" /></div>
           </div>
           <div class="form-group">
             <label>Périmètre crânien (cm)</label>
@@ -1128,6 +1180,115 @@ function ic(name, size=18) {
   return '<svg xmlns="http://www.w3.org/2000/svg" width="'+size+'" height="'+size+'" viewBox="0 0 24 24" '+_IC_A+'>'+(_IC_P[name]||'')+'</svg>';
 }
 // ─────────────────────────────────────────────────────────────────────────────
+// ─── DATE PICKER ─────────────────────────────────────────────────────────────
+const DP = (() => {
+  const MONTHS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  const DAYS   = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+  let cal, curY, curM, active;
+
+  function init() {
+    cal = document.createElement('div');
+    cal.id = 'dpCal';
+    document.body.appendChild(cal);
+    document.addEventListener('click', e => {
+      if (!cal.contains(e.target) && !e.target.closest('.dp-trigger')) _close();
+    }, true);
+  }
+
+  function fmtDisplay(v) {
+    if (!v) return '';
+    const d = new Date(v + 'T12:00:00');
+    return d.toLocaleDateString('fr-FR', {day:'2-digit', month:'2-digit', year:'numeric'});
+  }
+
+  function open(triggerEl) {
+    const wrap = triggerEl.closest('.dp-wrap');
+    active = wrap.querySelector('.dp-hidden');
+    const v = active ? active.value : '';
+    const d = v ? new Date(v + 'T12:00:00') : new Date();
+    curY = d.getFullYear(); curM = d.getMonth();
+    _render();
+    // Position below trigger
+    const r = triggerEl.getBoundingClientRect();
+    cal.style.top  = (r.bottom + 6) + 'px';
+    cal.style.left = r.left + 'px';
+    cal.style.display = 'block';
+    requestAnimationFrame(() => {
+      // keep within viewport
+      const cr = cal.getBoundingClientRect();
+      if (cr.right > window.innerWidth - 6)
+        cal.style.left = Math.max(6, window.innerWidth - cr.width - 6) + 'px';
+      if (cr.bottom > window.innerHeight - 6)
+        cal.style.top = (r.top - cr.height - 6) + 'px';
+      cal.classList.add('dp-open');
+    });
+    document.querySelectorAll('.dp-trigger').forEach(t => t.classList.remove('dp-active'));
+    triggerEl.classList.add('dp-active');
+  }
+
+  function _close() {
+    cal.classList.remove('dp-open');
+    document.querySelectorAll('.dp-trigger').forEach(t => t.classList.remove('dp-active'));
+    setTimeout(() => { if (!cal.classList.contains('dp-open')) cal.style.display = 'none'; }, 200);
+  }
+
+  function _render() {
+    const first = new Date(curY, curM, 1);
+    const last  = new Date(curY, curM + 1, 0);
+    const startDow = (first.getDay() + 6) % 7;
+    const selVal = active ? active.value : '';
+    const todayStr = new Date().toISOString().slice(0, 10);
+    let h = `<div class="dp-header">
+      <button class="dp-nav" onclick="DP.prev()">&#8249;</button>
+      <span class="dp-month-label">${MONTHS[curM]} ${curY}</span>
+      <button class="dp-nav" onclick="DP.next()">&#8250;</button>
+    </div><div class="dp-grid">`;
+    DAYS.forEach(d => { h += `<div class="dp-dh">${d}</div>`; });
+    for (let i = 0; i < startDow; i++) h += '<div></div>';
+    for (let d = 1; d <= last.getDate(); d++) {
+      const ds = `${curY}-${String(curM+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const cls = (ds===selVal?'dp-sel ':'') + (ds===todayStr?'dp-today ':'');
+      h += `<div class="dp-day ${cls}" onclick="DP.pick('${ds}')">${d}</div>`;
+    }
+    h += `</div><div class="dp-footer"><button class="dp-clear" onclick="DP.pick('')">Effacer</button></div>`;
+    cal.innerHTML = h;
+  }
+
+  function pick(dateStr) {
+    if (active) {
+      active.value = dateStr;
+      const wrap = active.closest('.dp-wrap');
+      if (wrap) {
+        const disp = wrap.querySelector('.dp-val');
+        if (disp) {
+          disp.textContent = dateStr ? fmtDisplay(dateStr) : (wrap.dataset.placeholder || 'Sélectionner');
+          disp.classList.toggle('dp-val-set', !!dateStr);
+        }
+      }
+      active.dispatchEvent(new Event('change', {bubbles:true}));
+    }
+    _close();
+  }
+
+  function set(id, dateStr) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.value = dateStr;
+    const wrap = el.closest('.dp-wrap');
+    if (wrap) {
+      const disp = wrap.querySelector('.dp-val');
+      if (disp) {
+        disp.textContent = dateStr ? fmtDisplay(dateStr) : (wrap.dataset.placeholder || 'Sélectionner');
+        disp.classList.toggle('dp-val-set', !!dateStr);
+      }
+    }
+  }
+
+  function prev() { curM--; if (curM < 0) { curM = 11; curY--; } _render(); }
+  function next() { curM++; if (curM > 11) { curM = 0; curY++; } _render(); }
+
+  return { init, open, pick, set, prev, next, fmtDisplay };
+})();
 // ─── CLÉS ────────────────────────────────────────────────────────────────────
 const KEYS = {
   tetees: 'bt_tetees', sommeil: 'bt_sommeil', couches: 'bt_couches',
@@ -1948,9 +2109,7 @@ function renderVaccins() {
             </div>
             <div class="vacc-detail">${v.detail}</div>
             <div class="vacc-meta">
-              <input type="date" class="vacc-date-input" id="vd-${v.id}"
-                value="${vs.date||''}" placeholder="Date admin."
-                onchange="saveVaccinField('${v.id}','date',this.value)">
+              <div class="dp-wrap"><div class="dp-trigger" onclick="DP.open(this)">${ic('calendar',12)}<span class="dp-val${vs.date?' dp-val-set':''}">${vs.date?DP.fmtDisplay(vs.date):'Date admin.'}</span></div><input type="hidden" class="dp-hidden" id="vd-${v.id}" value="${vs.date||''}" onchange="saveVaccinField('${v.id}','date',this.value)"></div>
               <input type="text" class="vacc-note-input" id="vn-${v.id}"
                 value="${vs.note||''}" placeholder="Lot, médecin…"
                 onblur="saveVaccinField('${v.id}','note',this.value)">
@@ -1999,7 +2158,8 @@ function addRDV() {
   data.push({ id: Date.now(), date, heure, type, medecin, lieu, notes });
   data.sort((a,b) => (a.date+a.heure).localeCompare(b.date+b.heure));
   save(KEYS.rdv, data);
-  ['rdvDate','rdvHeure','rdvMedecin','rdvLieu','rdvNotes'].forEach(id => document.getElementById(id).value='');
+  ['rdvHeure','rdvMedecin','rdvLieu','rdvNotes'].forEach(id => document.getElementById(id).value='');
+  DP.set('rdvDate', toLocalDateStr(now()));
   renderRDV(); showToast('Rendez-vous ajouté ✓');
 }
 
@@ -2438,9 +2598,7 @@ function renderMilestones() {
       <div class="mem-body">
         <div class="mem-label${done?' done':''}">${m.label}</div>
         <div class="mem-fields">
-          <input type="date" class="mem-date" value="${s.date||''}"
-            onchange="saveMilestone('${m.id}','date',this.value)"
-            placeholder="Date" />
+          <div class="dp-wrap"><div class="dp-trigger" onclick="DP.open(this)">${ic('calendar',12)}<span class="dp-val${s.date?' dp-val-set':''}">${s.date?DP.fmtDisplay(s.date):'Date'}</span></div><input type="hidden" class="dp-hidden" value="${s.date||''}" onchange="saveMilestone('${m.id}','date',this.value)"></div>
           <input type="text" class="mem-note" value="${(s.note||'').replace(/"/g,'&quot;')}"
             onchange="saveMilestone('${m.id}','note',this.value)"
             placeholder="Note…" />
@@ -2836,6 +2994,7 @@ function deleteWeightEntry(id) {
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 function init() {
+  DP.init();
   const profile=loadObj(KEYS.profile);
   if (profile) {
     document.getElementById('onboarding').classList.add('hidden');
@@ -2845,10 +3004,10 @@ function init() {
   }
   document.getElementById('tetTime').value='';
   document.getElementById('diaperTime').value=toLocalDatetimeStr(now());
-  document.getElementById('weightDate').value=toLocalDateStr(now());
-  document.getElementById('heightDate').value=toLocalDateStr(now());
-  document.getElementById('perimDate').value=toLocalDateStr(now());
-  document.getElementById('rdvDate').value=toLocalDateStr(now());
+  DP.set('weightDate', toLocalDateStr(now()));
+  DP.set('heightDate', toLocalDateStr(now()));
+  DP.set('perimDate',  toLocalDateStr(now()));
+  DP.set('rdvDate',    toLocalDateStr(now()));
   document.getElementById('sleepStart').value=toLocalDatetimeStr(now());
   renderTetees(); renderSommeil(); renderCouches(); renderPoids();
   // Les charts OMS sont dessinés lors du premier affichage de l'onglet poids
