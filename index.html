@@ -48,7 +48,7 @@
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      padding-bottom: 84px;
+      padding-bottom: calc(64px + env(safe-area-inset-bottom));
     }
 
     /* ── ONBOARDING ─────────────────────────────────────────────────────── */
@@ -86,7 +86,7 @@
     .onboard-field input {
       width: 100%; background: var(--surface2);
       border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-      color: var(--text); font-size: 1rem; padding: 12px 14px;
+      color: var(--text); font-size: 1rem; padding: 14px;
       outline: none; transition: border-color 0.2s; -webkit-appearance: none;
     }
     .onboard-field input:focus { border-color: var(--accent); }
@@ -122,32 +122,78 @@
     .header-baby-age  { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
     .header-right { text-align: right; font-size: 0.72rem; color: var(--text-muted); line-height: 1.5; }
 
-    /* ── NAV ────────────────────────────────────────────────────────────── */
-    .nav-tabs {
-      display: flex; background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none;
+    /* ── BOTTOM NAV ─────────────────────────────────────────────────────── */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+      background: var(--surface); border-top: 1px solid var(--border);
+      display: flex; padding-bottom: env(safe-area-inset-bottom);
+      box-shadow: 0 -4px 24px rgba(0,0,0,0.35);
     }
-    .nav-tabs::-webkit-scrollbar { display: none; }
-    .nav-tab {
-      flex: 1; min-width: 60px;
+    .bn-tab {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; padding: 10px 4px 8px; cursor: pointer;
+      min-height: 56px; border-top: 2px solid transparent;
+      transition: border-color 0.18s; user-select: none; gap: 2px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .bn-tab .tab-icon { line-height: 1; }
+    .bn-tab .tab-label { font-size: 0.58rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; }
+    .bn-tab[data-tab="tétées"].active  { border-color: var(--accent); }
+    .bn-tab[data-tab="tétées"].active .tab-label  { color: var(--accent); }
+    .bn-tab[data-tab="sommeil"].active { border-color: var(--sleep); }
+    .bn-tab[data-tab="sommeil"].active .tab-label { color: var(--sleep); }
+    .bn-tab[data-tab="couches"].active { border-color: var(--diaper); }
+    .bn-tab[data-tab="couches"].active .tab-label { color: var(--diaper); }
+    .bn-tab[data-tab="journée"].active { border-color: #fb923c; }
+    .bn-tab[data-tab="journée"].active .tab-label { color: #fb923c; }
+    .bn-tab.bn-more.active { border-color: var(--text-muted); }
+    .bn-tab.bn-more.active .tab-label { color: var(--text); }
+    /* ── MORE MENU ───────────────────────────────────────────────────────── */
+    .more-overlay {
+      display: none; position: fixed; inset: 0; z-index: 300;
+    }
+    .more-overlay.open { display: block; }
+    .more-backdrop {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.55);
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+    .more-sheet {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: var(--surface); border-radius: 20px 20px 0 0;
+      border-top: 1px solid var(--border);
+      padding: 12px 16px calc(16px + env(safe-area-inset-bottom));
+      animation: slideUp 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes slideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
+    .more-sheet-handle {
+      width: 36px; height: 4px; border-radius: 2px;
+      background: rgba(255,255,255,0.15); margin: 0 auto 14px;
+    }
+    .more-sheet-title {
+      font-size: 0.65rem; font-weight: 800; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px;
+    }
+    .more-grid {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 8px;
+    }
+    .more-item {
       display: flex; flex-direction: column; align-items: center;
-      padding: 10px 6px 8px; cursor: pointer;
-      border-bottom: 2px solid transparent;
-      transition: all 0.18s; user-select: none; gap: 3px;
+      padding: 12px 4px; border-radius: var(--radius-sm);
+      background: var(--surface2); border: 1px solid var(--border);
+      cursor: pointer; gap: 6px; transition: border-color 0.15s;
+      min-height: 72px; justify-content: center;
+      -webkit-tap-highlight-color: transparent;
     }
-    .nav-tab .tab-icon  { font-size: 1.2rem; }
-    .nav-tab .tab-label { font-size: 0.58rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; }
-    .nav-tab[data-tab="tétées"].active    { border-color: var(--accent); }
-    .nav-tab[data-tab="tétées"].active .tab-label    { color: var(--accent); }
-    .nav-tab[data-tab="sommeil"].active   { border-color: var(--sleep); }
-    .nav-tab[data-tab="sommeil"].active .tab-label   { color: var(--sleep); }
-    .nav-tab[data-tab="couches"].active   { border-color: var(--diaper); }
-    .nav-tab[data-tab="couches"].active .tab-label   { color: var(--diaper); }
-    .nav-tab[data-tab="poids"].active     { border-color: var(--weight); }
-    .nav-tab[data-tab="poids"].active .tab-label     { color: var(--weight); }
-    .nav-tab[data-tab="paramètres"].active { border-color: var(--text-muted); }
-    .nav-tab[data-tab="paramètres"].active .tab-label { color: var(--text-muted); }
+    .more-item .tab-label { font-size: 0.6rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3px; }
+    .more-item[data-tab="poids"]:hover    { border-color: var(--weight); }
+    .more-item[data-tab="santé"]:hover    { border-color: #2dd4bf; }
+    .more-item[data-tab="insights"]:hover { border-color: #f59e0b; }
+    .more-item[data-tab="mémoires"]:hover { border-color: #e879f9; }
+    .more-item[data-tab="paramètres"]:hover { border-color: var(--text-muted); }
+    .more-item.active { border-color: var(--accent); background: var(--accent-dim); }
+    .more-item.active .tab-label { color: var(--text); }
 
     /* ── MAIN ───────────────────────────────────────────────────────────── */
     .main { padding: 16px; max-width: 520px; margin: 0 auto; }
@@ -169,9 +215,9 @@
     .form-group { flex: 1; display: flex; flex-direction: column; gap: 5px; }
     .form-group label { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); }
     .form-group input, .form-group select {
-      width: 100%; padding: 10px 12px;
+      width: 100%; padding: 12px;
       border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-      font-size: 0.95rem; color: var(--text); background: var(--surface2);
+      font-size: 1rem; color: var(--text); background: var(--surface2);
       outline: none; transition: border-color 0.18s; -webkit-appearance: none;
     }
     .form-group input:focus, .form-group select:focus { border-color: var(--accent); }
@@ -181,10 +227,10 @@
     .dp-wrap { position: relative; }
     .dp-trigger {
       display: flex; align-items: center; gap: 8px;
-      width: 100%; padding: 10px 12px; box-sizing: border-box;
+      width: 100%; padding: 12px; box-sizing: border-box; min-height: 48px;
       border: 1.5px solid var(--border); border-radius: var(--radius-sm);
       background: var(--surface2); cursor: pointer;
-      font-size: 0.95rem; color: var(--text-muted);
+      font-size: 1rem; color: var(--text-muted);
       transition: border-color 0.18s; user-select: none;
     }
     .dp-trigger:hover { border-color: rgba(255,255,255,0.18); }
@@ -195,7 +241,7 @@
       display: none; position: fixed; z-index: 9999;
       background: #161b26; border: 1px solid rgba(255,255,255,0.12);
       border-radius: 12px; box-shadow: 0 20px 48px rgba(0,0,0,0.65);
-      width: 270px; padding: 14px; box-sizing: border-box;
+      width: min(290px, calc(100vw - 24px)); padding: 14px; box-sizing: border-box;
       opacity: 0; transform: translateY(-8px) scale(0.97);
       transition: opacity 0.18s ease, transform 0.18s ease;
     }
@@ -208,7 +254,7 @@
     .dp-nav {
       background: none; border: none; color: var(--text-muted);
       cursor: pointer; font-size: 1.4rem; line-height: 1;
-      padding: 2px 8px; border-radius: 6px;
+      padding: 8px 12px; border-radius: 6px; min-height: 40px;
       transition: background 0.14s, color 0.14s;
     }
     .dp-nav:hover { background: var(--surface2); color: var(--text); }
@@ -218,9 +264,10 @@
       text-align: center; padding: 4px 0; text-transform: uppercase;
     }
     .dp-day {
-      text-align: center; padding: 6px 0;
+      text-align: center; padding: 8px 0;
       font-size: 0.82rem; border-radius: 6px; cursor: pointer;
       color: var(--text); transition: background 0.12s;
+      -webkit-tap-highlight-color: transparent;
     }
     .dp-day:hover { background: var(--surface2); }
     .dp-today { color: var(--accent); font-weight: 700; }
@@ -240,7 +287,7 @@
       display: none; position: fixed; z-index: 9999;
       background: #161b26; border: 1px solid rgba(255,255,255,0.12);
       border-radius: 12px; box-shadow: 0 20px 48px rgba(0,0,0,0.65);
-      width: 270px; padding: 14px; box-sizing: border-box;
+      width: min(290px, calc(100vw - 24px)); padding: 14px; box-sizing: border-box;
       opacity: 0; transform: translateY(-8px) scale(0.97);
       transition: opacity 0.18s ease, transform 0.18s ease;
     }
@@ -254,17 +301,17 @@
     .dtp-time-ctrl { display: flex; align-items: center; gap: 4px; }
     .dtp-spin {
       background: var(--surface2); border: 1px solid var(--border);
-      color: var(--text); width: 26px; height: 26px; border-radius: 6px;
-      cursor: pointer; font-size: 1rem; line-height: 1;
+      color: var(--text); width: 36px; height: 36px; border-radius: 8px;
+      cursor: pointer; font-size: 1.1rem; line-height: 1;
       display: flex; align-items: center; justify-content: center;
-      transition: background 0.12s; padding: 0;
+      transition: background 0.12s; padding: 0; -webkit-tap-highlight-color: transparent;
     }
     .dtp-spin:hover { background: rgba(255,255,255,0.12); }
     .dtp-time-val { font-size: 1.1rem; font-weight: 800; color: var(--text); min-width: 30px; text-align: center; }
     .dtp-sep { font-size: 1.1rem; font-weight: 800; color: var(--text-muted); line-height: 1; }
     .dtp-confirm {
       background: var(--accent); border: none; color: #0d1117;
-      font-size: 0.72rem; font-weight: 800; padding: 5px 14px;
+      font-size: 0.78rem; font-weight: 800; padding: 10px 18px; min-height: 40px;
       border-radius: 6px; cursor: pointer; transition: opacity 0.15s;
     }
     .dtp-confirm:hover { opacity: 0.85; }
@@ -278,11 +325,11 @@
     /* ── SEGMENT BUTTONS ────────────────────────────────────────────────── */
     .seg-group { display: flex; gap: 6px; }
     .seg-btn {
-      flex: 1; padding: 9px 6px;
+      flex: 1; padding: 12px 6px; min-height: 44px;
       border: 1.5px solid var(--border); border-radius: var(--radius-sm);
       background: var(--surface2); font-size: 0.8rem; font-weight: 700;
       color: var(--text-muted); cursor: pointer; text-align: center;
-      transition: all 0.15s; user-select: none;
+      transition: all 0.15s; user-select: none; -webkit-tap-highlight-color: transparent;
     }
     .seg-btn.active-primary  { background: var(--accent-dim);  border-color: var(--accent);  color: var(--accent); }
     .seg-btn.active-secondary{ background: var(--sleep-dim);   border-color: var(--sleep);   color: var(--sleep); }
@@ -291,9 +338,9 @@
 
     /* ── BUTTONS ────────────────────────────────────────────────────────── */
     .btn {
-      width: 100%; padding: 13px; border: none; border-radius: var(--radius-sm);
-      font-size: 0.95rem; font-weight: 800; cursor: pointer;
-      transition: all 0.15s; letter-spacing: 0.2px;
+      width: 100%; padding: 14px 13px; border: none; border-radius: var(--radius-sm);
+      font-size: 0.95rem; font-weight: 800; cursor: pointer; min-height: 48px;
+      transition: all 0.15s; letter-spacing: 0.2px; -webkit-tap-highlight-color: transparent;
     }
     .btn:active { transform: scale(0.98); }
     .btn-primary   { background: var(--accent); color: #fff; }
@@ -323,7 +370,7 @@
     }
     .timer-display .timer-label { font-size: 0.68rem; color: var(--text-muted); margin-top: 3px; }
     .timer-controls { display: flex; gap: 8px; margin-bottom: 12px; }
-    .timer-controls .btn { font-size: 0.85rem; padding: 10px; }
+    .timer-controls .btn { font-size: 0.85rem; padding: 14px 10px; min-height: 48px; }
 
     /* ── STATS ──────────────────────────────────────────────────────────── */
     .stats-row { display: flex; gap: 8px; margin-bottom: 14px; }
@@ -391,7 +438,7 @@
 
     /* ── TOAST ──────────────────────────────────────────────────────────── */
     .toast {
-      position: fixed; bottom: 90px; left: 50%;
+      position: fixed; bottom: calc(72px + env(safe-area-inset-bottom)); left: 50%;
       transform: translateX(-50%) translateY(20px);
       background: var(--surface2); border: 1px solid var(--border);
       color: var(--text); padding: 10px 20px; border-radius: 20px;
@@ -433,8 +480,6 @@
     .btn-reset:hover { background: rgba(239,68,68,0.2); }
 
     /* ── SANTÉ ──────────────────────────────────────────────────────────── */
-    .nav-tab[data-tab="santé"].active { border-color: #2dd4bf; }
-    .nav-tab[data-tab="santé"].active .tab-label { color: #2dd4bf; }
 
     /* Sub-navigation */
     .health-subnav {
@@ -537,12 +582,6 @@
     /* (reuses existing .who-chart-wrap, .who-legend, etc.) */
 
     /* ── INSIGHTS ───────────────────────────────────────────────────────── */
-    .nav-tab[data-tab="insights"].active { border-color: #f59e0b; }
-    .nav-tab[data-tab="insights"].active .tab-label { color: #f59e0b; }
-    .nav-tab[data-tab="journée"].active  { border-color: #fb923c; }
-    .nav-tab[data-tab="journée"].active .tab-label  { color: #fb923c; }
-    .nav-tab[data-tab="mémoires"].active { border-color: #e879f9; }
-    .nav-tab[data-tab="mémoires"].active .tab-label { color: #e879f9; }
 
     .insight-header {
       display: flex; align-items: center; justify-content: space-between;
@@ -632,10 +671,36 @@
     }
     .stats-row-2col { display: flex; gap: 8px; margin-bottom: 14px; }
     .stats-row-2col .stat-box { flex: 1; }
+    /* ── TÉTÉE TIMER ONE-HAND ───────────────────────────────────────────── */
+    .tet-timer-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 4px 0 8px;
+    }
+    .tet-big-btn {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: var(--accent); border: none; margin-top: 4px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 6px 24px var(--accent-glow);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tet-big-btn:active { transform: scale(0.94); }
+    .tet-big-btn.running { background: #ef4444; box-shadow: 0 6px 24px rgba(239,68,68,0.4); }
+    .tet-big-btn.paused  { background: var(--surface2); border: 2px solid var(--accent); box-shadow: none; }
+    .tet-reset-btn {
+      background: none; border: none; color: var(--text-muted); font-size: 0.75rem;
+      font-weight: 700; padding: 8px 16px; cursor: pointer; margin-top: 6px;
+      border-radius: 20px; transition: color 0.15s; letter-spacing: 0.3px;
+    }
+    .tet-reset-btn:hover { color: var(--text); }
     /* ── RESPONSIVE ─────────────────────────────────────────────────────── */
-    @media (max-width: 360px) {
+    @media (max-width: 390px) {
       .form-row { flex-direction: column; }
-      .seg-btn { font-size: 0.72rem; padding: 8px 4px; }
+      .more-grid { grid-template-columns: repeat(3,1fr); }
+    }
+    @media (max-width: 360px) {
+      .seg-btn { font-size: 0.72rem; }
+      .more-grid { grid-template-columns: repeat(3,1fr); }
     }
 
     /* ── SVG Lucide — ajustements globaux ─────────────────────────────── */
@@ -806,36 +871,60 @@
   <div class="header-right" id="headerDate"></div>
 </div>
 
-<!-- ═══════════════ NAV ═══════════════ -->
-<nav class="nav-tabs">
-  <div class="nav-tab active" data-tab="tétées" onclick="switchTab('tétées')">
-    <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2h8"/><path d="M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.788a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2"/><path d="M7 15a6.472 6.472 0 0 1 5 0 6.472 6.472 0 0 0 5 0"/></svg></span><span class="tab-label">Tétées</span>
+<!-- ═══════════════ BOTTOM NAV ═══════════════ -->
+<nav class="bottom-nav" id="bottomNav">
+  <div class="bn-tab active" data-tab="tétées" onclick="switchTab('tétées')">
+    <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2h8"/><path d="M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.788a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2"/><path d="M7 15a6.472 6.472 0 0 1 5 0 6.472 6.472 0 0 0 5 0"/></svg></span>
+    <span class="tab-label">Tétées</span>
   </div>
-  <div class="nav-tab" data-tab="sommeil" onclick="switchTab('sommeil')">
-    <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span><span class="tab-label">Sommeil</span>
+  <div class="bn-tab" data-tab="sommeil" onclick="switchTab('sommeil')">
+    <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span>
+    <span class="tab-label">Sommeil</span>
   </div>
-  <div class="nav-tab" data-tab="couches" onclick="switchTab('couches')">
-    <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></span><span class="tab-label">Couches</span>
+  <div class="bn-tab" data-tab="couches" onclick="switchTab('couches')">
+    <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></span>
+    <span class="tab-label">Couches</span>
   </div>
-  <div class="nav-tab" data-tab="poids" onclick="switchTab('poids')">
-    <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg></span><span class="tab-label">Poids</span>
+  <div class="bn-tab" data-tab="journée" onclick="switchTab('journée')">
+    <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg></span>
+    <span class="tab-label">Journée</span>
   </div>
-  <div class="nav-tab" data-tab="santé" onclick="switchTab('santé')">
-    <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2a2 2 0 0 0-2 2v5H4a2 2 0 0 0-2 2v2c0 1.1.9 2 2 2h5v5c0 1.1.9 2 2 2h2a2 2 0 0 0 2-2v-5h5a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2h-5V4a2 2 0 0 0-2-2h-2z"/></svg></span><span class="tab-label">Santé</span>
-  </div>
-  <div class="nav-tab" data-tab="insights" onclick="switchTab('insights')">
-    <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg></span><span class="tab-label">Insights</span>
-  </div>
-  <div class="nav-tab" data-tab="journée" onclick="switchTab('journée')">
-    <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg></span><span class="tab-label">Journée</span>
-  </div>
-  <div class="nav-tab" data-tab="mémoires" onclick="switchTab('mémoires')">
-    <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span><span class="tab-label">Mémoires</span>
-  </div>
-  <div class="nav-tab" data-tab="paramètres" onclick="switchTab('paramètres')">
-    <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></span><span class="tab-label">Réglages</span>
+  <div class="bn-tab bn-more" onclick="toggleMoreMenu()">
+    <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></span>
+    <span class="tab-label">Plus</span>
   </div>
 </nav>
+
+<!-- ═══════════════ MORE MENU ═══════════════ -->
+<div class="more-overlay" id="moreOverlay">
+  <div class="more-backdrop" onclick="closeMoreMenu()"></div>
+  <div class="more-sheet">
+    <div class="more-sheet-handle"></div>
+    <div class="more-sheet-title">Plus d'onglets</div>
+    <div class="more-grid">
+      <div class="more-item" data-tab="poids" onclick="switchTab('poids');closeMoreMenu()">
+        <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg></span>
+        <span class="tab-label">Poids</span>
+      </div>
+      <div class="more-item" data-tab="santé" onclick="switchTab('santé');closeMoreMenu()">
+        <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2a2 2 0 0 0-2 2v5H4a2 2 0 0 0-2 2v2c0 1.1.9 2 2 2h5v5c0 1.1.9 2 2 2h2a2 2 0 0 0 2-2v-5h5a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2h-5V4a2 2 0 0 0-2-2h-2z"/></svg></span>
+        <span class="tab-label">Santé</span>
+      </div>
+      <div class="more-item" data-tab="insights" onclick="switchTab('insights');closeMoreMenu()">
+        <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg></span>
+        <span class="tab-label">Insights</span>
+      </div>
+      <div class="more-item" data-tab="mémoires" onclick="switchTab('mémoires');closeMoreMenu()">
+        <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e879f9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+        <span class="tab-label">Mémoires</span>
+      </div>
+      <div class="more-item" data-tab="paramètres" onclick="switchTab('paramètres');closeMoreMenu()">
+        <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></span>
+        <span class="tab-label">Réglages</span>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ═══════════════ CONTENU ═══════════════ -->
 <div class="main">
@@ -853,13 +942,15 @@
           <div class="seg-btn" data-val="biberon"     onclick="selectSeg('tetTypeGroup','active-primary',this)"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M8 2h8"/><path d="M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.788a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2"/><path d="M7 15a6.472 6.472 0 0 1 5 0 6.472 6.472 0 0 0 5 0"/></svg> Biberon</div>
         </div>
       </div>
-      <div class="timer-display">
-        <div class="timer-time" id="tetTimerClock">00:00</div>
-        <div class="timer-label">Durée de la tétée</div>
-      </div>
-      <div class="timer-controls">
-        <button class="btn btn-primary" onclick="tetTimerToggle()" id="tetTimerBtn"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><polygon points="5 3 19 12 5 21 5 3"/></svg> Démarrer</button>
-        <button class="btn btn-ghost" style="flex:0 0 94px;" onclick="tetTimerReset()">Réinitialiser</button>
+      <div class="tet-timer-wrap">
+        <div class="timer-display" style="width:100%;margin-bottom:0;">
+          <div class="timer-time" id="tetTimerClock">00:00</div>
+          <div class="timer-label">Durée de la tétée</div>
+        </div>
+        <button class="tet-big-btn" onclick="tetTimerToggle()" id="tetTimerBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </button>
+        <button class="tet-reset-btn" onclick="tetTimerReset()">Réinitialiser</button>
       </div>
       <div class="form-row">
         <div class="form-group">
@@ -1688,11 +1779,23 @@ function renderProfilePreview() {
 }
 
 // ─── TABS ────────────────────────────────────────────────────────────────────
+const MAIN_TABS = ['tétées','sommeil','couches','journée'];
 function switchTab(name) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
-  document.querySelector(`.nav-tab[data-tab="${name}"]`).classList.add('active');
+  // Bottom nav active state
+  document.querySelectorAll('.bn-tab').forEach(t => t.classList.remove('active'));
+  if (MAIN_TABS.includes(name)) {
+    const bt = document.querySelector(`.bn-tab[data-tab="${name}"]`);
+    if (bt) bt.classList.add('active');
+  } else {
+    const moreBtn = document.querySelector('.bn-tab.bn-more');
+    if (moreBtn) moreBtn.classList.add('active');
+  }
+  // More menu active state
+  document.querySelectorAll('.more-item').forEach(t => t.classList.remove('active'));
+  const mi = document.querySelector(`.more-item[data-tab="${name}"]`);
+  if (mi) mi.classList.add('active');
   if (name==='tétées')    renderTetees();
   if (name==='sommeil')   renderSommeil();
   if (name==='couches')   renderCouches();
@@ -1701,6 +1804,14 @@ function switchTab(name) {
   if (name==='insights')  renderInsights();
   if (name==='journée')   renderJournee();
   if (name==='mémoires')  renderMemoires();
+}
+function toggleMoreMenu() {
+  const overlay = document.getElementById('moreOverlay');
+  if (overlay.classList.contains('open')) { closeMoreMenu(); }
+  else { overlay.classList.add('open'); }
+}
+function closeMoreMenu() {
+  document.getElementById('moreOverlay').classList.remove('open');
 }
 
 // ─── EXPORT / IMPORT ─────────────────────────────────────────────────────────
@@ -1758,24 +1869,32 @@ function importData(event) {
 // ══════════════════════════════════════════════════════════════════════════════
 let tetTimerInterval=null, tetTimerStart=null, tetTimerRunning=false, tetTimerSeconds=0;
 
+const _PLAY_ICON  = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
+const _PAUSE_ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
 function tetTimerToggle() {
   const btn = document.getElementById('tetTimerBtn');
   if (!tetTimerRunning) {
     tetTimerStart = Date.now() - tetTimerSeconds*1000;
-    tetTimerRunning = true; btn.innerHTML = ic('pause',15)+' Pause';
+    tetTimerRunning = true;
+    btn.innerHTML = _PAUSE_ICON;
+    btn.classList.add('running'); btn.classList.remove('paused');
     tetTimerInterval = setInterval(() => {
       tetTimerSeconds = Math.floor((Date.now()-tetTimerStart)/1000);
       document.getElementById('tetTimerClock').textContent = fmtDurationSec(tetTimerSeconds);
       document.getElementById('tetDuration').value = Math.round(tetTimerSeconds/60) || '';
     }, 500);
   } else {
-    clearInterval(tetTimerInterval); tetTimerRunning=false; btn.innerHTML=ic('play',15)+' Reprendre';
+    clearInterval(tetTimerInterval); tetTimerRunning=false;
+    btn.innerHTML = _PLAY_ICON;
+    btn.classList.remove('running'); btn.classList.add('paused');
   }
 }
 function tetTimerReset() {
   clearInterval(tetTimerInterval); tetTimerRunning=false; tetTimerSeconds=0;
   document.getElementById('tetTimerClock').textContent='00:00';
-  document.getElementById('tetTimerBtn').innerHTML=ic('play',15)+' Démarrer';
+  const btn = document.getElementById('tetTimerBtn');
+  btn.innerHTML = _PLAY_ICON;
+  btn.classList.remove('running','paused');
   document.getElementById('tetDuration').value='';
 }
 
