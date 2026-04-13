@@ -603,6 +603,74 @@
       width: 10px; height: 10px; border-radius: 50%;
       background: #f87171;
     }
+
+    /* ── MÉMOIRES ───────────────────────────────────────────────────────── */
+    .mem-milestone {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 11px 0; border-bottom: 1px solid var(--border);
+    }
+    .mem-milestone:last-child { border-bottom: none; padding-bottom: 0; }
+    .mem-check {
+      width: 22px; height: 22px; border-radius: 50%;
+      border: 2px solid var(--border); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: border-color 0.2s, background 0.2s;
+      margin-top: 1px;
+    }
+    .mem-check.done { border-color: #34d399; background: rgba(52,211,153,0.15); }
+    .mem-check.done svg { display: block; }
+    .mem-check svg { display: none; }
+    .mem-body { flex: 1; min-width: 0; }
+    .mem-label {
+      font-size: 0.85rem; font-weight: 700; color: var(--text);
+      margin-bottom: 5px; transition: color 0.2s;
+    }
+    .mem-label.done { color: #34d399; }
+    .mem-fields { display: flex; gap: 6px; flex-wrap: wrap; }
+    .mem-date {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); color: var(--text);
+      font-size: 0.72rem; padding: 4px 7px;
+      width: 130px; box-sizing: border-box;
+    }
+    .mem-date:focus { outline: none; border-color: var(--accent); }
+    .mem-note {
+      flex: 1; min-width: 100px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); color: var(--text);
+      font-size: 0.72rem; padding: 4px 7px;
+    }
+    .mem-note:focus { outline: none; border-color: var(--accent); }
+    .mem-note::placeholder { color: var(--text-muted); }
+
+    /* journal */
+    .journal-form { display: flex; flex-direction: column; gap: 8px; margin-bottom: 4px; }
+    .journal-textarea {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); color: var(--text);
+      font-size: 0.85rem; padding: 10px 12px; resize: vertical;
+      min-height: 80px; font-family: inherit;
+    }
+    .journal-textarea:focus { outline: none; border-color: var(--accent); }
+    .journal-textarea::placeholder { color: var(--text-muted); }
+    .journal-add-row { display: flex; justify-content: flex-end; }
+    .journal-entry {
+      padding: 12px 0; border-bottom: 1px solid var(--border);
+    }
+    .journal-entry:last-child { border-bottom: none; padding-bottom: 0; }
+    .journal-entry-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    .journal-entry-date { font-size: 0.68rem; color: var(--text-muted); font-weight: 600; }
+    .journal-entry-del {
+      background: none; border: none; color: var(--text-muted);
+      cursor: pointer; padding: 2px 4px; border-radius: 4px;
+      font-size: 0.72rem; transition: color 0.15s;
+    }
+    .journal-entry-del:hover { color: #f87171; }
+    .journal-entry-text { font-size: 0.83rem; color: var(--text); white-space: pre-wrap; line-height: 1.5; }
+    .journal-empty { font-size: 0.82rem; color: var(--text-muted); text-align: center; padding: 20px 0; }
   </style>
 </head>
 <body>
@@ -671,6 +739,9 @@
   </div>
   <div class="nav-tab" data-tab="journée" onclick="switchTab('journée')">
     <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg></span><span class="tab-label">Journée</span>
+  </div>
+  <div class="nav-tab" data-tab="mémoires" onclick="switchTab('mémoires')">
+    <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span><span class="tab-label">Mémoires</span>
   </div>
   <div class="nav-tab" data-tab="paramètres" onclick="switchTab('paramètres')">
     <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></span><span class="tab-label">Réglages</span>
@@ -1002,6 +1073,24 @@
     <div id="journeeInner"></div>
   </div>
 
+  <!-- MÉMOIRES -->
+  <div class="tab-content" id="tab-mémoires">
+    <div class="card">
+      <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> Premières fois</div>
+      <div id="memMilestones"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg> Journal</div>
+      <div class="journal-form">
+        <textarea class="journal-textarea" id="journalText" placeholder="Note du jour…" rows="3"></textarea>
+        <div class="journal-add-row">
+          <button class="btn btn-primary" onclick="addJournalEntry()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg> Ajouter</button>
+        </div>
+      </div>
+      <div id="journalList"></div>
+    </div>
+  </div>
+
   <!-- PARAMÈTRES -->
   <div class="tab-content" id="tab-paramètres">
 
@@ -1044,6 +1133,7 @@ const KEYS = {
   tetees: 'bt_tetees', sommeil: 'bt_sommeil', couches: 'bt_couches',
   poids: 'bt_poids', tailles: 'bt_tailles', activeSleep: 'bt_active_sleep', profile: 'bt_profile',
   vaccins: 'bt_vaccins', rdv: 'bt_rdv', perimetre: 'bt_perimetre',
+  milestones: 'bt_milestones', journal: 'bt_journal',
 };
 
 // ─── DONNÉES OMS ─────────────────────────────────────────────────────────────
@@ -1259,6 +1349,7 @@ function switchTab(name) {
   if (name==='santé')     { renderVaccins(); renderRDV(); }
   if (name==='insights')  renderInsights();
   if (name==='journée')   renderJournee();
+  if (name==='mémoires')  renderMemoires();
 }
 
 // ─── EXPORT / IMPORT ─────────────────────────────────────────────────────────
@@ -2303,6 +2394,105 @@ function journeeBlockClick(kind, id) {
     const lbl = e.type==='pipi'?'Pipi':e.type==='caca'?'Caca':'Mixte';
     showToast(lbl+' · '+fmtTime(e.timestamp)+(e.note?' · '+e.note:''));
   }
+}
+
+// ─── MÉMOIRES ────────────────────────────────────────────────────────────────
+const MILESTONES_DEF = [
+  { id:'smile',       label:'Premier sourire' },
+  { id:'laugh',       label:'Premier rire' },
+  { id:'rollover',    label:'Premier retournement' },
+  { id:'tooth',       label:'Première dent' },
+  { id:'steps',       label:'Premiers pas' },
+  { id:'word',        label:'Premier mot' },
+  { id:'fullnight',   label:'Première nuit complète' },
+  { id:'breastfeed',  label:'Première tétée au sein' },
+  { id:'bath',        label:'Premier bain' },
+  { id:'travel',      label:'Premier voyage' },
+];
+
+function saveMilestone(id, field, value) {
+  const data = loadObj(KEYS.milestones) || {};
+  if (!data[id]) data[id] = {};
+  data[id][field] = value;
+  localStorage.setItem(KEYS.milestones, JSON.stringify(data));
+}
+
+function toggleMilestone(id) {
+  const data = loadObj(KEYS.milestones) || {};
+  if (!data[id]) data[id] = {};
+  data[id].done = !data[id].done;
+  localStorage.setItem(KEYS.milestones, JSON.stringify(data));
+  renderMemoires();
+}
+
+function renderMilestones() {
+  const data = loadObj(KEYS.milestones) || {};
+  let html = '';
+  MILESTONES_DEF.forEach(m => {
+    const s    = data[m.id] || {};
+    const done = !!s.done;
+    html += `<div class="mem-milestone">
+      <div class="mem-check${done?' done':''}" onclick="toggleMilestone('${m.id}')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="mem-body">
+        <div class="mem-label${done?' done':''}">${m.label}</div>
+        <div class="mem-fields">
+          <input type="date" class="mem-date" value="${s.date||''}"
+            onchange="saveMilestone('${m.id}','date',this.value)"
+            placeholder="Date" />
+          <input type="text" class="mem-note" value="${(s.note||'').replace(/"/g,'&quot;')}"
+            onchange="saveMilestone('${m.id}','note',this.value)"
+            placeholder="Note…" />
+        </div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('memMilestones').innerHTML = html;
+}
+
+function addJournalEntry() {
+  const ta = document.getElementById('journalText');
+  const text = ta.value.trim();
+  if (!text) return;
+  const entries = load(KEYS.journal);
+  entries.unshift({ id: Date.now(), date: new Date().toISOString(), text });
+  localStorage.setItem(KEYS.journal, JSON.stringify(entries));
+  ta.value = '';
+  renderJournalList();
+  showToast('Entrée ajoutée');
+}
+
+function deleteJournalEntry(id) {
+  const entries = load(KEYS.journal).filter(e => e.id !== id);
+  localStorage.setItem(KEYS.journal, JSON.stringify(entries));
+  renderJournalList();
+}
+
+function renderJournalList() {
+  const entries = load(KEYS.journal);
+  const el = document.getElementById('journalList');
+  if (!entries.length) {
+    el.innerHTML = '<div class="journal-empty">Aucune entrée pour le moment.</div>';
+    return;
+  }
+  el.innerHTML = entries.map(e => {
+    const d = new Date(e.date);
+    const dateStr = d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    const timeStr = d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+    return `<div class="journal-entry">
+      <div class="journal-entry-header">
+        <span class="journal-entry-date">${dateStr} · ${timeStr}</span>
+        <button class="journal-entry-del" onclick="deleteJournalEntry(${e.id})" title="Supprimer">✕</button>
+      </div>
+      <div class="journal-entry-text">${e.text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderMemoires() {
+  renderMilestones();
+  renderJournalList();
 }
 
 // ── Rendu principal ───────────────────────────────────────────────────────────
