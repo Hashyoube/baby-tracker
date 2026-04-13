@@ -549,6 +549,60 @@
     .insight-icon svg { width: 18px; height: 18px; }
     .tab-icon svg { display: block; margin: 0 auto 2px; }
     .onboard-logo svg { opacity: 0.9; }
+
+    /* ── JOURNÉE TIMELINE ───────────────────────────────────────────────── */
+    .journee-summary {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 8px;
+      margin-bottom: 14px;
+    }
+    .jsum-pill {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 10px 8px; text-align: center;
+    }
+    .jsum-pill .jsp-val { font-size: 1.1rem; font-weight: 800; }
+    .jsum-pill .jsp-lbl { font-size: 0.58rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; margin-top: 2px; }
+    .tl-wrap { display: flex; position: relative; padding-bottom: 16px; }
+    .tl-hours {
+      width: 34px; flex-shrink: 0;
+      display: flex; flex-direction: column;
+    }
+    .tl-hour-label {
+      font-size: 0.58rem; color: var(--text-muted);
+      height: 40px; box-sizing: border-box; line-height: 1;
+      padding-top: 0; display: flex; align-items: flex-start;
+    }
+    .tl-grid {
+      flex: 1; position: relative; min-height: 960px;
+    }
+    .tl-gridline {
+      position: absolute; left: 0; right: 0;
+      border-top: 1px solid var(--border); height: 0;
+    }
+    .tl-block {
+      position: absolute; left: 2px; right: 2px;
+      border-radius: 4px; cursor: pointer;
+      padding: 2px 5px; box-sizing: border-box;
+      overflow: hidden; min-height: 16px;
+      font-size: 0.58rem; font-weight: 600;
+      transition: filter 0.15s;
+      display: flex; align-items: flex-start; gap: 3px;
+    }
+    .tl-block:hover { filter: brightness(1.2); }
+    .tl-block span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .tl-block.tl-tet { background: rgba(96,165,250,0.22); border-left: 3px solid var(--accent); color: var(--accent); }
+    .tl-block.tl-som { background: rgba(129,140,248,0.2); border-left: 3px solid var(--sleep); color: var(--sleep); }
+    .tl-block.tl-som-active { background: rgba(129,140,248,0.32); border-left: 3px solid var(--sleep); color: var(--sleep); }
+    .tl-block.tl-cou { background: rgba(52,211,153,0.18); border-left: 3px solid var(--diaper); color: var(--diaper); }
+    .tl-now {
+      position: absolute; left: 0; right: 0;
+      height: 2px; background: #f87171; z-index: 10;
+      pointer-events: none;
+    }
+    .tl-now::before {
+      content: ''; position: absolute; left: -4px; top: -4px;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #f87171;
+    }
   </style>
 </head>
 <body>
@@ -614,6 +668,9 @@
   </div>
   <div class="nav-tab" data-tab="insights" onclick="switchTab('insights')">
     <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg></span><span class="tab-label">Insights</span>
+  </div>
+  <div class="nav-tab" data-tab="journée" onclick="switchTab('journée')">
+    <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg></span><span class="tab-label">Journée</span>
   </div>
   <div class="nav-tab" data-tab="paramètres" onclick="switchTab('paramètres')">
     <span class="tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></span><span class="tab-label">Réglages</span>
@@ -940,6 +997,11 @@
 
   </div>
 
+  <!-- JOURNÉE -->
+  <div class="tab-content" id="tab-journée">
+    <div id="journeeInner"></div>
+  </div>
+
   <!-- PARAMÈTRES -->
   <div class="tab-content" id="tab-paramètres">
 
@@ -1196,6 +1258,7 @@ function switchTab(name) {
   if (name==='poids')     { renderPoids(); drawWHOCharts(); }
   if (name==='santé')     { renderVaccins(); renderRDV(); }
   if (name==='insights')  renderInsights();
+  if (name==='journée')   renderJournee();
 }
 
 // ─── EXPORT / IMPORT ─────────────────────────────────────────────────────────
@@ -2123,6 +2186,123 @@ function avgPerDay(entries, dateKey='timestamp') {
   });
   const counts = Object.values(byDay);
   return mean(counts);
+}
+
+// ─── JOURNÉE ─────────────────────────────────────────────────────────────────
+function renderJournee() {
+  const todayStr = toLocalDateStr(now());
+  const PX_PER_MIN = 960 / (24 * 60);
+
+  const allTetees  = load(KEYS.tetees);
+  const allSommeil = load(KEYS.sommeil);
+  const allCouches = load(KEYS.couches);
+  const activeSleep = loadObj(KEYS.activeSleep);
+
+  const tetees  = allTetees.filter(e  => toLocalDateStr(new Date(e.timestamp)) === todayStr);
+  const sommeil = allSommeil.filter(e => {
+    const startDay = toLocalDateStr(new Date(e.start));
+    const endDay   = e.end ? toLocalDateStr(new Date(e.end)) : null;
+    return startDay === todayStr || endDay === todayStr;
+  });
+  const couches = allCouches.filter(e => toLocalDateStr(new Date(e.timestamp)) === todayStr);
+
+  const nTet = tetees.length;
+  let totalSleepMin = sommeil.filter(e => e.duration).reduce((s,e) => s+(e.duration||0), 0);
+  if (activeSleep && toLocalDateStr(new Date(activeSleep.start)) === todayStr) {
+    totalSleepMin += (Date.now() - new Date(activeSleep.start)) / 60000;
+  }
+  const nCou = couches.length;
+
+  function minFromMidnight(isoStr) {
+    const d = new Date(isoStr);
+    return d.getHours()*60 + d.getMinutes() + d.getSeconds()/60;
+  }
+
+  function makeBlock(cls, topMin, durMin, label, iconName, id, kind) {
+    const top    = (topMin * PX_PER_MIN).toFixed(1);
+    const height = Math.max(16, durMin * PX_PER_MIN).toFixed(1);
+    return `<div class="tl-block ${cls}" style="top:${top}px;height:${height}px" onclick="journeeBlockClick('${kind}','${id}')">`+
+           ic(iconName,10)+`<span>${label}</span></div>`;
+  }
+
+  let blocks = '';
+
+  tetees.forEach(e => {
+    const startMin = minFromMidnight(e.timestamp);
+    const durMin   = e.duration || 5;
+    const lbl      = e.type==='biberon' ? 'Biberon' : e.type==='sein_gauche' ? 'Sein G.' : e.type==='sein_droit' ? 'Sein D.' : 'Tétée';
+    blocks += makeBlock('tl-tet', startMin, durMin, lbl+(e.duration?' '+fmtDuration(e.duration):''), 'bottle', e.id, 'tet');
+  });
+
+  sommeil.forEach(e => {
+    const startMin = minFromMidnight(e.start);
+    let durMin = e.duration;
+    if (!durMin && e.end) durMin = (new Date(e.end)-new Date(e.start))/60000;
+    if (!durMin) durMin = 15;
+    blocks += makeBlock('tl-som', startMin, durMin, 'Sommeil'+(e.duration?' '+fmtDuration(Math.round(e.duration)):''), 'moon', e.id, 'som');
+  });
+
+  if (activeSleep && toLocalDateStr(new Date(activeSleep.start)) === todayStr) {
+    const startMin = minFromMidnight(activeSleep.start);
+    const durMin   = (Date.now()-new Date(activeSleep.start))/60000;
+    blocks += makeBlock('tl-som-active', startMin, durMin, 'Sommeil en cours', 'moon', 'active', 'som_active');
+  }
+
+  couches.forEach(e => {
+    const startMin = minFromMidnight(e.timestamp);
+    const lbl = e.type==='pipi'?'Pipi':e.type==='caca'?'Caca':'Mixte';
+    blocks += makeBlock('tl-cou', startMin, 20, lbl, 'droplet', e.id, 'cou');
+  });
+
+  let hoursHtml = '';
+  for (let h=0; h<24; h++) hoursHtml += `<div class="tl-hour-label">${String(h).padStart(2,'0')}h</div>`;
+
+  let gridHtml = '';
+  for (let h=0; h<24; h++) gridHtml += `<div class="tl-gridline" style="top:${h*40}px"></div>`;
+
+  const nowMin = new Date().getHours()*60+new Date().getMinutes();
+  const nowTop = (nowMin*PX_PER_MIN).toFixed(1);
+
+  const sumHtml = `<div class="journee-summary">
+    <div class="jsum-pill"><div class="jsp-val" style="color:var(--accent)">${nTet}</div><div class="jsp-lbl">Tétées</div></div>
+    <div class="jsum-pill"><div class="jsp-val" style="color:var(--sleep)">${fmtDuration(Math.round(totalSleepMin))}</div><div class="jsp-lbl">Sommeil</div></div>
+    <div class="jsum-pill"><div class="jsp-val" style="color:var(--diaper)">${nCou}</div><div class="jsp-lbl">Couches</div></div>
+  </div>`;
+
+  document.getElementById('journeeInner').innerHTML = sumHtml +
+    `<div class="card" style="padding:12px 10px;overflow-x:hidden">
+      <div class="tl-wrap">
+        <div class="tl-hours">${hoursHtml}</div>
+        <div class="tl-grid">${gridHtml}${blocks}<div class="tl-now" style="top:${nowTop}px"></div></div>
+      </div>
+    </div>`;
+
+  setTimeout(() => {
+    const nowEl = document.querySelector('#tab-journée .tl-now');
+    if (nowEl) nowEl.scrollIntoView({block:'center',behavior:'smooth'});
+  }, 80);
+}
+
+function journeeBlockClick(kind, id) {
+  if (kind==='tet') {
+    const e = load(KEYS.tetees).find(t => String(t.id)===String(id));
+    if (!e) return;
+    const lbl = e.type==='biberon'?'Biberon':e.type==='sein_gauche'?'Sein gauche':e.type==='sein_droit'?'Sein droit':'Tétée';
+    showToast(lbl+' · '+fmtTime(e.timestamp)+(e.duration?' · '+fmtDuration(e.duration):'')+(e.ml?' · '+e.ml+' ml':''));
+  } else if (kind==='som') {
+    const e = load(KEYS.sommeil).find(s => String(s.id)===String(id));
+    if (!e) return;
+    showToast('Sommeil · '+fmtTime(e.start)+' → '+(e.end?fmtTime(e.end):'en cours')+(e.duration?' · '+fmtDuration(Math.round(e.duration)):''));
+  } else if (kind==='som_active') {
+    const a = loadObj(KEYS.activeSleep);
+    if (!a) return;
+    showToast('Sommeil en cours · depuis '+fmtTime(a.start)+' · '+fmtDuration(Math.round((Date.now()-new Date(a.start))/60000)));
+  } else if (kind==='cou') {
+    const e = load(KEYS.couches).find(c => String(c.id)===String(id));
+    if (!e) return;
+    const lbl = e.type==='pipi'?'Pipi':e.type==='caca'?'Caca':'Mixte';
+    showToast(lbl+' · '+fmtTime(e.timestamp)+(e.note?' · '+e.note:''));
+  }
 }
 
 // ── Rendu principal ───────────────────────────────────────────────────────────
