@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>BabyTrack</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     /* ── THEME ──────────────────────────────────────────────────────────── */
     :root {
@@ -476,6 +477,8 @@
     .btn-export:hover { background: #1d4ed8; }
     .btn-import { background: #059669; color: #fff; }
     .btn-import:hover { background: #047857; }
+    .btn-pdf { background: #1e293b; color: #f1f5f9; }
+    .btn-pdf:hover { background: #334155; }
     .import-info { font-size: 0.73rem; color: var(--text-muted); margin-top: 8px; font-style: italic; }
     #importFileInput { display: none; }
     .profile-preview {
@@ -1311,6 +1314,12 @@
       <p style="font-size:.8rem;color:var(--text-muted);margin-bottom:12px">Choisissez 2 à 4 onglets à afficher dans la barre de navigation.</p>
       <div class="nav-opts" id="navOptsGrid"></div>
       <p class="nav-settings-hint" id="navSettingsHint"></p>
+    </div>
+
+    <div class="card settings-section">
+      <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg> Rapport pédiatre</div>
+      <p style="font-size:.8rem;color:var(--text-muted);margin-bottom:12px">Génère un rapport PDF d'une page : courbe de poids, résumé 7 jours, dernières mesures avec percentiles OMS, vaccins administrés.</p>
+      <button class="btn btn-pdf" onclick="generatePDF()"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg> Générer rapport pédiatre PDF</button>
     </div>
 
     <div class="card settings-section">
@@ -3435,6 +3444,233 @@ function deleteEntry(storeKey,id,renderFn) {
 function deleteWeightEntry(id) {
   save(KEYS.poids,load(KEYS.poids).filter(e=>e.id!==id));
   renderPoids(); drawWHOCharts();
+}
+
+// ─── RAPPORT PDF ──────────────────────────────────────────────────────────────
+function generatePDF() {
+  if (!window.jspdf?.jsPDF) { showToast('Librairie PDF non chargee…'); return; }
+  const profile = loadObj(KEYS.profile);
+  if (!profile) { showToast('Aucun profil bebe trouve'); return; }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+  const PW = 210, PH = 297, ML = 15, MR = 15;
+  const CW = PW - ML - MR; // 180 mm
+  let y = 14;
+
+  // ── helpers ────────────────────────────────────────────────────────────────
+  const fmtFR = s => {
+    if (!s) return '-';
+    return new Date(s.length <= 10 ? s + 'T12:00:00' : s)
+      .toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric' });
+  };
+  const T = (style, size, r=0, g=0, b=0) => {
+    doc.setFont('helvetica', style);
+    doc.setFontSize(size);
+    doc.setTextColor(r, g, b);
+  };
+  const sectionHdr = title => {
+    doc.setFillColor(20, 20, 20);
+    doc.rect(ML, y, CW, 7, 'F');
+    T('bold', 8.5, 255, 255, 255);
+    doc.text(title, ML + 3, y + 4.9);
+    doc.setTextColor(0, 0, 0);
+    y += 9.5;
+  };
+  const estimPerc = (tbl, sx, am, val) => {
+    const rows = tbl[sx] || tbl['garçon'] || Object.values(tbl)[0];
+    const r = rows[Math.max(0, Math.min(Math.round(am), rows.length - 1))];
+    if (val <= r[0]) return '< P3';
+    if (val <= r[1]) return 'P3-P15';
+    if (val <= r[2]) return 'P15-P50';
+    if (val <= r[3]) return 'P50-P85';
+    if (val <= r[4]) return 'P85-P97';
+    return '> P97';
+  };
+
+  // ── EN-TETE ────────────────────────────────────────────────────────────────
+  // Logo BT (cercle noir)
+  doc.setFillColor(18, 18, 18);
+  doc.circle(ML + 6.5, y + 6.5, 6.5, 'F');
+  T('bold', 8.5, 255, 255, 255);
+  doc.text('BT', ML + 6.5, y + 8.1, { align:'center' });
+
+  T('bold', 17, 12, 12, 12);
+  doc.text('BabyTrack', ML + 16, y + 6);
+  T('normal', 8, 115, 115, 115);
+  doc.text('Rapport de suivi pediatrique', ML + 16, y + 11.5);
+
+  // Infos bébé — droite
+  const birth  = new Date(profile.naissance + 'T12:00:00');
+  const ageMs  = Date.now() - birth.getTime();
+  const ageSem = Math.floor(ageMs / (7 * 24 * 3600e3));
+  const ageMois= Math.floor(ageMs / (30.4375 * 24 * 3600e3));
+  const dateDuJour = new Date().toLocaleDateString('fr-FR', { day:'2-digit', month:'long', year:'numeric' });
+
+  T('bold', 15, 12, 12, 12);
+  doc.text(profile.prenom || 'Bebe', PW - MR, y + 3, { align:'right' });
+  T('normal', 8, 78, 78, 78);
+  doc.text('Ne(e) le ' + fmtFR(profile.naissance) + '   ' + (profile.sexe === 'fille' ? 'Fille' : 'Garcon'), PW - MR, y + 8.5, { align:'right' });
+  doc.text('Age : ' + ageSem + ' semaines  (' + ageMois + ' mois)', PW - MR, y + 13.5, { align:'right' });
+  T('bold', 8, 45, 45, 45);
+  doc.text('Rapport du ' + dateDuJour, PW - MR, y + 18.5, { align:'right' });
+
+  y += 23;
+  doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.5);
+  doc.line(ML, y, PW - MR, y);
+  y += 7;
+
+  // ── SECTION 1 — COURBE DE POIDS ───────────────────────────────────────────
+  sectionHdr('1.  Courbe de poids  -  10 dernieres pesees');
+
+  const poidsAll = [...load(KEYS.poids)].sort((a, b) => a.date.localeCompare(b.date));
+  const last10   = poidsAll.slice(-10);
+
+  if (!last10.length) {
+    T('italic', 8, 155, 155, 155);
+    doc.text('Aucune pesee enregistree.', ML, y + 4); y += 10;
+  } else {
+    const cx = [ML, ML+30, ML+58, ML+86, ML+116];
+    // En-tête tableau
+    doc.setFillColor(222, 222, 222);
+    doc.rect(ML, y, CW, 5.5, 'F');
+    T('bold', 7.5, 40, 40, 40);
+    ['Date', 'Poids (g)', 'Poids (kg)', 'Evolution', 'Note'].forEach((h, i) => doc.text(h, cx[i] + 1.5, y + 3.8));
+    const tblTop = y; y += 5.5;
+    // Lignes
+    last10.forEach((e, idx) => {
+      if (idx % 2 === 1) { doc.setFillColor(247, 247, 247); doc.rect(ML, y, CW, 5, 'F'); }
+      const prev  = idx > 0 ? last10[idx-1].weight : null;
+      const delta = prev !== null ? (e.weight >= prev ? '+' : '') + (e.weight - prev) + 'g' : '-';
+      T('normal', 7.5, 28, 28, 28);
+      doc.text(fmtFR(e.date),                    cx[0] + 1.5, y + 3.4);
+      doc.text(e.weight + ' g',                   cx[1] + 1.5, y + 3.4);
+      doc.text((e.weight/1000).toFixed(3) + ' kg', cx[2] + 1.5, y + 3.4);
+      if (prev !== null) {
+        doc.setTextColor(...(e.weight >= prev ? [18,110,40] : [165,28,28]));
+        doc.text(delta, cx[3] + 1.5, y + 3.4);
+      } else { T('normal', 7.5, 130, 130, 130); doc.text('-', cx[3] + 1.5, y + 3.4); }
+      T('normal', 7, 125, 125, 125);
+      doc.text((e.note || '').substring(0, 25), cx[4] + 1.5, y + 3.4);
+      y += 5;
+    });
+    // Bordures tableau
+    doc.setDrawColor(185, 185, 185); doc.setLineWidth(0.2);
+    doc.rect(ML, tblTop, CW, y - tblTop, 'S');
+    [cx[1], cx[2], cx[3], cx[4]].forEach(x => doc.line(x, tblTop, x, y));
+  }
+  y += 5;
+
+  // ── SECTION 2 — RESUME 7 JOURS ────────────────────────────────────────────
+  sectionHdr('2.  Resume des 7 derniers jours');
+
+  const cut7  = Date.now() - 7 * 24 * 3600e3;
+  const tet7  = load(KEYS.tetees).filter(e => new Date(e.timestamp).getTime() > cut7);
+  const som7  = load(KEYS.sommeil).filter(e => new Date(e.start).getTime() > cut7 && e.duration != null);
+  const cou7  = load(KEYS.couches).filter(e => new Date(e.timestamp).getTime() > cut7);
+  const tetDurArr = tet7.filter(e => e.duration > 0);
+
+  const stats2 = [
+    { v: tet7.length     ? (tet7.length / 7).toFixed(1)                                        : '-', l:'Tetees / jour'     },
+    { v: tetDurArr.length ? fmtDuration(tetDurArr.reduce((s,e)=>s+e.duration,0)/tetDurArr.length) : '-', l:'Duree moy. tetee'  },
+    { v: som7.length     ? (som7.reduce((s,e)=>s+(e.duration||0),0)/7/60).toFixed(1) + 'h'     : '-', l:'Sommeil / jour'    },
+    { v: cou7.length     ? (cou7.length / 7).toFixed(1)                                        : '-', l:'Couches / jour'    },
+  ];
+  const BW = (CW - 6) / 4;
+  stats2.forEach((s, i) => {
+    const bx = ML + i * (BW + 2);
+    doc.setFillColor(244, 244, 244); doc.setDrawColor(185, 185, 185); doc.setLineWidth(0.2);
+    doc.rect(bx, y, BW, 20, 'FD');
+    T('bold', 14, 14, 14, 14);
+    doc.text(String(s.v), bx + BW / 2, y + 10.5, { align:'center' });
+    T('normal', 7, 108, 108, 108);
+    doc.text(s.l, bx + BW / 2, y + 16, { align:'center' });
+  });
+  y += 25;
+
+  // ── SECTION 3 — DERNIERES MESURES ─────────────────────────────────────────
+  sectionHdr('3.  Dernieres mesures avec percentile OMS');
+
+  const sx      = profile.sexe || 'garçon';
+  const lastP   = poidsAll.length ? poidsAll[poidsAll.length-1] : null;
+  const tailleS = [...load(KEYS.tailles)].sort((a,b) => a.date.localeCompare(b.date));
+  const lastT   = tailleS.length ? tailleS[tailleS.length-1] : null;
+  const perimS  = [...load(KEYS.perimetre)].sort((a,b) => a.date.localeCompare(b.date));
+  const lastPC  = perimS.length ? perimS[perimS.length-1] : null;
+
+  const mesures = [];
+  if (lastP)  { const am=ageEnMois(lastP.date);  mesures.push({ titre:'Dernier poids',    val:lastP.weight+'g',  sous:'('+(lastP.weight/1000).toFixed(3)+' kg)', date:lastP.date,  pct:am!=null?estimPerc(WHO_POIDS, sx, am, lastP.weight/1000):null  }); }
+  if (lastT)  { const am=ageEnMois(lastT.date);  mesures.push({ titre:'Derniere taille',  val:lastT.height+' cm', sous:'',                                      date:lastT.date,  pct:am!=null?estimPerc(WHO_TAILLE, sx, am, lastT.height):null       }); }
+  if (lastPC) { const am=ageEnMois(lastPC.date); mesures.push({ titre:'Perim. cranien',   val:lastPC.value+' cm', sous:'',                                      date:lastPC.date, pct:am!=null?estimPerc(WHO_PERIMETRE, sx, am, lastPC.value):null    }); }
+
+  const MBH = 26;
+  if (!mesures.length) {
+    T('italic', 8, 155, 155, 155); doc.text('Aucune mesure enregistree.', ML, y+4); y += 10;
+  } else {
+    const mbw = (CW - (mesures.length-1)*3) / mesures.length;
+    mesures.forEach((m, i) => {
+      const mx = ML + i*(mbw+3);
+      doc.setFillColor(244,244,244); doc.setDrawColor(185,185,185); doc.setLineWidth(0.2);
+      doc.rect(mx, y, mbw, MBH, 'FD');
+      T('bold', 11, 12, 12, 12);
+      doc.text(m.val, mx+mbw/2, y+8.5, { align:'center' });
+      if (m.sous) { T('normal', 7.5, 88, 88, 88); doc.text(m.sous, mx+mbw/2, y+13, { align:'center' }); }
+      if (m.pct) {
+        T('bold', 7.5, 30, 100, 55);
+        doc.text('Percentile : '+m.pct, mx+mbw/2, y+(m.sous?17.5:14), { align:'center' });
+      }
+      T('normal', 6.5, 128, 128, 128);
+      doc.text(m.titre,     mx+mbw/2, y+MBH-7,   { align:'center' });
+      doc.text(fmtFR(m.date), mx+mbw/2, y+MBH-3.5, { align:'center' });
+    });
+    y += MBH + 5;
+  }
+
+  // ── SECTION 4 — VACCINS ADMINISTRES ───────────────────────────────────────
+  sectionHdr('4.  Vaccins administres');
+
+  const vState = loadObj(KEYS.vaccins) || {};
+  const allV   = [...(VACCINS_DATA.FR||[]), ...(VACCINS_DATA.TH||[])];
+  const seenV  = new Set();
+  const doneV  = allV.filter(v => { if (seenV.has(v.id)) return false; seenV.add(v.id); return !!vState[v.id]?.done; });
+
+  if (!doneV.length) {
+    T('italic', 8, 155, 155, 155); doc.text('Aucun vaccin administre enregistre.', ML, y+4); y += 10;
+  } else {
+    const hW = (CW - 4) / 2;
+    const rH = 5.5;
+    let col = 0;
+    doneV.forEach(v => {
+      const vs = vState[v.id];
+      const bx = col === 0 ? ML : ML + hW + 4;
+      if (col === 0) { doc.setFillColor(249,249,249); doc.rect(ML, y, CW, rH, 'F'); }
+      // Indicateur vert (petit cercle plein)
+      doc.setFillColor(22, 105, 48);
+      doc.circle(bx + 2, y + rH/2, 1.7, 'F');
+      // Nom du vaccin
+      T('normal', 7.5, 20, 20, 20);
+      const nm = v.nom.length > 36 ? v.nom.substring(0,35) + '...' : v.nom;
+      doc.text(nm, bx + 6, y + 3.8);
+      // Date d'administration
+      if (vs?.date) { T('normal', 7, 108, 108, 108); doc.text(fmtFR(vs.date), bx + hW - 1, y + 3.8, { align:'right' }); }
+      col++;
+      if (col === 2) { col = 0; y += rH; }
+    });
+    if (col !== 0) y += rH;
+  }
+
+  // ── PIED DE PAGE ──────────────────────────────────────────────────────────
+  const fy = PH - 11;
+  doc.setDrawColor(182, 182, 182); doc.setLineWidth(0.3);
+  doc.line(ML, fy - 4, PW - MR, fy - 4);
+  T('italic', 6, 152, 152, 152);
+  doc.text("Ce document est un outil de suivi personnel et ne remplace pas l'avis d'un professionnel de sante.", ML, fy);
+  T('normal', 6, 152, 152, 152);
+  doc.text('BabyTrack  -  genere le ' + new Date().toLocaleString('fr-FR'), PW - MR, fy, { align:'right' });
+
+  const fname = 'BabyTrack_rapport_' + (profile.prenom||'bebe') + '_' + toLocalDateStr(new Date()) + '.pdf';
+  doc.save(fname);
+  showToast('Rapport PDF genere !');
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
