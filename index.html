@@ -479,6 +479,34 @@
     .btn-import:hover { background: #047857; }
     .btn-pdf { background: #1e293b; color: #f1f5f9; }
     .btn-pdf:hover { background: #334155; }
+    /* ── NOTIFICATION SETTINGS ──────────────────────────────────────────── */
+    .notif-status-bar {
+      display:flex; align-items:flex-start; gap:10px;
+      padding:10px 12px; border-radius:var(--radius-sm);
+      background:var(--surface2); border:1px solid var(--border); margin-bottom:10px;
+    }
+    .notif-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; margin-top:4px; }
+    .notif-dot.on     { background:var(--diaper); box-shadow:0 0 7px var(--diaper); }
+    .notif-dot.off    { background:var(--text-muted); }
+    .notif-dot.denied { background:#f87171; }
+    .notif-label { font-size:.83rem; font-weight:700; color:var(--text); }
+    .notif-sub   { font-size:.72rem; color:var(--text-muted); margin-top:2px; line-height:1.4; }
+    .btn-notif-on  { background:var(--accent); color:#0d1117; }
+    .btn-notif-on:hover  { opacity:.88; }
+    .btn-notif-off { background:rgba(248,113,113,.13); color:#f87171; border:1.5px solid rgba(248,113,113,.3) !important; }
+    .btn-notif-off:hover { background:rgba(248,113,113,.22); }
+    .btn[disabled]  { opacity:.45; cursor:not-allowed; pointer-events:none; }
+    .notif-interval-section { margin-top:14px; display:flex; flex-direction:column; gap:8px; }
+    .notif-interval-label { font-size:.68rem; font-weight:800; text-transform:uppercase; letter-spacing:.7px; color:var(--text-muted); }
+    .notif-custom-row { display:flex; align-items:center; gap:10px; }
+    .notif-custom-row .form-group { flex:0 0 90px; }
+    .btn-notif-test {
+      background:rgba(255,255,255,.05); border:1px solid var(--border); color:var(--text-muted);
+      font-size:.8rem; padding:10px 14px; border-radius:var(--radius-sm);
+      cursor:pointer; text-align:center; transition:all .15s;
+      display:flex; align-items:center; justify-content:center; gap:6px; width:100%;
+    }
+    .btn-notif-test:hover { background:rgba(255,255,255,.1); color:var(--text); }
     .import-info { font-size: 0.73rem; color: var(--text-muted); margin-top: 8px; font-style: italic; }
     #importFileInput { display: none; }
     .profile-preview {
@@ -1310,6 +1338,11 @@
     </div>
 
     <div class="card settings-section">
+      <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg> Notifications tétées</div>
+      <div id="notifContent"></div>
+    </div>
+
+    <div class="card settings-section">
       <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg> Personnaliser la navigation</div>
       <p style="font-size:.8rem;color:var(--text-muted);margin-bottom:12px">Choisissez 2 à 4 onglets à afficher dans la barre de navigation.</p>
       <div class="nav-opts" id="navOptsGrid"></div>
@@ -1344,7 +1377,7 @@
 
 <script>
 // ── Icônes Lucide dynamiques ─────────────────────────────────────────────────
-const _IC_P = {"bottle":"<path d=\"M8 2h8\"/><path d=\"M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.788a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2\"/><path d=\"M7 15a6.472 6.472 0 0 1 5 0 6.472 6.472 0 0 0 5 0\"/>","moon":"<path d=\"M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z\"/>","shield":"<path d=\"M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z\"/>","scale":"<path d=\"m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z\"/><path d=\"m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z\"/><path d=\"M7 21h10\"/><path d=\"M12 3v18\"/><path d=\"M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2\"/>","chart":"<line x1=\"12\" x2=\"12\" y1=\"20\" y2=\"10\"/><line x1=\"18\" x2=\"18\" y1=\"20\" y2=\"4\"/><line x1=\"6\" x2=\"6\" y1=\"20\" y2=\"16\"/>","ruler":"<path d=\"M21.3 8.7 8.7 21.3c-1 1-2.5 1-3.4 0l-2.6-2.6c-1-1-1-2.5 0-3.4L15.3 2.7c1-1 2.5-1 3.4 0l2.6 2.6c1 1 1 2.5 0 3.4Z\"/><path d=\"m7.5 10.5 2 2\"/><path d=\"m10.5 7.5 2 2\"/><path d=\"m13.5 4.5 2 2\"/><path d=\"m4.5 13.5 2 2\"/>","calendar":"<rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\" ry=\"2\"/><line x1=\"16\" x2=\"16\" y1=\"2\" y2=\"6\"/><line x1=\"8\" x2=\"8\" y1=\"2\" y2=\"6\"/><line x1=\"3\" x2=\"21\" y1=\"10\" y2=\"10\"/>","sparkles":"<path d=\"m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z\"/><path d=\"M5 3v4\"/><path d=\"M19 17v4\"/><path d=\"M3 5h4\"/><path d=\"M17 19h4\"/>","check":"<polyline points=\"20 6 9 17 4 12\"/>","play":"<polygon points=\"5 3 19 12 5 21 5 3\"/>","pause":"<rect width=\"4\" height=\"16\" x=\"6\" y=\"4\"/><rect width=\"4\" height=\"16\" x=\"14\" y=\"4\"/>","refresh":"<path d=\"M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8\"/><path d=\"M21 3v5h-5\"/><path d=\"M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16\"/><path d=\"M8 16H3v5\"/>","download":"<path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/><polyline points=\"7 10 12 15 17 10\"/><line x1=\"12\" x2=\"12\" y1=\"15\" y2=\"3\"/>","upload":"<path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/><polyline points=\"17 8 12 3 7 8\"/><line x1=\"12\" x2=\"12\" y1=\"3\" y2=\"15\"/>","heart":"<path d=\"M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z\"/>","venus":"<circle cx=\"12\" cy=\"8\" r=\"6\"/><line x1=\"12\" x2=\"12\" y1=\"14\" y2=\"22\"/><line x1=\"9\" x2=\"15\" y1=\"19\" y2=\"19\"/>","mars":"<circle cx=\"10\" cy=\"14\" r=\"6\"/><line x1=\"21\" x2=\"15\" y1=\"3\" y2=\"9\"/><path d=\"M21 3h-6\"/><path d=\"M21 9V3\"/>","settings":"<path d=\"M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/>","cross":"<path d=\"M11 2a2 2 0 0 0-2 2v5H4a2 2 0 0 0-2 2v2c0 1.1.9 2 2 2h5v5c0 1.1.9 2 2 2h2a2 2 0 0 0 2-2v-5h5a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2h-5V4a2 2 0 0 0-2-2h-2z\"/>","droplet":"<path d=\"M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z\"/>","alertcircle":"<circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"12\" x2=\"12\" y1=\"8\" y2=\"12\"/><circle cx=\"12\" cy=\"16\" r=\".5\" fill=\"currentColor\"/>","layers":"<polygon points=\"12 2 2 7 12 12 22 7 12 2\"/><polyline points=\"2 17 12 22 22 17\"/><polyline points=\"2 12 12 17 22 12\"/>","trending":"<polyline points=\"22 7 13.5 15.5 8.5 10.5 2 17\"/><polyline points=\"16 7 22 7 22 13\"/>","timer":"<line x1=\"10\" x2=\"14\" y1=\"2\" y2=\"2\"/><line x1=\"12\" x2=\"15\" y1=\"14\" y2=\"11\"/><circle cx=\"12\" cy=\"14\" r=\"8\"/>","bed":"<path d=\"M2 4v16\"/><path d=\"M2 8h18a2 2 0 0 1 2 2v10\"/><path d=\"M2 17h20\"/><path d=\"M6 8v9\"/>","clock":"<circle cx=\"12\" cy=\"12\" r=\"10\"/><polyline points=\"12 6 12 12 16 14\"/>","alarmclock":"<circle cx=\"12\" cy=\"13\" r=\"8\"/><path d=\"M12 9v4l2 2\"/><path d=\"M5 3 2 6\"/><path d=\"m22 6-3-3\"/><path d=\"M6.38 18.7 4 21\"/><path d=\"M17.64 18.67 20 21\"/>","alert":"<path d=\"m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z\"/><line x1=\"12\" x2=\"12\" y1=\"9\" y2=\"13\"/><line x1=\"12\" x2=\"12.01\" y1=\"17\" y2=\"17\"/>","pin":"<line x1=\"12\" x2=\"12\" y1=\"17\" y2=\"22\"/><path d=\"M5 17H4a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1\"/><polygon points=\"12 17 8 11 16 11 12 17\"/>","mappin":"<path d=\"M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z\"/><circle cx=\"12\" cy=\"10\" r=\"3\"/>","user":"<path d=\"M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2\"/><circle cx=\"12\" cy=\"7\" r=\"4\"/>","stethoscope":"<path d=\"M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3\"/><path d=\"M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4\"/><circle cx=\"20\" cy=\"10\" r=\"2\"/>","plus":"<line x1=\"12\" x2=\"12\" y1=\"5\" y2=\"19\"/><line x1=\"5\" x2=\"19\" y1=\"12\" y2=\"12\"/>","syringe":"<path d=\"m18 2 4 4\"/><path d=\"m17 7 3-3\"/><path d=\"M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5\"/><line x1=\"9\" x2=\"13\" y1=\"11\" y2=\"15\"/><line x1=\"5\" x2=\"2\" y1=\"19\" y2=\"22\"/><line x1=\"14\" x2=\"20\" y1=\"4\" y2=\"10\"/>","filetext":"<path d=\"M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z\"/><polyline points=\"14 2 14 8 20 8\"/><line x1=\"16\" x2=\"8\" y1=\"13\" y2=\"13\"/><line x1=\"16\" x2=\"8\" y1=\"17\" y2=\"17\"/><line x1=\"10\" x2=\"8\" y1=\"9\" y2=\"9\"/>"};
+const _IC_P = {"bottle":"<path d=\"M8 2h8\"/><path d=\"M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.788a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2\"/><path d=\"M7 15a6.472 6.472 0 0 1 5 0 6.472 6.472 0 0 0 5 0\"/>","moon":"<path d=\"M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z\"/>","shield":"<path d=\"M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z\"/>","scale":"<path d=\"m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z\"/><path d=\"m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z\"/><path d=\"M7 21h10\"/><path d=\"M12 3v18\"/><path d=\"M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2\"/>","chart":"<line x1=\"12\" x2=\"12\" y1=\"20\" y2=\"10\"/><line x1=\"18\" x2=\"18\" y1=\"20\" y2=\"4\"/><line x1=\"6\" x2=\"6\" y1=\"20\" y2=\"16\"/>","ruler":"<path d=\"M21.3 8.7 8.7 21.3c-1 1-2.5 1-3.4 0l-2.6-2.6c-1-1-1-2.5 0-3.4L15.3 2.7c1-1 2.5-1 3.4 0l2.6 2.6c1 1 1 2.5 0 3.4Z\"/><path d=\"m7.5 10.5 2 2\"/><path d=\"m10.5 7.5 2 2\"/><path d=\"m13.5 4.5 2 2\"/><path d=\"m4.5 13.5 2 2\"/>","calendar":"<rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\" ry=\"2\"/><line x1=\"16\" x2=\"16\" y1=\"2\" y2=\"6\"/><line x1=\"8\" x2=\"8\" y1=\"2\" y2=\"6\"/><line x1=\"3\" x2=\"21\" y1=\"10\" y2=\"10\"/>","sparkles":"<path d=\"m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z\"/><path d=\"M5 3v4\"/><path d=\"M19 17v4\"/><path d=\"M3 5h4\"/><path d=\"M17 19h4\"/>","check":"<polyline points=\"20 6 9 17 4 12\"/>","play":"<polygon points=\"5 3 19 12 5 21 5 3\"/>","pause":"<rect width=\"4\" height=\"16\" x=\"6\" y=\"4\"/><rect width=\"4\" height=\"16\" x=\"14\" y=\"4\"/>","refresh":"<path d=\"M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8\"/><path d=\"M21 3v5h-5\"/><path d=\"M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16\"/><path d=\"M8 16H3v5\"/>","download":"<path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/><polyline points=\"7 10 12 15 17 10\"/><line x1=\"12\" x2=\"12\" y1=\"15\" y2=\"3\"/>","upload":"<path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/><polyline points=\"17 8 12 3 7 8\"/><line x1=\"12\" x2=\"12\" y1=\"3\" y2=\"15\"/>","heart":"<path d=\"M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z\"/>","venus":"<circle cx=\"12\" cy=\"8\" r=\"6\"/><line x1=\"12\" x2=\"12\" y1=\"14\" y2=\"22\"/><line x1=\"9\" x2=\"15\" y1=\"19\" y2=\"19\"/>","mars":"<circle cx=\"10\" cy=\"14\" r=\"6\"/><line x1=\"21\" x2=\"15\" y1=\"3\" y2=\"9\"/><path d=\"M21 3h-6\"/><path d=\"M21 9V3\"/>","settings":"<path d=\"M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/>","cross":"<path d=\"M11 2a2 2 0 0 0-2 2v5H4a2 2 0 0 0-2 2v2c0 1.1.9 2 2 2h5v5c0 1.1.9 2 2 2h2a2 2 0 0 0 2-2v-5h5a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2h-5V4a2 2 0 0 0-2-2h-2z\"/>","droplet":"<path d=\"M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z\"/>","alertcircle":"<circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"12\" x2=\"12\" y1=\"8\" y2=\"12\"/><circle cx=\"12\" cy=\"16\" r=\".5\" fill=\"currentColor\"/>","layers":"<polygon points=\"12 2 2 7 12 12 22 7 12 2\"/><polyline points=\"2 17 12 22 22 17\"/><polyline points=\"2 12 12 17 22 12\"/>","trending":"<polyline points=\"22 7 13.5 15.5 8.5 10.5 2 17\"/><polyline points=\"16 7 22 7 22 13\"/>","timer":"<line x1=\"10\" x2=\"14\" y1=\"2\" y2=\"2\"/><line x1=\"12\" x2=\"15\" y1=\"14\" y2=\"11\"/><circle cx=\"12\" cy=\"14\" r=\"8\"/>","bed":"<path d=\"M2 4v16\"/><path d=\"M2 8h18a2 2 0 0 1 2 2v10\"/><path d=\"M2 17h20\"/><path d=\"M6 8v9\"/>","clock":"<circle cx=\"12\" cy=\"12\" r=\"10\"/><polyline points=\"12 6 12 12 16 14\"/>","alarmclock":"<circle cx=\"12\" cy=\"13\" r=\"8\"/><path d=\"M12 9v4l2 2\"/><path d=\"M5 3 2 6\"/><path d=\"m22 6-3-3\"/><path d=\"M6.38 18.7 4 21\"/><path d=\"M17.64 18.67 20 21\"/>","alert":"<path d=\"m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z\"/><line x1=\"12\" x2=\"12\" y1=\"9\" y2=\"13\"/><line x1=\"12\" x2=\"12.01\" y1=\"17\" y2=\"17\"/>","pin":"<line x1=\"12\" x2=\"12\" y1=\"17\" y2=\"22\"/><path d=\"M5 17H4a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1\"/><polygon points=\"12 17 8 11 16 11 12 17\"/>","mappin":"<path d=\"M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z\"/><circle cx=\"12\" cy=\"10\" r=\"3\"/>","user":"<path d=\"M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2\"/><circle cx=\"12\" cy=\"7\" r=\"4\"/>","stethoscope":"<path d=\"M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3\"/><path d=\"M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4\"/><circle cx=\"20\" cy=\"10\" r=\"2\"/>","plus":"<line x1=\"12\" x2=\"12\" y1=\"5\" y2=\"19\"/><line x1=\"5\" x2=\"19\" y1=\"12\" y2=\"12\"/>","syringe":"<path d=\"m18 2 4 4\"/><path d=\"m17 7 3-3\"/><path d=\"M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5\"/><line x1=\"9\" x2=\"13\" y1=\"11\" y2=\"15\"/><line x1=\"5\" x2=\"2\" y1=\"19\" y2=\"22\"/><line x1=\"14\" x2=\"20\" y1=\"4\" y2=\"10\"/>","filetext":"<path d=\"M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z\"/><polyline points=\"14 2 14 8 20 8\"/><line x1=\"16\" x2=\"8\" y1=\"13\" y2=\"13\"/><line x1=\"16\" x2=\"8\" y1=\"17\" y2=\"17\"/><line x1=\"10\" x2=\"8\" y1=\"9\" y2=\"9\"/>","bell":"<path d=\"M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9\"/><path d=\"M13.73 21a2 2 0 0 1-3.46 0\"/>","belloff":"<path d=\"M8.7 3A6 6 0 0 1 18 8a21.3 21.3 0 0 1 .6 5\"/><path d=\"M17 17H3s3-2 3-9\"/><path d=\"M10.3 21a1.94 1.94 0 0 0 3.4 0\"/><line x1=\"2\" x2=\"22\" y1=\"2\" y2=\"22\"/>"};
 const _IC_A = 'fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"';
 function ic(name, size=18) {
   return '<svg xmlns="http://www.w3.org/2000/svg" width="'+size+'" height="'+size+'" viewBox="0 0 24 24" '+_IC_A+'>'+(_IC_P[name]||'')+'</svg>';
@@ -1618,6 +1651,7 @@ const KEYS = {
   poids: 'bt_poids', tailles: 'bt_tailles', activeSleep: 'bt_active_sleep', profile: 'bt_profile',
   vaccins: 'bt_vaccins', rdv: 'bt_rdv', perimetre: 'bt_perimetre',
   milestones: 'bt_milestones', journal: 'bt_journal', navTabs: 'bt_nav_tabs',
+  notifEnabled: 'bt_notif_on', notifInterval: 'bt_notif_iv', notifCustom: 'bt_notif_ch', notifLastSent: 'bt_notif_ts',
 };
 
 // ─── CONFIG DES ONGLETS ───────────────────────────────────────────────────────
@@ -1869,7 +1903,7 @@ function switchTab(name) {
   if (name==='insights')  renderInsights();
   if (name==='journée')   renderJournee();
   if (name==='mémoires')  renderMemoires();
-  if (name==='paramètres') renderNavSettings();
+  if (name==='paramètres') { renderNavSettings(); renderNotifSettings(); }
 }
 function toggleMoreMenu() {
   const overlay = document.getElementById('moreOverlay');
@@ -1878,6 +1912,166 @@ function toggleMoreMenu() {
 }
 function closeMoreMenu() {
   document.getElementById('moreOverlay').classList.remove('open');
+}
+
+// ─── NOTIFICATIONS PUSH ──────────────────────────────────────────────────────
+let _notifTimer = null;
+let _swReg = null;
+
+async function initNotifications() {
+  if (!('Notification' in window)) return;
+  // Enregistre le Service Worker
+  if ('serviceWorker' in navigator) {
+    try { _swReg = await navigator.serviceWorker.register('./sw.js'); } catch(e) { /* file:// ou erreur */ }
+  }
+  // Relance le checker si notifications actives
+  if (localStorage.getItem(KEYS.notifEnabled) === 'true' && Notification.permission === 'granted') {
+    _startNotifChecker();
+  }
+  // Vérifie à chaque retour en premier plan
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') _checkFeedingNotif();
+  });
+}
+
+function _getNotifIntervalH() {
+  const v = localStorage.getItem(KEYS.notifInterval) || '3';
+  if (v === 'custom') return Math.max(0.5, parseFloat(localStorage.getItem(KEYS.notifCustom) || '3'));
+  return parseFloat(v);
+}
+
+function _startNotifChecker() {
+  if (_notifTimer) clearInterval(_notifTimer);
+  _notifTimer = setInterval(_checkFeedingNotif, 60_000); // vérifie toutes les minutes
+  _checkFeedingNotif();
+}
+function _stopNotifChecker() {
+  if (_notifTimer) { clearInterval(_notifTimer); _notifTimer = null; }
+}
+
+async function _checkFeedingNotif() {
+  if (localStorage.getItem(KEYS.notifEnabled) !== 'true') return;
+  if (Notification.permission !== 'granted') return;
+  const tetees = load(KEYS.tetees);
+  if (!tetees.length) return;
+  const lastFeedTs = Math.max(...tetees.map(e => new Date(e.timestamp).getTime()));
+  const intervalMs = _getNotifIntervalH() * 3_600_000;
+  const sinceMs    = Date.now() - lastFeedTs;
+  if (sinceMs < intervalMs) return;
+  // Déjà notifié pour ce gap ?
+  const lastSent = parseFloat(localStorage.getItem(KEYS.notifLastSent) || '0');
+  if (lastSent > lastFeedTs) return;
+  localStorage.setItem(KEYS.notifLastSent, String(Date.now()));
+  const profile = loadObj(KEYS.profile);
+  const prenom  = profile?.prenom || 'Bébé';
+  const h = Math.floor(sinceMs / 3_600_000);
+  const m = Math.round((sinceMs % 3_600_000) / 60_000);
+  const sinceStr = h > 0 ? `${h}h${m > 0 ? m + 'min' : ''}` : `${m}min`;
+  await _sendNotif(
+    `Rappel tétée — ${prenom}`,
+    `${prenom} n'a pas été nourri(e) depuis ${sinceStr}. Pensez à la prochaine tétée !`
+  );
+}
+
+async function _sendNotif(title, body) {
+  const opts = { body, tag: 'babytrack-tetee', renotify: true,
+                 vibrate: [200, 100, 200], requireInteraction: false };
+  // Préférence : passer par le SW (notification persistante même en arrière-plan)
+  try {
+    const reg = _swReg || await navigator.serviceWorker?.ready;
+    if (reg) { await reg.showNotification(title, opts); return; }
+  } catch(e) { /* fallback */ }
+  // Fallback direct (fonctionne seulement quand l'onglet est actif)
+  if (Notification.permission === 'granted') new Notification(title, opts);
+}
+
+async function toggleNotifications() {
+  if (!('Notification' in window)) { showToast('Notifications non supportées par ce navigateur'); return; }
+  const perm    = Notification.permission;
+  const enabled = localStorage.getItem(KEYS.notifEnabled) === 'true';
+  if (perm === 'denied') { showToast('Notifications bloquées — à autoriser dans les réglages du navigateur'); return; }
+  if (!enabled) {
+    if (perm === 'default') {
+      const res = await Notification.requestPermission();
+      if (res !== 'granted') { renderNotifSettings(); showToast('Permission refusée'); return; }
+    }
+    localStorage.setItem(KEYS.notifEnabled, 'true');
+    if (!localStorage.getItem(KEYS.notifInterval)) localStorage.setItem(KEYS.notifInterval, '3');
+    _startNotifChecker();
+    showToast('Notifications activées ✓');
+  } else {
+    localStorage.setItem(KEYS.notifEnabled, 'false');
+    _stopNotifChecker();
+    showToast('Notifications désactivées');
+  }
+  renderNotifSettings();
+}
+
+function setNotifInterval(val) {
+  localStorage.setItem(KEYS.notifInterval, String(val));
+  renderNotifSettings();
+}
+function updateNotifCustom(val) {
+  localStorage.setItem(KEYS.notifCustom, String(Math.max(0.5, Math.min(24, parseFloat(val) || 3))));
+}
+
+async function testNotification() {
+  if (Notification.permission !== 'granted') { showToast('Autorisez d\'abord les notifications'); return; }
+  const profile = loadObj(KEYS.profile);
+  const prenom  = profile?.prenom || 'Bébé';
+  await _sendNotif('Test BabyTrack', `${prenom} n'a pas été nourri(e) depuis 3h00. Pensez à la prochaine tétée !`);
+  showToast('Notification test envoyée !');
+}
+
+function renderNotifSettings() {
+  const el = document.getElementById('notifContent');
+  if (!el) return;
+  if (!('Notification' in window)) {
+    el.innerHTML = `<p style="font-size:.8rem;color:var(--text-muted)">Votre navigateur ne supporte pas les notifications web.</p>`;
+    return;
+  }
+  const perm     = Notification.permission;
+  const enabled  = localStorage.getItem(KEYS.notifEnabled) === 'true' && perm === 'granted';
+  const ivVal    = localStorage.getItem(KEYS.notifInterval) || '3';
+  const customH  = localStorage.getItem(KEYS.notifCustom)  || '3';
+
+  const dotCls  = perm === 'denied' ? 'denied' : enabled ? 'on' : 'off';
+  const statusTx = perm === 'denied' ? 'Bloquées par le navigateur'
+                 : enabled           ? 'Actives'
+                 :                     'Désactivées';
+  const subTx    = perm === 'denied'
+    ? 'Autorisez BabyTrack dans les réglages de votre navigateur, puis réactivez.'
+    : enabled
+    ? `Rappel si pas de tétée depuis ${_getNotifIntervalH()}h · vérification toutes les minutes`
+    : 'Recevez un rappel si bébé n\'a pas été nourri depuis un certain temps.';
+
+  const segs = [
+    { v:'2', l:'2h' }, { v:'3', l:'3h' }, { v:'4', l:'4h' }, { v:'custom', l:'Perso.' }
+  ].map(s => `<div class="seg-btn${ivVal===s.v?' active-primary':''}" onclick="setNotifInterval('${s.v}')">${s.l}</div>`).join('');
+
+  el.innerHTML = `
+    <div class="notif-status-bar">
+      <div class="notif-dot ${dotCls}"></div>
+      <div><div class="notif-label">${statusTx}</div><div class="notif-sub">${subTx}</div></div>
+    </div>
+    <button class="btn ${enabled ? 'btn-notif-off' : 'btn-notif-on'}" onclick="toggleNotifications()" ${perm==='denied'?'disabled':''}>
+      ${ic(enabled?'belloff':'bell',15)} ${enabled ? 'Désactiver les notifications' : 'Activer les notifications'}
+    </button>
+    ${enabled ? `
+    <div class="notif-interval-section">
+      <div class="notif-interval-label">Rappel si pas de tétée depuis :</div>
+      <div class="seg-group">${segs}</div>
+      ${ivVal==='custom' ? `
+      <div class="notif-custom-row">
+        <div class="form-group"><input type="number" id="notifCustomInput" value="${customH}" min="0.5" max="24" step="0.5"
+          oninput="updateNotifCustom(this.value)" onchange="updateNotifCustom(this.value);renderNotifSettings()"></div>
+        <span style="font-size:.85rem;color:var(--text-muted)">heures</span>
+      </div>` : ''}
+      <button class="btn-notif-test" onclick="testNotification()">
+        ${ic('bell',14)} Envoyer une notification test
+      </button>
+    </div>` : ''}
+  `;
 }
 
 // ─── BOTTOM NAV & MORE MENU DYNAMIQUES ───────────────────────────────────────
@@ -3678,6 +3872,7 @@ function init() {
   DP.init(); DTP.init();
   buildBottomNav();
   buildMoreMenu();
+  initNotifications();
   const profile=loadObj(KEYS.profile);
   if (profile) {
     document.getElementById('onboarding').classList.add('hidden');
